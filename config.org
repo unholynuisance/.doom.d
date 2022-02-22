@@ -41,14 +41,14 @@
 ** Font
 #+begin_src emacs-lisp
 
-(setq doom-font (font-spec :family "Hack" :size 15))
+(setq doom-font (font-spec :family "Hack" :size 16))
 
 #+end_src
 
 ** Theme
 #+begin_src emacs-lisp
 
-(setq doom-theme 'doom-dracula)
+(setq doom-theme 'doom-palenight)
 
 #+end_src
 
