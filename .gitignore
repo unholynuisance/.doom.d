@@ -1,0 +1,11 @@
+# ignore eveything
+/*
+
+# except
+!/pictures/
+!/config.org
+!/init.el
+!/packages.el
+!/custom.el
+!/README.md
+!/.gitignore

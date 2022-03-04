@@ -109,3 +109,15 @@ Banner:
         (concat (file-name-as-directory org-directory) "roam")))
 
 #+end_src
+
+* Other
+** Reverse-im
+#+begin_src emacs-lisp
+
+(use-package! reverse-im
+  :hook
+  (after-init . reverse-im-mode)
+  :custom
+  (reverse-im-input-methods '("russian-computer" "ukrainian-computer")))
+
+#+end_src
