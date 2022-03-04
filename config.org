@@ -106,7 +106,11 @@ Banner:
 (after! org
   (setq org-directory "~/Org")
   (setq org-roam-directory
-        (concat (file-name-as-directory org-directory) "roam")))
+        (concat (file-name-as-directory org-directory) "roam"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
+
+(use-package! org-tempo
+  :after org)
 
 #+end_src
 
