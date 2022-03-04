@@ -115,7 +115,7 @@ Banner:
 #+end_src
 
 * Other
-** Reverse-im
+** Reverse im
 #+begin_src emacs-lisp
 
 (use-package! reverse-im
@@ -123,5 +123,14 @@ Banner:
   (after-init . reverse-im-mode)
   :custom
   (reverse-im-input-methods '("russian-computer" "ukrainian-computer")))
+
+#+end_src
+
+** Good scroll
+#+begin_src emacs-lisp
+
+(use-package! good-scroll
+  :hook
+  (after-init . good-scroll-mode))
 
 #+end_src
