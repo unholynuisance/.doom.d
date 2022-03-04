@@ -1,61 +1,46 @@
 * Name and address
 #+begin_src emacs-lisp
-
 (setq user-full-name "son-of-satan"
       user-mail-address "mtataryn555@gmail.com")
-
 #+end_src
 
 * Keybindings
 ** Doom leader keys:
 #+begin_src emacs-lisp
-
 (setq doom-leader-alt-key "C-SPC")
 (setq doom-localleader-alt-key "C-SPC l")
-
 #+end_src
 
 ** Rebind set-mark-command
 #+begin_src emacs-lisp
-
 (map! "S-SPC" 'set-mark-command)
-
 #+end_src
 
 ** Projectile prefix
 #+begin_src emacs-lisp
-
 (map! :leader
       "p" 'projectile-command-map)
-
 #+end_src
 
 * UI
 ** Transparency
 #+begin_src emacs-lisp
-
 (add-to-list 'default-frame-alist '(alpha . (98 . 98)))
-
 #+end_src
 
 ** Font
 #+begin_src emacs-lisp
-
 (setq doom-font (font-spec :family "Hack" :size 16))
-
 #+end_src
 
 ** Theme
 #+begin_src emacs-lisp
-
 (setq doom-theme 'doom-palenight)
-
 #+end_src
 
 ** Dashboard
 Menu sections:
 #+begin_src emacs-lisp
-
 (setq +doom-dashboard-menu-sections
       '(("Reload last session"
          :icon (all-the-icons-octicon "history" :face 'doom-dashboard-menu-title)
@@ -82,27 +67,21 @@ Menu sections:
          :icon (all-the-icons-octicon "tools" :face 'doom-dashboard-menu-title)
          :when (file-directory-p doom-private-dir)
          :action doom/open-private-config)))
-
 #+end_src
 
 Banner:
 #+begin_src emacs-lisp
-
 (setq fancy-splash-image (concat (file-name-as-directory doom-private-dir) "pictures/kurisu.png"))
-
 #+end_src
 
 ** Doom quit
 #+begin_src emacs-lisp
-
 (setq +doom-quit-messages '("It's not like I'll miss you or anything, b-baka!"))
-
 #+end_src
 
 * Lang
 ** Org
 #+begin_src emacs-lisp
-
 (after! org
   (setq org-directory "~/Org")
   (setq org-roam-directory
@@ -111,26 +90,21 @@ Banner:
 
 (use-package! org-tempo
   :after org)
-
 #+end_src
 
 * Other
 ** Reverse im
 #+begin_src emacs-lisp
-
 (use-package! reverse-im
   :hook
   (after-init . reverse-im-mode)
   :custom
   (reverse-im-input-methods '("russian-computer" "ukrainian-computer")))
-
 #+end_src
 
 ** Good scroll
 #+begin_src emacs-lisp
-
 (use-package! good-scroll
   :hook
   (after-init . good-scroll-mode))
-
 #+end_src
