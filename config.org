@@ -25,7 +25,7 @@
 * UI
 ** Transparency
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist '(alpha . (98 . 98)))
+(add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 #+end_src
 
 ** Font
@@ -83,8 +83,8 @@ Banner:
 ** Org
 #+begin_src emacs-lisp
 (after! org
-  (setq org-directory "~/Org")
-  (setq org-roam-directory
+  (setq! org-directory "~/Org")
+  (setq! org-roam-directory
         (concat (file-name-as-directory org-directory) "roam"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
