@@ -83,9 +83,8 @@ Banner:
 ** Org
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-directory "~/Org")
-  (setq! org-roam-directory
-        (concat (file-name-as-directory org-directory) "roam"))
+  (setq! org-directory "~/Org/agenda")
+  (setq! org-roam-directory "~/Org/roam")
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
 (use-package! org-tempo
