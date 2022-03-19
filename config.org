@@ -92,6 +92,32 @@ Banner:
   :after org)
 #+end_src
 
+* Email
+** mu4e
+#+begin_src emacs-lisp
+(after! mu4e
+  (setq! ; use msmtp
+         sendmail-program (executable-find "msmtp")
+         send-mail-function #'smtpmail-send-it
+         message-sendmail-f-is-evil t
+         message-sendmail-extra-arguments '("--read-envelope-from")
+         message-send-mail-function #'message-send-mail-with-sendmail
+         ; misc
+         mu4e-alert-style 'notifications
+         mu4e-update-interval (* 5 60)
+         mu4e-context-policy 'ask-if-none
+         mu4e-compose-context-policy 'always-ask))
+
+(set-email-account! "mtataryn555@gmail.com"
+  '((mu4e-sent-folder       . "/mtataryn555@gmail.com/\[Gmail\]/Sent Mail")
+    (mu4e-drafts-folder     . "/mtataryn555@gmail.com/\[Gmail\]/Drafts")
+    (mu4e-trash-folder      . "/mtataryn555@gmail.com/\[Gmail\]/Trash")
+    (mu4e-refile-folder     . "/mtataryn555@gmail.com/\[Gmail\]/All Mail")
+    (smtpmail-smtp-user     . "mtataryn555@gmail.com")
+    (mu4e-compose-signature . "---\nMykola Tataryn"))
+  t)
+#+end_src
+
 * Other
 ** Reverse im
 #+begin_src emacs-lisp
