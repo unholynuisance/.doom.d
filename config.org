@@ -249,3 +249,38 @@ Banner:
   :hook
   (after-init . good-scroll-mode))
 #+end_src
+
+** Emacs application framework
+#+begin_src emacs-lisp
+(use-package! eaf
+  :defer-incrementally t
+  :custom
+  (eaf-apps-to-install '(browser
+                         pdf-viewer
+                         org-previewer
+                         markdown-previewer)))
+
+(use-package! eaf-browser
+  :defer-incrementally t
+  :after eaf)
+
+(use-package! eaf-mail
+  :defer-incrementally t
+  :after eaf
+  :config
+  (map! :map mu4e-view-mode-map
+        "o" 'eaf-open-mail-as-html))
+
+(use-package! eaf-pdf-viewer
+  :defer-incrementally t
+  :after eaf)
+
+(use-package! eaf-org-previewer
+  :defer-incrementally t
+  :after eaf)
+
+(use-package! eaf-markdown-previewer
+  :defer-incrementally t
+  :after eaf)
+
+#+end_src
