@@ -109,7 +109,7 @@ Banner:
 
 *** Personal Accounts
 #+begin_src emacs-lisp
-(let ((email "mtataryn555@gmail.com"))
+(after! mu4e
   (set-email-account! "p mtataryn555@gmail.com"
                       `((user-full-name     . "Mykola Tataryn")
                         (user-mail-address  . "mtataryn555@gmail.com")
@@ -164,73 +164,74 @@ Banner:
 
 *** Work Accounts
 #+begin_src emacs-lisp
-(set-email-account! "a mykola.tataryn@apriorit.com"
-                    `((user-full-name     . "Mykola Tataryn")
-                      (user-mail-address  . "mykola.tataryn@apriorit.com")
-                      (mu4e-sent-folder   . "/mykola.tataryn@apriorit.com/Sent")
-                      (mu4e-drafts-folder . "/mykola.tataryn@apriorit.com/Drafts")
-                      (mu4e-trash-folder  . "/mykola.tataryn@apriorit.com/Trash")
-                      (mu4e-refile-folder . "/mykola.tataryn@apriorit.com/Archive")
+(after! mu4e
+  (set-email-account! "a mykola.tataryn@apriorit.com"
+                      `((user-full-name     . "Mykola Tataryn")
+                        (user-mail-address  . "mykola.tataryn@apriorit.com")
+                        (mu4e-sent-folder   . "/mykola.tataryn@apriorit.com/Sent")
+                        (mu4e-drafts-folder . "/mykola.tataryn@apriorit.com/Drafts")
+                        (mu4e-trash-folder  . "/mykola.tataryn@apriorit.com/Trash")
+                        (mu4e-refile-folder . "/mykola.tataryn@apriorit.com/Archive")
 
-                      (mu4e-maildir-shortcuts . ((:maildir "/mykola.tataryn@apriorit.com/Inbox"   :key ?i)
-                                                 (:maildir "/mykola.tataryn@apriorit.com/Sent"    :key ?s)
-                                                 (:maildir "/mykola.tataryn@apriorit.com/Drafts"  :key ?d)
-                                                 (:maildir "/mykola.tataryn@apriorit.com/Trash"   :key ?t)
-                                                 (:maildir "/mykola.tataryn@apriorit.com/Archive" :key ?a)))
+                        (mu4e-maildir-shortcuts . ((:maildir "/mykola.tataryn@apriorit.com/Inbox"   :key ?i)
+                                                   (:maildir "/mykola.tataryn@apriorit.com/Sent"    :key ?s)
+                                                   (:maildir "/mykola.tataryn@apriorit.com/Drafts"  :key ?d)
+                                                   (:maildir "/mykola.tataryn@apriorit.com/Trash"   :key ?t)
+                                                   (:maildir "/mykola.tataryn@apriorit.com/Archive" :key ?a)))
 
-                      (mu4e-bookmarks . ((:name "[mykola.tataryn@apriorit.com] Unread messages"
-                                          :query "flag:unread AND NOT flag:trashed AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?u)
-                                         (:name "[mykola.tataryn@apriorit.com] Today's messages"
-                                          :query "date:today..now AND NOT flag:trashed AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?t)
-                                         (:name "[mykola.tataryn@apriorit.com] Last 7 days"
-                                          :query "date:7d..now AND NOT flag:trashed AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?w :hide-unread t)
-                                         (:name "[mykola.tataryn@apriorit.com] Flagged messages"
-                                          :query "flag:flagged AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?f)
-                                         (:name "[mykola.tataryn@apriorit.com] Varjo"
-                                          :query "contact:varjo@apriorit.com OR subject:[varjo] AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?v)
-                                         (:name "[mykola.tataryn@apriorit.com] Sotero"
-                                          :query "contact:sotero@apriorit.com OR subject:[sotero] AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?s)
-                                         (:name "[mykola.tataryn@apriorit.com] Jira"
-                                          :query "subject:[jira] AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?j)
-                                         (:name "[mykola.tataryn@apriorit.com] Confluence"
-                                          :query "subject:[confluence] AND maildir:/mykola.tataryn@apriorit.com/*"
-                                          :key ?c)
-                                         (:name "Unread messages"
-                                          :query "flag:unread AND NOT flag:trashed"
-                                          :key ?U)
-                                         (:name "Today's messages"
-                                          :query "date:today..now AND NOT flag:trashed"
-                                          :key ?T)
-                                         (:name "Last 7 days"
-                                          :query "date:7d..now AND NOT flag:trashed"
-                                          :key ?W :hide-unread t)
-                                         (:name "Flagged messages"
-                                          :query "flag:flagged"
-                                          :key ?F)))
+                        (mu4e-bookmarks . ((:name "[mykola.tataryn@apriorit.com] Unread messages"
+                                            :query "flag:unread AND NOT flag:trashed AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?u)
+                                           (:name "[mykola.tataryn@apriorit.com] Today's messages"
+                                            :query "date:today..now AND NOT flag:trashed AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?t)
+                                           (:name "[mykola.tataryn@apriorit.com] Last 7 days"
+                                            :query "date:7d..now AND NOT flag:trashed AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?w :hide-unread t)
+                                           (:name "[mykola.tataryn@apriorit.com] Flagged messages"
+                                            :query "flag:flagged AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?f)
+                                           (:name "[mykola.tataryn@apriorit.com] Varjo"
+                                            :query "contact:varjo@apriorit.com OR subject:[varjo] AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?v)
+                                           (:name "[mykola.tataryn@apriorit.com] Sotero"
+                                            :query "contact:sotero@apriorit.com OR subject:[sotero] AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?s)
+                                           (:name "[mykola.tataryn@apriorit.com] Jira"
+                                            :query "subject:[jira] AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?j)
+                                           (:name "[mykola.tataryn@apriorit.com] Confluence"
+                                            :query "subject:[confluence] AND maildir:/mykola.tataryn@apriorit.com/*"
+                                            :key ?c)
+                                           (:name "Unread messages"
+                                            :query "flag:unread AND NOT flag:trashed"
+                                            :key ?U)
+                                           (:name "Today's messages"
+                                            :query "date:today..now AND NOT flag:trashed"
+                                            :key ?T)
+                                           (:name "Last 7 days"
+                                            :query "date:7d..now AND NOT flag:trashed"
+                                            :key ?W :hide-unread t)
+                                           (:name "Flagged messages"
+                                            :query "flag:flagged"
+                                            :key ?F)))
 
-                      (smtpmail-smtp-user       . "mykola.tataryn@apriorit.com")
-                      (+mu4e-personal-addresses . ("mykola.tataryn@apriorit.com"))
+                        (smtpmail-smtp-user       . "mykola.tataryn@apriorit.com")
+                        (+mu4e-personal-addresses . ("mykola.tataryn@apriorit.com"))
 
-                      (mu4e-compose-signature   . ,(concat "Best regards,\n"
-                                                           "Mykola Tataryn,\n"
-                                                           "Software Developer of Apriorit - A Priority Choice!\n"
-                                                           "Visit us at http://www.apriorit.com"))
+                        (mu4e-compose-signature   . ,(concat "Best regards,\n"
+                                                             "Mykola Tataryn,\n"
+                                                             "Software Developer of Apriorit - A Priority Choice!\n"
+                                                             "Visit us at http://www.apriorit.com"))
 
-                      (org-msg-signature        . ,(concat "-----\n"
-                                                           "#+begin_signature\n"
-                                                           "Best regards,\n"
-                                                           "Mykola Tataryn,\n"
-                                                           "Software Developer of Apriorit - A Priority Choice!\n"
-                                                           "Visit us at [[https://apriorit.com]]\n"
-                                                           "#+end_signature")))
-                    t)
+                        (org-msg-signature        . ,(concat "-----\n"
+                                                             "#+begin_signature\n"
+                                                             "Best regards,\n"
+                                                             "Mykola Tataryn,\n"
+                                                             "Software Developer of Apriorit - A Priority Choice!\n"
+                                                             "Visit us at [[https://apriorit.com]]\n"
+                                                             "#+end_signature")))
+                      t))
 #+end_src
 
 * Other
