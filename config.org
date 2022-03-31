@@ -86,6 +86,12 @@ Banner:
   :after org)
 #+end_src
 
+** NASM
+#+begin_src emacs-lisp
+(use-package! nasm-mode
+  :mode "\\.asm\\'")
+#+end_src
+
 * Email
 ** mu4e
 #+begin_src emacs-lisp
