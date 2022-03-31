@@ -113,7 +113,8 @@ Banner:
          mu4e-compose-context-policy 'always-ask))
 #+end_src
 
-*** Personal Accounts
+*** Accounts
+**** mtataryn555@gmail.com
 #+begin_src emacs-lisp
 (after! mu4e
   (set-email-account! "p mtataryn555@gmail.com"
@@ -168,7 +169,7 @@ Banner:
                       t))
 #+end_src
 
-*** Work Accounts
+**** mykola.tataryn@apriorit.com
 #+begin_src emacs-lisp
 (after! mu4e
   (set-email-account! "a mykola.tataryn@apriorit.com"
@@ -238,6 +239,123 @@ Banner:
                                                              "Visit us at [[https://apriorit.com]]\n"
                                                              "#+end_signature")))
                       t))
+#+end_src
+
+** TODO External config
+*** mbsync
+#+begin_src conf :tangle no
+SyncState *
+Create Both
+Expunge Both
+
+IMAPStore mtataryn555@gmail.com-remote
+Host imap.gmail.com
+SSLType IMAPS
+AuthMechs LOGIN
+User mtataryn555@gmail.com
+PassCmd "secret-tool lookup application email account mtataryn555@gmail.com"
+
+MaildirStore mtataryn555@gmail.com-local
+Path ~/.mail/mtataryn555@gmail.com/
+Inbox ~/.mail/mtataryn555@gmail.com/Inbox
+Trash Trash
+SubFolders Verbatim
+
+Channel mtataryn555@gmail.com-inbox
+Far :mtataryn555@gmail.com-remote:
+Near :mtataryn555@gmail.com-local:
+
+Channel mtataryn555@gmail.com-sent
+Far :mtataryn555@gmail.com-remote:"[Gmail]/Sent Mail"
+Near :mtataryn555@gmail.com-local:Sent
+
+Channel mtataryn555@gmail.com-drafts
+Far :mtataryn555@gmail.com-remote:[Gmail]/Drafts
+Near :mtataryn555@gmail.com-local:Drafts
+
+Channel mtataryn555@gmail.com-trash
+Far :mtataryn555@gmail.com-remote:[Gmail]/Trash
+Near :mtataryn555@gmail.com-local:Trash
+
+Channel mtataryn555@gmail.com-archive
+Far :mtataryn555@gmail.com-remote:Archive
+Near :mtataryn555@gmail.com-local:Archive
+
+Group mtataryn555@gmail.com
+Channel mtataryn555@gmail.com-inbox
+Channel mtataryn555@gmail.com-sent
+Channel mtataryn555@gmail.com-drafts
+Channel mtataryn555@gmail.com-trash
+Channel mtataryn555@gmail.com-archive
+
+IMAPStore mykola.tataryn@apriorit.com-remote
+Host long.apriorit.com
+Port 40993
+User mykola.tataryn@apriorit.com
+AuthMechs LOGIN
+PassCmd "secret-tool lookup application email account mykola.tataryn@apriorit.com"
+SSLType IMAPS
+
+MaildirStore mykola.tataryn@apriorit.com-local
+Path ~/.mail/mykola.tataryn@apriorit.com/
+Inbox ~/.mail/mykola.tataryn@apriorit.com/Inbox
+Trash Trash
+SubFolders Verbatim
+
+Channel mykola.tataryn@apriorit.com-inbox
+Far :mykola.tataryn@apriorit.com-remote:
+Near :mykola.tataryn@apriorit.com-local:
+Sync Pull
+
+Channel mykola.tataryn@apriorit.com-sent
+Far :mykola.tataryn@apriorit.com-remote:Sent
+Near :mykola.tataryn@apriorit.com-local:Sent
+Sync Pull
+
+Channel mykola.tataryn@apriorit.com-drafts
+Far :mykola.tataryn@apriorit.com-remote:Drafts
+Near :mykola.tataryn@apriorit.com-local:Drafts
+Sync Pull
+
+Channel mykola.tataryn@apriorit.com-trash
+Far :mykola.tataryn@apriorit.com-remote:Trash
+Near :mykola.tataryn@apriorit.com-local:Trash
+Sync Pull
+
+# Channel mykola.tataryn@apriorit.com-archive
+# Far :mykola.tataryn@apriorit.com-remote:Archive
+# Near :mykola.tataryn@apriorit.com-local:Archive
+# Sync Pull
+
+Group mykola.tataryn@apriorit.com
+Channel mykola.tataryn@apriorit.com-inbox
+Channel mykola.tataryn@apriorit.com-sent
+Channel mykola.tataryn@apriorit.com-drafts
+Channel mykola.tataryn@apriorit.com-trash
+# Channel mykola.tataryn@apriorit.com-archive
+#+end_src
+
+*** mstmp
+#+begin_src conf :tangle no
+defaults
+auth on
+tls on
+
+account mtataryn555@gmail.com
+host smtp.gmail.com
+port 587
+from mtataryn555@gmail.com
+user mtataryn555@gmail.com
+passwordeval "secret-tool lookup application email account mtataryn555@gmail.com"
+
+account mykola.tataryn@apriorit.com
+host long.apriorit.com
+port 40465
+from mykola.tataryn@apriorit.com
+user mykola.tataryn@apriorit.com
+passwordeval "secret-tool lookup application email account mykola.tataryn@apriorit.com"
+
+account default : mtataryn555@gmail.com
 #+end_src
 
 * Other
