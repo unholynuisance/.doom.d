@@ -1,38 +1,39 @@
-* Keybindings
-** Doom leader keys:
+* General configuration
+** Keybindings
+*** Doom leader keys:
 #+begin_src emacs-lisp
 (setq doom-leader-alt-key "C-SPC")
 (setq doom-localleader-alt-key "C-SPC l")
 #+end_src
 
-** Rebind set-mark-command
+*** Rebind set-mark-command
 #+begin_src emacs-lisp
 (map! "S-SPC" 'set-mark-command)
 #+end_src
 
-** Projectile prefix
+*** Projectile prefix
 #+begin_src emacs-lisp
 (map! :leader
       "p" 'projectile-command-map)
 #+end_src
 
-* UI
-** Transparency
+** UI
+*** Transparency
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist '(alpha . (98 . 98)))
 #+end_src
 
-** Font
+*** Font
 #+begin_src emacs-lisp
 (setq doom-font (font-spec :family "Hack" :size 16))
 #+end_src
 
-** Theme
+*** Theme
 #+begin_src emacs-lisp
 (setq! doom-theme 'doom-vibrant)
 #+end_src
 
-** Dashboard
+*** Dashboard
 Menu sections:
 #+begin_src emacs-lisp
 (setq +doom-dashboard-menu-sections
@@ -68,36 +69,78 @@ Banner:
 (setq fancy-splash-image (concat (file-name-as-directory doom-private-dir) "pictures/kurisu.png"))
 #+end_src
 
-** Doom quit
+*** Doom quit
 #+begin_src emacs-lisp
 (setq +doom-quit-messages '("It's not like I'll miss you or anything, b-baka!"))
 #+end_src
 
-* Lang
-** Org
+* Packages
+** Reverse im
 #+begin_src emacs-lisp
-(after! org
-  (setq! org-directory "~/Org/agenda")
-  (setq! org-roam-directory "~/Org/roam")
-  (setq! org-agenda-files '("~/Org/agenda"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
-
-(use-package! org-tempo
-  :after org)
-#+end_src
-
-** NASM
-#+begin_src emacs-lisp
-(use-package! nasm-mode
-  :mode "\\.asm\\'")
+(use-package! reverse-im
+  :hook
+  (after-init . reverse-im-mode)
+  :custom
+  (reverse-im-input-methods '("russian-computer" "ukrainian-computer")))
 #+end_src
 
 #+begin_src emacs-lisp :tangle packages.el
-(package! nasm-mode)
+(package! reverse-im)
 #+end_src
 
-* Email
-** mu4e
+** Good scroll
+#+begin_src emacs-lisp
+(use-package! good-scroll
+  :hook
+  (after-init . good-scroll-mode))
+#+end_src
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! good-scroll)
+#+end_src
+
+* Applications
+** Emacs application framework
+#+begin_src emacs-lisp
+(use-package! eaf
+  :defer-incrementally t
+  :custom
+  (eaf-apps-to-install '(browser
+                         pdf-viewer
+                         org-previewer
+                         markdown-previewer)))
+
+(use-package! eaf-browser
+  :defer-incrementally t
+  :after eaf)
+
+(use-package! eaf-mail
+  :defer-incrementally t
+  :after eaf
+  :config
+  (map! :map mu4e-view-mode-map
+        "o" 'eaf-open-mail-as-html))
+
+(use-package! eaf-pdf-viewer
+  :defer-incrementally t
+  :after eaf)
+
+(use-package! eaf-org-previewer
+  :defer-incrementally t
+  :after eaf)
+
+(use-package! eaf-markdown-previewer
+  :defer-incrementally t
+  :after eaf)
+#+end_src
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! emacs-application-framework
+  :recipe (:host github :repo "manateelazycat/emacs-application-framework" :files ("*")))
+#+end_src
+
+** Email
+*** mu4e
 #+begin_src emacs-lisp
 (after! mu4e
   (setq! ; sendmail setup
@@ -117,8 +160,8 @@ Banner:
          mu4e-compose-context-policy 'always-ask))
 #+end_src
 
-*** Accounts
-**** mtataryn555@gmail.com
+**** Accounts
+***** mtataryn555@gmail.com
 #+begin_src emacs-lisp
 (after! mu4e
   (set-email-account! "p mtataryn555@gmail.com"
@@ -173,7 +216,7 @@ Banner:
                       t))
 #+end_src
 
-**** mykola.tataryn@apriorit.com
+***** mykola.tataryn@apriorit.com
 #+begin_src emacs-lisp
 (after! mu4e
   (set-email-account! "a mykola.tataryn@apriorit.com"
@@ -245,8 +288,8 @@ Banner:
                       t))
 #+end_src
 
-** TODO External config
-*** mbsync
+*** TODO External config
+**** mbsync
 #+begin_src conf :tangle no
 SyncState *
 Create Both
@@ -339,7 +382,7 @@ Channel mykola.tataryn@apriorit.com-trash
 # Channel mykola.tataryn@apriorit.com-archive
 #+end_src
 
-*** mstmp
+**** mstmp
 #+begin_src conf :tangle no
 defaults
 auth on
@@ -362,66 +405,26 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 account default : mtataryn555@gmail.com
 #+end_src
 
-* Other
-** Reverse im
+* Language configuration
+** Org
 #+begin_src emacs-lisp
-(use-package! reverse-im
-  :hook
-  (after-init . reverse-im-mode)
-  :custom
-  (reverse-im-input-methods '("russian-computer" "ukrainian-computer")))
+(after! org
+  (setq! org-directory "~/Org/agenda")
+  (setq! org-roam-directory "~/Org/roam")
+  (setq! org-agenda-files '("~/Org/agenda"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
+
+(use-package! org-tempo
+  :after org)
+#+end_src
+
+** NASM
+#+begin_src emacs-lisp
+(use-package! nasm-mode
+  :mode "\\.asm\\'")
 #+end_src
 
 #+begin_src emacs-lisp :tangle packages.el
-(package! reverse-im)
+(package! nasm-mode)
 #+end_src
 
-** Good scroll
-#+begin_src emacs-lisp
-(use-package! good-scroll
-  :hook
-  (after-init . good-scroll-mode))
-#+end_src
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! good-scroll)
-#+end_src
-
-** Emacs application framework
-#+begin_src emacs-lisp
-(use-package! eaf
-  :defer-incrementally t
-  :custom
-  (eaf-apps-to-install '(browser
-                         pdf-viewer
-                         org-previewer
-                         markdown-previewer)))
-
-(use-package! eaf-browser
-  :defer-incrementally t
-  :after eaf)
-
-(use-package! eaf-mail
-  :defer-incrementally t
-  :after eaf
-  :config
-  (map! :map mu4e-view-mode-map
-        "o" 'eaf-open-mail-as-html))
-
-(use-package! eaf-pdf-viewer
-  :defer-incrementally t
-  :after eaf)
-
-(use-package! eaf-org-previewer
-  :defer-incrementally t
-  :after eaf)
-
-(use-package! eaf-markdown-previewer
-  :defer-incrementally t
-  :after eaf)
-#+end_src
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! emacs-application-framework
-  :recipe (:host github :repo "manateelazycat/emacs-application-framework" :files ("*")))
-#+end_src
