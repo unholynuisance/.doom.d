@@ -92,6 +92,10 @@ Banner:
   :mode "\\.asm\\'")
 #+end_src
 
+#+begin_src emacs-lisp :tangle packages.el
+(package! nasm-mode)
+#+end_src
+
 * Email
 ** mu4e
 #+begin_src emacs-lisp
@@ -368,11 +372,19 @@ account default : mtataryn555@gmail.com
   (reverse-im-input-methods '("russian-computer" "ukrainian-computer")))
 #+end_src
 
+#+begin_src emacs-lisp :tangle packages.el
+(package! reverse-im)
+#+end_src
+
 ** Good scroll
 #+begin_src emacs-lisp
 (use-package! good-scroll
   :hook
   (after-init . good-scroll-mode))
+#+end_src
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! good-scroll)
 #+end_src
 
 ** Emacs application framework
@@ -407,5 +419,9 @@ account default : mtataryn555@gmail.com
 (use-package! eaf-markdown-previewer
   :defer-incrementally t
   :after eaf)
+#+end_src
 
+#+begin_src emacs-lisp :tangle packages.el
+(package! emacs-application-framework
+  :recipe (:host github :repo "manateelazycat/emacs-application-framework" :files ("*")))
 #+end_src
