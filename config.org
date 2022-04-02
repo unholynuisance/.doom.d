@@ -290,7 +290,7 @@ Banner:
 
 *** TODO External config
 **** mbsync
-#+begin_src conf :tangle no
+#+begin_src conf :tangle ~/.config/mbsync/config
 SyncState *
 Create Both
 Expunge Both
@@ -383,7 +383,7 @@ Channel mykola.tataryn@apriorit.com-trash
 #+end_src
 
 **** mstmp
-#+begin_src conf :tangle no
+#+begin_src conf :tangle ~/.config/msmtp/config
 defaults
 auth on
 tls on
