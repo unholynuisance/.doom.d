@@ -101,7 +101,7 @@ Banner:
 
 * Applications
 ** Emacs application framework
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package! eaf
   :defer-incrementally t
   :custom
@@ -118,8 +118,9 @@ Banner:
   :defer-incrementally t
   :after eaf
   :config
-  (map! :map mu4e-view-mode-map
-        "o" 'eaf-open-mail-as-html))
+  (after! mu4e
+    (map! :map mu4e-view-mode-map
+          "o" 'eaf-open-mail-as-html)))
 
 (use-package! eaf-pdf-viewer
   :defer-incrementally t
