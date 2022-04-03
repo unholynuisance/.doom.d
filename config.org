@@ -75,7 +75,8 @@ Banner:
 #+end_src
 
 * Packages
-** Reverse im
+** Convenience
+*** Reverse im
 #+begin_src emacs-lisp
 (use-package! reverse-im
   :hook
@@ -88,7 +89,8 @@ Banner:
 (package! reverse-im)
 #+end_src
 
-** Good scroll
+** Visuals
+*** Good scroll
 #+begin_src emacs-lisp
 (use-package! good-scroll
   :hook
@@ -97,6 +99,12 @@ Banner:
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! good-scroll)
+#+end_src
+
+*** Mixed pitch
+Hooks
+#+begin_src emacs-lisp
+(add-hook! (org-mode LaTeX-mode markdown-mode gfm-mode Info-mode) #'mixed-pitch-mode)
 #+end_src
 
 * Applications
