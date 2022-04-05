@@ -11,12 +11,6 @@
 (map! :leader :desc "Mark" "C-SPC"#'set-mark-command)
 #+end_src
 
-*** Projectile prefix
-#+begin_src emacs-lisp
-(map! :leader
-      "p" 'projectile-command-map)
-#+end_src
-
 ** UI
 *** Transparency
 #+begin_src emacs-lisp
@@ -105,6 +99,20 @@ Banner:
 Hooks
 #+begin_src emacs-lisp
 (add-hook! (org-mode LaTeX-mode markdown-mode gfm-mode Info-mode) #'mixed-pitch-mode)
+#+end_src
+
+** Tools
+*** Projectile
+Keybindings
+#+begin_src emacs-lisp :tangle no
+(map! :leader
+      "p" 'projectile-command-map)
+#+end_src
+
+Include
+#+begin_src emacs-lisp
+(after! projectile
+  (setq! projectile-find-dir-includes-top-level t))
 #+end_src
 
 * Applications
