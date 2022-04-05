@@ -8,7 +8,7 @@
 
 *** Rebind set-mark-command
 #+begin_src emacs-lisp
-(map! "S-SPC" 'set-mark-command)
+(map! :leader :desc "Mark" "C-SPC"#'set-mark-command)
 #+end_src
 
 *** Projectile prefix
