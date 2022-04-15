@@ -86,6 +86,20 @@ Banner:
 (package! reverse-im)
 #+end_src
 
+** Tools
+*** Projectile
+Keybindings.
+#+begin_src emacs-lisp :tangle no
+(map! :leader
+      "p" 'projectile-command-map)
+#+end_src
+
+Make ~projectile-find-dir~ include top level directory.
+#+begin_src emacs-lisp
+(after! projectile
+  (setq! projectile-find-dir-includes-top-level t))
+#+end_src
+
 ** Visuals
 *** Good scroll
 #+begin_src emacs-lisp
