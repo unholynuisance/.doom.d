@@ -460,6 +460,13 @@ account default : mtataryn555@gmail.com
   :mode "\\.asm\\'")
 #+end_src
 
+** Systemd
+For editing systemd unit files
 #+begin_src emacs-lisp :tangle packages.el
-(package! nasm-mode)
+(package! systemd :pin "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! systemd
+  :defer t)
 #+end_src
