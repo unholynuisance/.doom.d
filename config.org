@@ -100,6 +100,50 @@ Make ~projectile-find-dir~ include top level directory.
   (setq! projectile-find-dir-includes-top-level t))
 #+end_src
 
+*** Collaborative programming
+**** Floobits
+I have found this pair programming service (proprietary, unfortunately) and they have an emacs plugin. Neat! Let's make it work.
+
+First, package setup and configuration.
+#+begin_src emacs-lisp :tangle packages.el
+(package! floobits)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! floobits
+  :defer t)
+
+(map! :leader
+      (:prefix-map ("C-c" . "collaboration")
+       :desc "Join workspace"        "j" #'floobits-join-workspace
+       :desc "Leave workspace"       "l" #'floobits-leave-workspace
+       :desc "Summon"                "s" #'floobits-summon
+       :desc "Follow user"           "f" #'floobits-follow-user
+       :desc "Follow toggle"         "F" #'floobits-follow-mode-toggle
+       :desc "Clear highlights"      "h" #'floobits-clear-highlights
+       :desc "Add to workspace"      "a" #'floobits-add-to-workspace
+       :desc "Remove from workspace" "r" #'floobits-remove-from-workspace
+       (:prefix-map ("w" . "workspace")
+        :desc "Share private"        "s" #'floobits-share-dir-private
+        :desc "Share public"         "S" #'floobits-share-dir-public
+        :desc "Configure"            "c" #'floobits-workspace-settings
+        :desc "Delete"               "k" #'floobits-delete-workspace)
+       :desc "Browse"                "b" #'floobits-open-workspace-in-browser))
+#+end_src
+
+We also need a =.floorc.json= with credentials in our home dir.
+#+begin_src json :tangle ~/.floorc.json
+{
+  "auth": {
+    "floobits.com": {
+      "username": "son-of-satan",
+      "api_key": "user_6q950st0qn",
+      "secret": "pfengudkiveq5yvsjbet3g7xr"
+    }
+  }
+}
+#+end_src
+
 ** Visuals
 *** Good scroll
 #+begin_src emacs-lisp
