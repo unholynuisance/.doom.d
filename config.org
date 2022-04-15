@@ -451,6 +451,10 @@ account default : mtataryn555@gmail.com
 #+end_src
 
 ** NASM
+#+begin_src emacs-lisp :tangle packages.el
+(package! nasm-mode)
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package! nasm-mode
   :mode "\\.asm\\'")
