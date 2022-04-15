@@ -180,6 +180,18 @@ Include
 #+begin_src emacs-lisp
 (after! projectile
   (setq! projectile-find-dir-includes-top-level t))
+** Questionable stuff
+*** Elcord
+I use emacs btw.
+#+begin_src emacs-lisp :tangle packages.el
+(package! elcord)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! elcord
+  :commands elcord-mode
+  :config
+  (setq! elcord-use-major-mode-as-main-icon t))
 #+end_src
 
 * Applications
