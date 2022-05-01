@@ -189,15 +189,18 @@ Include
   (setq! projectile-find-dir-includes-top-level t))
 ** Questionable stuff
 *** Elcord
-I use emacs btw.
-#+begin_src emacs-lisp :tangle packages.el
+I use emacs btw (only if discord is installed).
+#+begin_src emacs-lisp :tangle (if (executable-find "discord") "packages.el" "no")
 (package! elcord)
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package! elcord
+  :hook
+  (after-init . elcord-mode)
   :commands elcord-mode
   :config
+  (setq! elcord-quiet t)
   (setq! elcord-use-major-mode-as-main-icon t))
 #+end_src
 
