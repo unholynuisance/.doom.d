@@ -515,6 +515,8 @@ account default : mtataryn555@gmail.com
   (setq! org-directory "~/Org/agenda")
   (setq! org-roam-directory "~/Org/roam")
   (setq! org-agenda-files '("~/Org/agenda"))
+  (setq! org-cite-global-bibliography '("~/Org/bibliography.bib"))
+  (setq! org-latex-compiler '"xelatex")
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
 (use-package! org-tempo
@@ -531,6 +533,106 @@ account default : mtataryn555@gmail.com
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! org-auto-tangle)
+#+end_src
+
+*** Exporting
+Make org recognize first /five/ levels of headings as headings when exporting
+#+begin_src emacs-lisp
+(setq! org-export-headline-levels 5)
+#+end_src
+
+*** Latex export
+**** Export settings
+#+begin_src conf :tangle ~/.config/environment.d/texmf.conf
+TEXMFHOME=${HOME}/.local/share/texmf
+#+end_src
+
+#+begin_src emacs-lisp
+(after! org
+  (setq! org-latex-classes
+         '(("beamer" "\\documentclass[presentation]{beamer}"
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+           ("article" "\\documentclass[11pt]{article}"
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+            ("\\paragraph{%s}" . "\\paragraph*{%s}")
+            ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+           ("report" "\\documentclass[11pt]{report}"
+            ("\\part{%s}" . "\\part*{%s}")
+            ("\\chapter{%s}" . "\\chapter*{%s}")
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+           ("book" "\\documentclass[11pt]{book}"
+            ("\\part{%s}" . "\\part*{%s}")
+            ("\\chapter{%s}" . "\\chapter*{%s}")
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+           ("dstu-report" "\\documentclass{satan/dstu-report}"
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+            ("\\paragraph{%s}" . "\\paragraph*{%s}")
+            ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
+#+end_src
+
+**** TODO Default style
+
+**** TODO DSTU 3008-2015 Style
+#+begin_src latex :tangle ~/.local/share/texmf/tex/xelatex/satan/dstu-report.cls
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{satan/dstu-article}
+
+\LoadClass[14pt,a4paper]{article}
+
+% indentfirst paragraph (it needs to be loaded before polyglossia)
+\RequirePackage{indentfirst}
+
+% polyglossia setup
+\RequirePackage{fontspec}
+\RequirePackage{polyglossia}
+\setdefaultlanguage{ukrainian}
+\setotherlanguage{english}
+
+% fontspec setup
+\setmainfont{Times New Roman}
+\setsansfont{Noto Sans}
+\setmonofont{Noto Sans Mono}
+
+% page layout
+\RequirePackage[paper=a4paper,top=2cm,bottom=2cm,left=2.5cm,right=1cm]{geometry}
+
+% paragraphs and linespread
+\setlength{\parindent}{5ex}
+\setlength{\parskip}{0pt}
+\linespread{1.3}
+#+end_src
+
+*** HTML export
+**** Mathjax
+#+begin_src emacs-lisp
+(after! org
+  (setq! org-html-mathjax-options
+         '((path "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" )
+           (scale "1")
+           (autonumber "ams")
+           (multlinewidth "85%")
+           (tagindent ".8em")
+           (tagside "right"))))
+#+end_src
+
+*** Reveal export
+#+begin_src emacs-lisp
+(after! org
+  (setq! org-re-reveal-theme "night"
+         org-re-reveal-transition "slide"
+         org-re-reveal-plugins '(markdown notes math search zoom)
+         org-re-reveal-width (display-pixel-width)
+         org-re-reveal-height (display-pixel-height)))
 #+end_src
 
 ** NASM
