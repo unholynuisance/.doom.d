@@ -1,3 +1,5 @@
+#+property: header-args :mkdirp yes
+
 * General configuration
 ** Keybindings
 *** Doom leader keys:
@@ -170,23 +172,10 @@ We also need a =.floorc.json= with credentials in our home dir.
 #+end_src
 
 *** Mixed pitch
-Hooks
 #+begin_src emacs-lisp
 (add-hook! (org-mode LaTeX-mode markdown-mode gfm-mode Info-mode) #'mixed-pitch-mode)
 #+end_src
 
-** Tools
-*** Projectile
-Keybindings
-#+begin_src emacs-lisp :tangle no
-(map! :leader
-      "p" 'projectile-command-map)
-#+end_src
-
-Include
-#+begin_src emacs-lisp
-(after! projectile
-  (setq! projectile-find-dir-includes-top-level t))
 ** Questionable stuff
 *** Elcord
 I use emacs btw (only if discord is installed).
@@ -266,8 +255,24 @@ I use emacs btw (only if discord is installed).
          mu4e-compose-context-policy 'always-ask))
 #+end_src
 
-**** Accounts
-***** mtataryn555@gmail.com
+*** External config (defaults)
+**** mbsync
+#+begin_src conf :tangle ~/.config/mbsync/config
+SyncState *
+Create Both
+Expunge Both
+#+end_src
+
+**** mstmp
+#+begin_src conf :tangle ~/.config/msmtp/config
+defaults
+auth on
+tls on
+#+end_src
+
+*** Accounts
+**** mtataryn555@gmail.com
+***** mu4e config
 #+begin_src emacs-lisp
 (after! mu4e
   (set-email-account! "p mtataryn555@gmail.com"
@@ -322,7 +327,63 @@ I use emacs btw (only if discord is installed).
                       t))
 #+end_src
 
-***** mykola.tataryn@apriorit.com
+***** mbsync config
+#+begin_src conf :tangle ~/.config/mbsync/config
+IMAPStore mtataryn555@gmail.com-remote
+Host imap.gmail.com
+SSLType IMAPS
+AuthMechs LOGIN
+User mtataryn555@gmail.com
+PassCmd "secret-tool lookup application email account mtataryn555@gmail.com"
+
+MaildirStore mtataryn555@gmail.com-local
+Path ~/.mail/mtataryn555@gmail.com/
+Inbox ~/.mail/mtataryn555@gmail.com/Inbox
+Trash Trash
+SubFolders Verbatim
+
+Channel mtataryn555@gmail.com-inbox
+Far :mtataryn555@gmail.com-remote:
+Near :mtataryn555@gmail.com-local:
+
+Channel mtataryn555@gmail.com-sent
+Far :mtataryn555@gmail.com-remote:"[Gmail]/Sent Mail"
+Near :mtataryn555@gmail.com-local:Sent
+
+Channel mtataryn555@gmail.com-drafts
+Far :mtataryn555@gmail.com-remote:[Gmail]/Drafts
+Near :mtataryn555@gmail.com-local:Drafts
+
+Channel mtataryn555@gmail.com-trash
+Far :mtataryn555@gmail.com-remote:[Gmail]/Trash
+Near :mtataryn555@gmail.com-local:Trash
+
+Channel mtataryn555@gmail.com-archive
+Far :mtataryn555@gmail.com-remote:Archive
+Near :mtataryn555@gmail.com-local:Archive
+
+Group mtataryn555@gmail.com
+Channel mtataryn555@gmail.com-inbox
+Channel mtataryn555@gmail.com-sent
+Channel mtataryn555@gmail.com-drafts
+Channel mtataryn555@gmail.com-trash
+Channel mtataryn555@gmail.com-archive
+#+end_src
+
+***** msmtp config
+#+begin_src conf :tangle ~/.config/msmtp/config
+account mtataryn555@gmail.com
+host smtp.gmail.com
+port 587
+from mtataryn555@gmail.com
+user mtataryn555@gmail.com
+passwordeval "secret-tool lookup application email account mtataryn555@gmail.com"
+
+account default : mtataryn555@gmail.com
+#+end_src
+
+**** mykola.tataryn@apriorit.com
+***** mu4e config
 #+begin_src emacs-lisp
 (after! mu4e
   (set-email-account! "a mykola.tataryn@apriorit.com"
@@ -379,69 +440,24 @@ I use emacs btw (only if discord is installed).
                         (smtpmail-smtp-user       . "mykola.tataryn@apriorit.com")
                         (+mu4e-personal-addresses . ("mykola.tataryn@apriorit.com"))
 
-                        (mu4e-compose-signature   . ,(concat "Best regards,\n"
+                        (mu4e-compose-signature   . ,(concat "-----\n"
+                                                             "Best regards,\n"
                                                              "Mykola Tataryn,\n"
                                                              "Software Developer of Apriorit - A Priority Choice!\n"
                                                              "Visit us at http://www.apriorit.com"))
 
                         (org-msg-signature        . ,(concat "-----\n"
                                                              "#+begin_signature\n"
-                                                             "Best regards,\n"
-                                                             "Mykola Tataryn,\n"
-                                                             "Software Developer of Apriorit - A Priority Choice!\n"
+                                                             "Best regards,\n\n"
+                                                             "Mykola Tataryn,\n\n"
+                                                             "Software Developer of Apriorit - A Priority Choice!\n\n"
                                                              "Visit us at [[https://apriorit.com]]\n"
                                                              "#+end_signature")))
                       t))
 #+end_src
 
-*** TODO External config
-**** mbsync
+***** mbsync config
 #+begin_src conf :tangle ~/.config/mbsync/config
-SyncState *
-Create Both
-Expunge Both
-
-IMAPStore mtataryn555@gmail.com-remote
-Host imap.gmail.com
-SSLType IMAPS
-AuthMechs LOGIN
-User mtataryn555@gmail.com
-PassCmd "secret-tool lookup application email account mtataryn555@gmail.com"
-
-MaildirStore mtataryn555@gmail.com-local
-Path ~/.mail/mtataryn555@gmail.com/
-Inbox ~/.mail/mtataryn555@gmail.com/Inbox
-Trash Trash
-SubFolders Verbatim
-
-Channel mtataryn555@gmail.com-inbox
-Far :mtataryn555@gmail.com-remote:
-Near :mtataryn555@gmail.com-local:
-
-Channel mtataryn555@gmail.com-sent
-Far :mtataryn555@gmail.com-remote:"[Gmail]/Sent Mail"
-Near :mtataryn555@gmail.com-local:Sent
-
-Channel mtataryn555@gmail.com-drafts
-Far :mtataryn555@gmail.com-remote:[Gmail]/Drafts
-Near :mtataryn555@gmail.com-local:Drafts
-
-Channel mtataryn555@gmail.com-trash
-Far :mtataryn555@gmail.com-remote:[Gmail]/Trash
-Near :mtataryn555@gmail.com-local:Trash
-
-Channel mtataryn555@gmail.com-archive
-Far :mtataryn555@gmail.com-remote:Archive
-Near :mtataryn555@gmail.com-local:Archive
-
-Group mtataryn555@gmail.com
-Channel mtataryn555@gmail.com-inbox
-Channel mtataryn555@gmail.com-sent
-Channel mtataryn555@gmail.com-drafts
-Channel mtataryn555@gmail.com-trash
-Channel mtataryn555@gmail.com-archive
-
-IMAPStore mykola.tataryn@apriorit.com-remote
 Host long.apriorit.com
 Port 40993
 User mykola.tataryn@apriorit.com
@@ -475,40 +491,27 @@ Far :mykola.tataryn@apriorit.com-remote:Trash
 Near :mykola.tataryn@apriorit.com-local:Trash
 Sync Pull
 
-# Channel mykola.tataryn@apriorit.com-archive
-# Far :mykola.tataryn@apriorit.com-remote:Archive
-# Near :mykola.tataryn@apriorit.com-local:Archive
-# Sync Pull
+Channel mykola.tataryn@apriorit.com-archive
+Far :mykola.tataryn@apriorit.com-remote:Archive
+Near :mykola.tataryn@apriorit.com-local:Archive
+Sync Pull
 
 Group mykola.tataryn@apriorit.com
 Channel mykola.tataryn@apriorit.com-inbox
 Channel mykola.tataryn@apriorit.com-sent
 Channel mykola.tataryn@apriorit.com-drafts
 Channel mykola.tataryn@apriorit.com-trash
-# Channel mykola.tataryn@apriorit.com-archive
+Channel mykola.tataryn@apriorit.com-archive
 #+end_src
 
-**** mstmp
+***** msmtp config
 #+begin_src conf :tangle ~/.config/msmtp/config
-defaults
-auth on
-tls on
-
-account mtataryn555@gmail.com
-host smtp.gmail.com
-port 587
-from mtataryn555@gmail.com
-user mtataryn555@gmail.com
-passwordeval "secret-tool lookup application email account mtataryn555@gmail.com"
-
 account mykola.tataryn@apriorit.com
 host long.apriorit.com
 port 40465
 from mykola.tataryn@apriorit.com
 user mykola.tataryn@apriorit.com
 passwordeval "secret-tool lookup application email account mykola.tataryn@apriorit.com"
-
-account default : mtataryn555@gmail.com
 #+end_src
 
 * Language configuration
