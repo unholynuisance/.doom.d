@@ -605,17 +605,17 @@ Far :mykola.tataryn@apriorit.com-remote:Trash
 Near :mykola.tataryn@apriorit.com-local:Trash
 Sync Pull
 
-Channel mykola.tataryn@apriorit.com-archive
-Far :mykola.tataryn@apriorit.com-remote:Archive
-Near :mykola.tataryn@apriorit.com-local:Archive
-Sync Pull
+# Channel mykola.tataryn@apriorit.com-archive
+# Far :mykola.tataryn@apriorit.com-remote:Archive
+# Near :mykola.tataryn@apriorit.com-local:Archive
+# Sync Pull
 
 Group mykola.tataryn@apriorit.com
 Channel mykola.tataryn@apriorit.com-inbox
 Channel mykola.tataryn@apriorit.com-sent
 Channel mykola.tataryn@apriorit.com-drafts
 Channel mykola.tataryn@apriorit.com-trash
-Channel mykola.tataryn@apriorit.com-archive
+# Channel mykola.tataryn@apriorit.com-archive
 #+end_src
 
 ***** msmtp config
