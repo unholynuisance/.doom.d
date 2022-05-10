@@ -266,6 +266,13 @@ We also need a =.floorc.json= with credentials in our home dir.
 }
 #+end_src
 
+*** Checkers
+**** Spelling
+#+begin_src emacs-lisp
+(setq! ispell-dictionary "english")
+(setq! ispell-personal-dictionary (expand-file-name ".ispell-personal-dictionary" doom-private-dir))
+#+end_src
+
 ** Visuals
 *** Good scroll
 #+begin_src emacs-lisp
