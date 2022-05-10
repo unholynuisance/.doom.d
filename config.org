@@ -85,6 +85,38 @@ Banner:
 #+end_src
 
 ** Other
+*** New frames
+I have (or had) two problems with new frames:
++ Sometimes, if you resize frame, close it, and open new frame, that new frame is the size of previous one, and, for example, the dashboard might not fit in.
++ New frames are not centered.
+
+Fortunately, we can fix the first problem by modifying ~default-frame-alist~.
+#+begin_src emacs-lisp
+(add-to-list 'default-frame-alist '(width . 80))
+(add-to-list 'default-frame-alist '(height . 35))
+#+end_src
+
+To fix the second problem, we can use the following function (taken from [[https://christiantietze.de/posts/2022/04/emacs-center-window-current-monitor-simplified/][here]]) that centers the frame.
+#+begin_src emacs-lisp
+(defun satan/center-frame (&optional frame)
+  "Center FRAME on the screen.
+FRAME can be a frame name, a terminal name, or a frame.
+If FRAME is omitted or nil, use currently selected frame."
+  (interactive)
+  (unless (eq 'maximised (frame-parameter nil 'fullscreen))
+    (modify-frame-parameters
+     frame '((user-position . t) (top . 0.5) (left . 0.5)))))
+#+end_src
+
+And add it to one of ~doom-init-ui~ or ~server-after-make-frame~ hooks.
+#+begin_src emacs-lisp
+(if (daemonp)
+  (add-hook! server-after-make-frame
+             #'satan/center-frame)
+  (add-hook! doom-init-ui
+             #'satan/center-frame))
+#+end_src
+
 *** Preferred encoding
 Just in case.
 #+begin_src emacs-lisp
