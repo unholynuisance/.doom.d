@@ -1,6 +1,11 @@
 #+property: header-args :mkdirp yes
 
 * General configuration
+** Enable lexical binding
+#+begin_src emacs-lisp
+;;; config.el -*- lexical-binding: t; -*-
+#+end_src
+
 ** Keybindings
 *** Doom leader keys:
 #+begin_src emacs-lisp
