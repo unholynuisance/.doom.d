@@ -1,5 +1,29 @@
 #+property: header-args :mkdirp yes
 
+* Installation
+** Packages
+*** Pacman
+#+begin_src conf :noweb yes :tangle pkg/pacman/PKGBUILD
+# Maintainer: son-of-satan <mtataryn555@gmail.com>
+pkgname=satanic-emacs-meta-package
+pkgver=3
+pkgrel=1
+pkgdesc="Set of packages needed by my emacs setup"
+arch=('any')
+license=('WTFPL')
+depends=(
+<<pacman-packages>>
+)
+#+end_src
+
+** Doom dependencies
+Pacman packages.
+#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+ripgrep fd
+#+end_src
+
+** Install script
+
 * General configuration
 ** Enable lexical binding
 #+begin_src emacs-lisp
@@ -30,6 +54,11 @@
        doom-big-font (font-spec :family "Fira Code" :size 24)
        doom-variable-pitch-font (font-spec :family "Julia Mono")
        doom-unicode-font (font-spec :family "Julia Mono"))
+#+end_src
+
+Pacman packages.
+#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+ttf-fira-code ttf-juliamono
 #+end_src
 
 *** Line numbers
@@ -374,6 +403,11 @@ I use Emacs btw (only if discord is installed).
          mu4e-compose-context-policy 'always-ask))
 #+end_src
 
+Pacman packages.
+#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+mu
+#+end_src
+
 *** External config (defaults)
 **** mbsync
 #+begin_src conf :tangle ~/.config/mbsync/config
@@ -382,11 +416,21 @@ Create Both
 Expunge Both
 #+end_src
 
+Pacman packages.
+#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+isync
+#+end_src
+
 **** msmtp
 #+begin_src conf :tangle ~/.config/msmtp/config
 defaults
 auth on
 tls on
+#+end_src
+
+Pacman packages.
+#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+msmtp
 #+end_src
 
 *** Accounts
@@ -678,6 +722,16 @@ Make org recognize first /five/ levels of headings as headings when exporting
 #+end_src
 
 *** Latex export
+**** System dependencies
+Pacman packages.
+#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+texlive-core
+texlive-latexextra
+texlive-fontsextra
+texlive-langcyrillic
+texlive-pictures
+#+end_src
+
 **** Export settings
 #+begin_src conf :tangle ~/.config/environment.d/texmf.conf
 TEXMFHOME=${HOME}/.local/share/texmf
