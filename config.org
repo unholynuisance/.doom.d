@@ -165,7 +165,7 @@ Also, I prefer =main= workspace when opening a new frame.
 
 * Packages
 ** Convenience
-*** Reverse im
+*** Reverse-im
 #+begin_src emacs-lisp
 (use-package! reverse-im
   :hook
@@ -292,7 +292,7 @@ We also need a =.floorc.json= with credentials in our home dir.
 
 ** Questionable stuff
 *** Elcord
-I use emacs btw (only if discord is installed).
+I use Emacs btw (only if discord is installed).
 #+begin_src emacs-lisp :tangle (if (executable-find "discord") "packages.el" "no")
 (package! elcord)
 #+end_src
@@ -377,7 +377,7 @@ Create Both
 Expunge Both
 #+end_src
 
-**** mstmp
+**** msmtp
 #+begin_src conf :tangle ~/.config/msmtp/config
 defaults
 auth on
