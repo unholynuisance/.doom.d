@@ -163,6 +163,12 @@ Also, I prefer =main= workspace when opening a new frame.
   (setq persp-emacsclient-init-frame-behaviour-override "main"))
 #+end_src
 
+*** TODO Alerts
+There are some packages in this config using [[https://github.com/jwiegley/alert][alert.el]], so it would be nice to set it up depending on platform we are on.
+#+begin_src emacs-lisp
+(setq! alert-default-style 'notifications)
+#+end_src
+
 * Packages
 ** Convenience
 *** Reverse-im
@@ -363,7 +369,6 @@ I use Emacs btw (only if discord is installed).
          mu4e-get-mail-command "mbsync -a -c ~/.config/mbsync/config"
          ; misc
          mu4e-compose-signature-auto-include t
-         mu4e-alert-style 'notifications
          mu4e-update-interval (* 5 60)
          mu4e-context-policy 'ask-if-none
          mu4e-compose-context-policy 'always-ask))
@@ -653,6 +658,17 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! org-auto-tangle)
+#+end_src
+
+**** Alerts
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-alert)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! org-alert
+  :hook
+  (after-init . org-alert-enable))
 #+end_src
 
 *** Exporting
