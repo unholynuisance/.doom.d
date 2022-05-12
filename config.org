@@ -1,32 +1,11 @@
-#+property: header-args:emacs-lisp+ :tangle yes
-#+property: header-args :mkdirp yes
+#+property: header-args:emacs-lisp+ :tangle yes :eval yes
+#+property: header-args :tangle no :results silent :eval no-export :mkdirp yes
 
-* Installation
-** Packages
-*** Pacman
-#+begin_src conf :noweb yes :tangle pkg/pacman/PKGBUILD
-# Maintainer: son-of-satan <mtataryn555@gmail.com>
-pkgname=satanic-emacs-meta-package
-pkgver=3
-pkgrel=1
-pkgdesc="Set of packages needed by my emacs setup"
-arch=('any')
-license=('WTFPL')
-depends=(
-<<pacman-packages>>
-)
-#+end_src
+* Early config
+This is a section for things that other stuff depends on, so they should be loaded early.
 
-** Doom dependencies
-Pacman packages.
-#+begin_src fundamental :tangle no :noweb-ref pacman-packages
-ripgrep fd
-#+end_src
-
-** Install script
-
-* General configuration
 ** Enable lexical binding
+We want lexical binding, right?
 #+begin_src emacs-lisp
 ;;; config.el -*- lexical-binding: t; -*-
 #+end_src
@@ -41,6 +20,93 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 (use-package f)
 #+end_src
 
+** Current system
+Let's define a straightforward way to check for system we are on (subject to change).
+#+name: current-system-p
+#+begin_src emacs-lisp :eval :session
+(defun satan/current-system-p (&rest args)
+  (pcase system-type
+        ('gnu/linux
+         (string-match-p (concat "^ID=\\(?:" (mapconcat 'identity args "\\|") "\\)")
+                         (org-file-contents "/etc/os-release")))
+        ('windows-nt
+         (member "Windows" args))
+        (default nil)))
+#+end_src
+
+As [[current-system-p]] is not evaluated during tangle, we need to somehow enforce evaluation.
+#+begin_src emacs-lisp :tangle (make-temp-file "") :noweb yes
+<<current-system-p()>>
+#+end_src
+
+* Installation
+** Packaging
+*** Pacman
+#+begin_src conf :tangle pkg/pacman/PKGBUILD :noweb yes
+# Maintainer: son-of-satan <mtataryn555@gmail.com>
+pkgname=satanic-emacs-packages
+pkgver=1
+pkgrel=1
+pkgdesc="Packages needed by my emacs setup"
+arch=('any')
+license=('WTFPL')
+depends=(
+    <<pacman-packages>>
+)
+#+end_src
+
+** General dependencies
+Pacman packages.
+#+begin_src fundamental :noweb-ref pacman-packages
+emacs ripgrep fd python cmake
+#+end_src
+
+Aptitude packages.
+#+begin_src fundamental :noweb-ref apt-packages
+
+#+end_src
+
+** Install script
+*** Arch
+#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Arch") "bin/install.sh" "no")
+cd ~/.config/doom/pkg/pacman
+paru -Ui
+#+end_src
+
+*** Ubuntu
+#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Ubuntu") "bin/install.sh" "no") :noweb yes
+PACKAGES=(
+    <<apt-packages>>
+)
+
+sudo apt update
+sudo apt install "${PACKAGES}"
+#+end_src
+
+** Init script
+This script tangles this file, clones [[https://github.com/doomemacs/doomemacs][Doom Emacs]] and then runs setup scripts.
+#+begin_src sh :shebang #!/bin/bash :tangle bin/init.sh :noweb yes
+emacs --batch --eval "
+(progn
+  (require 'org)
+  (setq org-confirm-babel-evaluate nil)
+  (org-babel-tangle-file \"~/.config/doom/config.org\"))
+"
+
+~/.config/doom/bin/install.sh
+
+git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.config/emacs
+
+~/.config/emacs/bin/doom -y install
+~/.config/doom/bin/setup.sh
+#+end_src
+
+** Setup script
+#+begin_src sh :shebang #!/bin/bash :tangle bin/setup.sh
+
+#+end_src
+
+* General configuration
 ** Keybindings
 *** Doom leader keys:
 #+begin_src emacs-lisp
@@ -98,7 +164,7 @@ Also, let's set a sensible keybind for this mode.
 #+end_src
 
 Pacman packages.
-#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+#+begin_src fundamental :noweb-ref pacman-packages
 ttf-fira-code ttf-juliamono
 #+end_src
 
@@ -355,18 +421,22 @@ vc                ; version-control and Emacs, sitting in a tree
 ;;shell             ; simple shell REPL for Emacs
 ;;term              ; basic terminal emulator for Emacs
 vterm             ; the best terminal emulation in Emacs
-
 #+end_src
 
 *** Checkers
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :checkers
-syntax              ; tasing you for every semicolon you forget
+syntax           ; tasing you for every semicolon you forget
 (spell           ; tasing you for misspelling mispelling
  +flyspell
  +aspell
  +everywhere)
 grammar          ; tasing grammar mistake every you make
+#+end_src
+
+Pacman packages.
+#+begin_src fundamental :noweb-ref pacman-packages
+aspell-en aspell-uk
 #+end_src
 
 *** Tools
@@ -394,6 +464,11 @@ taskrunner        ; taskrunner for all your projects
 ;;terraform         ; infrastructure as code
 ;;tmux              ; an API for interacting with tmux
 ;;upload            ; map local to remote projects via ssh/ftp
+#+end_src
+
+Pacman packages.
+#+begin_src fundamental :noweb-ref pacman-packages
+editorconfig-core-c
 #+end_src
 
 *** OS
@@ -486,6 +561,16 @@ sh                ; she sells {ba,z,fi}sh shells on the C xor
 ;;zig               ; C, but simpler
 #+end_src
 
+Pacman packages.
+#+begin_src fundamental :noweb-ref pacman-packages
+clang glslang
+jdk-openjdk
+pandoc
+gnome-screenshot graphviz
+python-black python-pyflakes python-isort python-pipenv python-nose python-pytest pyenv
+shellcheck
+#+end_src
+
 *** Email
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :email
@@ -498,6 +583,11 @@ sh                ; she sells {ba,z,fi}sh shells on the C xor
 ;; +gmail)
 #+end_src
 
+Pacman packages.
+#+begin_src fundamental :noweb-ref pacman-packages
+mu isync msmtp
+#+end_src
+
 *** App
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :app
@@ -508,6 +598,11 @@ everywhere        ; *leave* Emacs!? You must be joking
 ;;(rss              ; emacs as an RSS reader
 ;; +org)
 ;;twitter           ; twitter client https://twitter.com/vnought
+#+end_src
+
+Pacman packages.
+#+begin_src fundamental :noweb-ref pacman-packages
+xorg-xwininfo xorg-xprop xdotool xclip
 #+end_src
 
 *** Config
@@ -728,11 +823,6 @@ I use Emacs btw (only if discord is installed).
          mu4e-compose-context-policy 'always-ask))
 #+end_src
 
-Pacman packages.
-#+begin_src fundamental :tangle no :noweb-ref pacman-packages
-mu
-#+end_src
-
 *** External config (defaults)
 **** mbsync
 #+begin_src conf :tangle ~/.config/mbsync/config
@@ -741,21 +831,11 @@ Create Both
 Expunge Both
 #+end_src
 
-Pacman packages.
-#+begin_src fundamental :tangle no :noweb-ref pacman-packages
-isync
-#+end_src
-
 **** msmtp
 #+begin_src conf :tangle ~/.config/msmtp/config
 defaults
 auth on
 tls on
-#+end_src
-
-Pacman packages.
-#+begin_src fundamental :tangle no :noweb-ref pacman-packages
-msmtp
 #+end_src
 
 *** Accounts
@@ -1049,7 +1129,7 @@ Make org recognize first /five/ levels of headings as headings when exporting
 *** Latex export
 **** System dependencies
 Pacman packages.
-#+begin_src fundamental :tangle no :noweb-ref pacman-packages
+#+begin_src fundamental :noweb-ref pacman-packages
 texlive-core
 texlive-latexextra
 texlive-fontsextra

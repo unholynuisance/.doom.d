@@ -2,6 +2,7 @@
 /*
 
 # except
+!/bin/init.sh
 !/pictures/
 !/config.org
 !/custom.el
