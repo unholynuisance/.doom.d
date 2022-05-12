@@ -153,7 +153,23 @@ Just in case.
 #+end_src
 
 *** Systemd daemon
-Since =2.6= emacs has a systemd serice file, so lets throw a =.desktop= file for =emacsclient=.
+Default Systemd service that comes with Emacs from version =2.6= has ~Restart~ set to ~on-failure~, and i would like it to be ~always~.
+#+begin_src conf :tangle ~/.config/systemd/user/emacs.service :cache yes
+[Unit]
+Description=Emacs text editor
+Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/emacs --fg-daemon
+SuccessExitStatus=15
+Restart=always
+
+[Install]
+WantedBy=default.target
+#+end_src
+
+Now, we need =.desktop= file for =emacsclient=.
 #+begin_src conf :tangle ~/.local/share/applications/emacs.desktop
 [Desktop Entry]
 Name=Emacs
@@ -179,7 +195,7 @@ Name=No Daemon
 Exec=emacs %F
 #+end_src
 
-For some reason when I open new emacsclient frame it comes up garbled in some way. We can fix it by reloading theme after making newa frame.
+For some reason when I open new emacsclient frame it comes up garbled in some way. We can fix it by reloading theme after making new frame.
 #+begin_src emacs-lisp
 (when (daemonp)
   (add-hook! 'server-after-make-frame-hook
