@@ -344,8 +344,8 @@ We also need a =.floorc.json= with credentials in our home dir.
 ** Questionable stuff
 *** Elcord
 I use Emacs btw (only if discord is installed).
-#+begin_src emacs-lisp :tangle (if (executable-find "discord") "packages.el" "no")
-(package! elcord)
+#+begin_src emacs-lisp :tangle packages.el
+(package! elcord :disable (not (executable-find "discord")))
 #+end_src
 
 #+begin_src emacs-lisp
