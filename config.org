@@ -44,8 +44,38 @@ ripgrep fd
 
 ** UI
 *** Transparency
+I prefer my Emacs windows to be slightly transparent. So let's set a default alpha for new frames.
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist '(alpha . (98 . 98)))
+(defvar satan/default-transparency '(98 . 90))
+(add-to-list 'default-frame-alist
+             `(alpha . ,satan/default-transparency))
+#+end_src
+
+While we are at it, let's add some convenience functions to set current frame transparency.
+#+begin_src emacs-lisp
+(defun satan/set-transparency (active &optional inactive)
+  (interactive "p")
+  (set-frame-parameter (selected-frame) 'alpha
+                       (cons active (or inactive (cdr (frame-parameter (selected-frame) 'alpha))))))
+#+end_src
+
+We can go further and define the following minor mode.
+#+begin_src emacs-lisp
+(defvar satan/transparent-mode-transparency '(60 . 40))
+
+(define-minor-mode satan/transparent-mode
+  nil
+  :global t
+  (if satan/transparent-mode
+      (apply #'satan/set-transparency (flatten-tree satan/transparent-mode-transparency))
+    (apply #'satan/set-transparency (flatten-tree satan/default-transparency))))
+#+end_src
+
+Also, let's set a sensible keybind for this mode.
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix "t"
+       :desc "Transparent mode" "t" #'satan/transparent-mode))
 #+end_src
 
 *** Fonts
