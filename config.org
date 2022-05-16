@@ -143,6 +143,15 @@ Banner:
 (setq +doom-quit-messages '("It's not like I'll miss you or anything, b-baka!"))
 #+end_src
 
+*** Time
+I often run Emacs in fullscreen, and thus I can't see my system clock. We can fix that by displaying time on the modeline.
+#+begin_src emacs-lisp
+(setq! display-time-format "%H:%M")
+(setq! display-time-default-load-average nil)
+
+(add-hook! doom-init-ui #'display-time-mode)
+#+end_src
+
 ** Other
 *** New frames
 I have (or had) two problems with new frames:
