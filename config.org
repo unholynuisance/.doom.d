@@ -31,6 +31,16 @@ ripgrep fd
 ;;; config.el -*- lexical-binding: t; -*-
 #+end_src
 
+** File manipulation
+I'd like to have a some file manipulation utilities from [[https://github.com/rejeep/f.el][f.el]].
+#+begin_src emacs-lisp :tangle packages.el
+(package! f)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package f)
+#+end_src
+
 ** Keybindings
 *** Doom leader keys:
 #+begin_src emacs-lisp
