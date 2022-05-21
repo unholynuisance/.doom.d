@@ -22,21 +22,60 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 
 ** Current system
 Let's define a straightforward way to check for system we are on (subject to change).
-#+name: current-system-p
+#+name: current-system
 #+begin_src emacs-lisp :eval :session
+(defun satan/file-contents (filename)
+  "Return the contents of FILENAME."
+  (with-temp-buffer
+    (insert-file-contents filename)
+    (buffer-string)))
+        
+(defun satan/current-system ()
+  "Return string containing current system capitalized name, or `\"Unknown\"'"
+  (capitalize
+   (downcase 
+    (or (pcase system-type
+          ('gnu/linux
+           (save-match-data
+             (let ((contents (satan/file-contents "/etc/os-release")))
+               (string-match "^ID=\\(\\\w*\\)" contents)
+               (match-string 1 contents))))
+          ('windows-nt "Windows"))
+        "Unknown"))))
+
+
 (defun satan/current-system-p (&rest args)
-  (pcase system-type
-        ('gnu/linux
-         (string-match-p (concat "^ID=\\(?:" (mapconcat 'identity args "\\|") "\\)")
-                         (org-file-contents "/etc/os-release")))
-        ('windows-nt
-         (member "Windows" args))
-        (default nil)))
+  "Return non-nil if `satan/current-system' is in ARGS"
+  (member (satan/current-system) args))
 #+end_src
 
-As [[current-system-p]] is not evaluated during tangle, we need to somehow enforce evaluation.
+As [[current-system]] is not evaluated during tangle, we need to somehow enforce evaluation.
 #+begin_src emacs-lisp :tangle (make-temp-file "") :noweb yes
-<<current-system-p()>>
+<<current-system()>>
+#+end_src
+
+** Current display server
+We may want to know which display server we are running, so it would be nice to have a utility similar to [[current-system]].
+#+name: current-display-server
+#+begin_src emacs-lisp :eval :session
+(defun satan/current-display-server ()
+  "Return string containing current display server capitalized name, or `\"Unknown\"'"
+  (capitalize
+   (downcase
+    (string-trim
+     (or
+      (shell-command-to-string
+       "loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}'")
+      "Unknown")))))
+
+(defun satan/current-display-server-p (&rest args)
+  "Return non-nil if `satan/current-display-server' is in ARGS"
+  (member (satan/current-display-server) args))
+#+end_src
+
+Same as with [[current-system]], [[current-display-server]] has to be evaluated.
+#+begin_src emacs-lisp :tangle (make-temp-file "") :noweb yes
+<<current-display-server()>>
 #+end_src
 
 * Installation
@@ -56,14 +95,14 @@ depends=(
 #+end_src
 
 ** General dependencies
-Pacman packages.
+**** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 emacs ripgrep fd python cmake
 #+end_src
 
-Aptitude packages.
+**** Aptitude packages
 #+begin_src fundamental :noweb-ref apt-packages
-
+emacs ripgrep fd-find python3 cmake
 #+end_src
 
 ** Install script
@@ -74,13 +113,20 @@ paru -Ui
 #+end_src
 
 *** Ubuntu
+Because we are using noweb here, the syntax highlighting will break in this code block. So we need to split the script.
 #+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Ubuntu") "bin/install.sh" "no") :noweb yes
-PACKAGES=(
+APT_PACKAGES=(
     <<apt-packages>>
 )
+#+end_src
 
+And the other half of a script.
+#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Ubuntu") "bin/install.sh" "no")
 sudo apt update
-sudo apt install "${PACKAGES}"
+sudo apt install "${APT_PACKAGES[@]}"
+
+# HACK fd is fdfind on Ubuntu to avoid confusion with fdclone (really?)
+[[ -f /usr/bin/fd ]] || sudo ln -s /usr/bin/fdfind /usr/bin/fd
 #+end_src
 
 ** Init script
@@ -157,15 +203,31 @@ Also, let's set a sensible keybind for this mode.
 
 *** Fonts
 #+begin_src emacs-lisp
-(setq! doom-font (font-spec :family "Fira Code" :size 16)
-       doom-big-font (font-spec :family "Fira Code" :size 24)
-       doom-variable-pitch-font (font-spec :family "Julia Mono")
-       doom-unicode-font (font-spec :family "Julia Mono"))
+(pcase (satan/current-system)
+  ("Arch"
+   (setq! doom-font
+          (font-spec :family "Fira Code" :size 16)
+          doom-big-font
+          (font-spec :family "Fira Code" :size 24)
+          doom-variable-pitch-font
+          (font-spec :family "Julia Mono")
+          doom-unicode-font
+          (font-spec :family "Julia Mono")))
+  ("Ubuntu"
+   (setq! doom-font
+          (font-spec :family "Fira Code" :size 16)
+          doom-big-font
+          (font-spec :family "Fira Code" :size 24))))
 #+end_src
 
-Pacman packages.
+**** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 ttf-fira-code ttf-juliamono
+#+end_src
+
+**** Aptitude packages
+#+begin_src funtamental :noweb-ref apt-packages
+fonts-firacode fonts-noto
 #+end_src
 
 *** Line numbers
@@ -363,7 +425,8 @@ doom-quit         ; DOOM quit-message prompts when you quit Emacs
 hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
 ;;hydra
 ;;indent-guides     ; highlighted indent columns
-(ligatures        ; ligatures and symbols to make your code pretty again
+(:if (>= (string-to-number emacs-version) 28)
+ ligatures        ; ligatures and symbols to make your code pretty again
  +extra
  +fira)
 ;;minimap           ; show a map of the code on the side
@@ -423,6 +486,16 @@ vc                ; version-control and Emacs, sitting in a tree
 vterm             ; the best terminal emulation in Emacs
 #+end_src
 
+**** Pacman packages
+#+begin_src fundamental :noweb-ref pacman-packages
+libtool
+#+end_src
+
+**** Aptitude packages
+#+begin_src fundamental :noweb-ref apt-packages
+libtool-bin
+#+end_src
+
 *** Checkers
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :checkers
@@ -434,8 +507,13 @@ syntax           ; tasing you for every semicolon you forget
 grammar          ; tasing grammar mistake every you make
 #+end_src
 
-Pacman packages.
+**** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
+aspell-en aspell-uk
+#+end_src
+
+**** Aptitude packages
+#+begin_src fundamental :noweb-ref apt-packages
 aspell-en aspell-uk
 #+end_src
 
@@ -466,9 +544,14 @@ taskrunner        ; taskrunner for all your projects
 ;;upload            ; map local to remote projects via ssh/ftp
 #+end_src
 
-Pacman packages.
+**** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 editorconfig-core-c
+#+end_src
+
+**** Aptitude packages
+#+begin_src fundamental :noweb-ref apt-packages
+editorconfig
 #+end_src
 
 *** OS
@@ -561,14 +644,35 @@ sh                ; she sells {ba,z,fi}sh shells on the C xor
 ;;zig               ; C, but simpler
 #+end_src
 
-Pacman packages.
-#+begin_src fundamental :noweb-ref pacman-packages
+**** Pacman packages
+#+begin_src fundamental :noweb yes :noweb-ref pacman-packages
 clang glslang
 jdk-openjdk
 pandoc
 gnome-screenshot graphviz
+<<pacman-packages-wl-clipboard()>>
 python-black python-pyflakes python-isort python-pipenv python-nose python-pytest pyenv
 shellcheck
+#+end_src
+
+#+name: pacman-packages-wl-clipboard
+#+begin_src emacs-lisp
+(if (satan/current-display-server-p "Wayland") "wl-clipboard" "")
+#+end_src
+
+**** Aptitude packages
+#+begin_src fundamental :noweb yes :noweb-ref apt-packages
+clang-format glslang-tools
+default-jdk
+pandoc
+gnome-screenshot graphviz
+<<apt-packages-wl-clipboard()>>
+shellcheck
+#+end_src
+
+#+name: apt-packages-wl-clipboard
+#+begin_src emacs-lisp
+(if (satan/current-display-server-p "Wayland") "wl-clipboard" "")
 #+end_src
 
 *** Email
@@ -583,9 +687,14 @@ shellcheck
 ;; +gmail)
 #+end_src
 
-Pacman packages.
+**** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 mu isync msmtp
+#+end_src
+
+**** Aptitude packages
+#+begin_src fundamental :noweb-ref apt-packages
+mu4e isync msmtp
 #+end_src
 
 *** App
@@ -600,9 +709,14 @@ everywhere        ; *leave* Emacs!? You must be joking
 ;;twitter           ; twitter client https://twitter.com/vnought
 #+end_src
 
-Pacman packages.
+**** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 xorg-xwininfo xorg-xprop xdotool xclip
+#+end_src
+
+**** Aptitude packages
+#+begin_src fundamental :noweb-ref apt-packages
+x11-utils xdotool xclip
 #+end_src
 
 *** Config
@@ -1128,13 +1242,18 @@ Make org recognize first /five/ levels of headings as headings when exporting
 
 *** Latex export
 **** System dependencies
-Pacman packages.
+***** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 texlive-core
 texlive-latexextra
 texlive-fontsextra
 texlive-langcyrillic
 texlive-pictures
+#+end_src
+
+***** Aptitude packages
+#+begin_src fundamental :noweb-ref apt-packages
+texlive-full
 #+end_src
 
 **** Export settings
