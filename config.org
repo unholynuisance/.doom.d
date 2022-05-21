@@ -912,7 +912,7 @@ I use Emacs btw (only if discord is installed).
   :after eaf)
 #+end_src
 
-#+begin_src emacs-lisp :tangle packages.el
+#+begin_src emacs-lisp :tangle no
 (package! emacs-application-framework
   :recipe (:host github :repo "manateelazycat/emacs-application-framework" :files ("*")))
 #+end_src
