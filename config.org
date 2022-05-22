@@ -394,6 +394,12 @@ There are some packages in this config using [[https://github.com/jwiegley/alert
 
 * Packages
 ** Doom packages
+#+begin_src emacs-lisp :tangle init.el :noweb yes
+(doom!
+ <<doom-packages>>
+ )
+#+end_src
+
 *** Input
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :input
@@ -724,13 +730,6 @@ x11-utils xdotool xclip
 :config
 literate
 (default +bindings +smartparens)
-#+end_src
-
-*** Other
-#+begin_src emacs-lisp :tangle init.el :noweb yes
-(doom!
- <<doom-packages>>
- )
 #+end_src
 
 ** Convenience
