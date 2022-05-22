@@ -1,0 +1,32 @@
+#+title: Doom Emacs configuration
+#+author: son-of-satan
+
+This is my take at configuring Doom Emacs, heavily inspired by [[https://tecosaur.github.io/emacs-config/][this]] masterpiece by [[https://github.com/tecosaur][tecosaur]].
+
+It's a literate configuration, meaning it has one [[file:config.org][config.org]] file which is then tangled into whatever pieces of config I need ([[file:init.el][init.el]], [[file:packages.el][packages.el]], [[file:config.el][config.el]], install scripts, etc.).
+
+* Installation
+This section contains snippets that one can copy into the terminal and everything will (at least I hope so) just work™.
+
+** For Arch
+#+begin_src sh
+sudo pacman -Sy git emacs base-devel
+
+pushd "$(mktemp -d)"
+git clone https://aur.archlinux.org/paru.git .
+makepkg -si
+popd
+
+git clone git@github.com:son-of-satan/.doom.d.git ~/.config/doom
+~/.config/doom/init.sh
+#+end_src
+
+** For Ubuntu
+#+begin_src sh
+sudo apt update
+sudo apt install git emacs
+git clone git@github.com:son-of-satan/.doom.d.git ~/.config/doom
+~/.config/doom/ini.sh
+#+end_src
+
+** TODO For Windows
