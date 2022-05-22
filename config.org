@@ -61,12 +61,12 @@ We may want to know which display server we are running, so it would be nice to 
 (defun satan/current-display-server ()
   "Return string containing current display server capitalized name, or `\"Unknown\"'"
   (capitalize
-   (downcase
     (string-trim
      (or
       (shell-command-to-string
        "loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}'")
-      "Unknown")))))
+      (if (eq system-type 'windows-nt) "DWM")
+      "Unknown"))))
 
 (defun satan/current-display-server-p (&rest args)
   "Return non-nil if `satan/current-display-server' is in ARGS"
