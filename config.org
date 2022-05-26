@@ -105,7 +105,7 @@ depends=(
 )
 #+end_src
 
-** General dependencies
+** Doom dependencies
 **** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 emacs ripgrep fd python cmake
@@ -114,6 +114,11 @@ emacs ripgrep fd python cmake
 **** Aptitude packages
 #+begin_src fundamental :noweb-ref apt-packages
 emacs ripgrep fd-find python3 cmake
+#+end_src
+
+**** Chocolatey packages
+#+begin_src fundamental :noweb-ref chocolatey-packages
+emacs ripgrep fd python3 cmake
 #+end_src
 
 ** Install script
@@ -138,6 +143,22 @@ sudo apt install "${APT_PACKAGES[@]}"
 
 # HACK fd is fdfind on Ubuntu to avoid confusion with fdclone (really?)
 [[ -f /usr/bin/fd ]] || sudo ln -s /usr/bin/fdfind /usr/bin/fd
+#+end_src
+
+*** Windows
+I'm making two assumptions here:
++ Git bash is installed (as you would need git to clone the repository).
++ =Chocolatey= has been installed (otherwise it would be a nightmare to install dependencies).
+
+Similar to [[Ubuntu]] section, we need to split the script to get proper syntax highlighting.
+#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Windows") "bin/install.sh" "no") :noweb yes
+CHOCOLATEY_PACKAGES=(
+    <<chocolatey-packages>>
+)
+#+end_src
+
+#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Windows") "bin/install.sh" "no")
+choco install -y --force "${CHOCOLATEY_PACKAGES}"
 #+end_src
 
 ** Init script
