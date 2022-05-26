@@ -36,11 +36,12 @@ Let's define a straightforward way to check for system we are on (subject to cha
     (buffer-string)))
 
 (defun satan/current-system-type ()
-  (cond (IS-LINUX   "Linux")
-        (IS-WINDOWS "Windows")
-        (IS-MAC     "Mac")
-        (IS-BSD     "BSD")
-        (t          "Unknown")))
+  (cond
+   ((eq system-type 'gnu/linux)                    "Linux")
+   ((memq system-type '(cygwin windows-nt ms-dos)) "Windows")
+   ((eq system-type 'darwin)                       "Mac")
+   ((or IS-MAC (eq system-type 'berkeley-unix))    "BSD")
+   (t                                              "Unknown")))
 
 (defun satan/current-system ()
   "Return string containing current system capitalized name, or `\"Unknown\"'"
