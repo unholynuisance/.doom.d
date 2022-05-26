@@ -662,7 +662,7 @@ shellcheck
 #+end_src
 
 #+name: pacman-packages-wl-clipboard
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (if (satan/current-display-server-p "Wayland") "wl-clipboard" "")
 #+end_src
 
@@ -677,7 +677,7 @@ shellcheck
 #+end_src
 
 #+name: apt-packages-wl-clipboard
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (if (satan/current-display-server-p "Wayland") "wl-clipboard" "")
 #+end_src
 
