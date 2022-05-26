@@ -6,6 +6,11 @@ This is a section for things that other stuff depends on, so they should be load
 
 ** Enable lexical binding
 We want lexical binding, right?
+
+#+begin_src emacs-lisp :tangle init.el
+;;; init.el -*- lexical-binding: t; -*-
+#+end_src
+
 #+begin_src emacs-lisp
 ;;; config.el -*- lexical-binding: t; -*-
 #+end_src
@@ -23,7 +28,7 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 ** Current system
 Let's define a straightforward way to check for system we are on (subject to change).
 #+name: current-system
-#+begin_src emacs-lisp :eval :session
+#+begin_src emacs-lisp :tangle init.el :eval :session
 (defun satan/file-contents (filename)
   "Return the contents of FILENAME."
   (with-temp-buffer
@@ -63,7 +68,7 @@ As [[current-system]] is not evaluated during tangle, we need to somehow enforce
 ** Current display server
 We may want to know which display server we are running, so it would be nice to have a utility similar to [[current-system]].
 #+name: current-display-server
-#+begin_src emacs-lisp :eval :session
+#+begin_src emacs-lisp :tangle init.el :eval :session
 (defun satan/current-display-server ()
   "Return string containing current display server capitalized name, or `\"Unknown\"'"
   (capitalize
