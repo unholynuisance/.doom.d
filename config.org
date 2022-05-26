@@ -984,14 +984,14 @@ I use Emacs btw (only if discord is installed).
 
 *** External config (defaults)
 **** mbsync
-#+begin_src conf :tangle ~/.config/mbsync/config
+#+begin_src conf :tangle (if (executable-find "mbsync") "~/.config/mbsync/config" "no")
 SyncState *
 Create Both
 Expunge Both
 #+end_src
 
 **** msmtp
-#+begin_src conf :tangle ~/.config/msmtp/config
+#+begin_src conf :tangle (if (executable-find "msmtp") "~/.config/msmtp/config" "no")
 defaults
 auth on
 tls on
@@ -1055,7 +1055,7 @@ tls on
 #+end_src
 
 ***** mbsync config
-#+begin_src conf :tangle ~/.config/mbsync/config
+#+begin_src conf :tangle (if (executable-find "mbsync") "~/.config/mbsync/config" "no")
 IMAPStore mtataryn555@gmail.com-remote
 Host imap.gmail.com
 SSLType IMAPS
@@ -1098,7 +1098,7 @@ Channel mtataryn555@gmail.com-archive
 #+end_src
 
 ***** msmtp config
-#+begin_src conf :tangle ~/.config/msmtp/config
+#+begin_src conf :tangle (if (executable-find "msmtp") "~/.config/msmtp/config" "no")
 account mtataryn555@gmail.com
 host smtp.gmail.com
 port 587
@@ -1184,7 +1184,7 @@ account default : mtataryn555@gmail.com
 #+end_src
 
 ***** mbsync config
-#+begin_src conf :tangle ~/.config/mbsync/config
+#+begin_src conf :tangle (if (executable-find "mbsync") "~/.config/mbsync/config" "no")
 Host long.apriorit.com
 Port 40993
 User mykola.tataryn@apriorit.com
@@ -1232,7 +1232,7 @@ Channel mykola.tataryn@apriorit.com-trash
 #+end_src
 
 ***** msmtp config
-#+begin_src conf :tangle ~/.config/msmtp/config
+#+begin_src conf :tangle (if (executable-find "msmtp") "~/.config/msmtp/config" "no")
 account mykola.tataryn@apriorit.com
 host long.apriorit.com
 port 40465
