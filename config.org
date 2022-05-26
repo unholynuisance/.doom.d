@@ -1302,7 +1302,7 @@ texlive-full
 #+end_src
 
 **** Export settings
-#+begin_src conf :tangle ~/.config/environment.d/texmf.conf
+#+begin_src conf :tangle (if (executable-find "systemctl") "~/.config/environment.d/texmf.conf" "no")
 TEXMFHOME=${HOME}/.local/share/texmf
 #+end_src
 
@@ -1342,7 +1342,7 @@ TEXMFHOME=${HOME}/.local/share/texmf
 **** TODO Default style
 
 **** TODO DSTU 3008-2015 Style
-#+begin_src latex :tangle ~/.local/share/texmf/tex/xelatex/satan/dstu-report.cls
+#+begin_src latex :tangle (or "no" "~/.local/share/texmf/tex/xelatex/satan/dstu-report.cls")
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{satan/dstu-article}
 
