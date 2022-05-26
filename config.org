@@ -868,13 +868,13 @@ First, package setup and configuration.
 #+end_src
 
 We also need a =.floorc.json= with credentials in our home dir.
-#+begin_src json :tangle ~/.floorc.json
+#+begin_src json :tangle no
 {
   "auth": {
     "floobits.com": {
       "username": "son-of-satan",
-      "api_key": "user_6q950st0qn",
-      "secret": "pfengudkiveq5yvsjbet3g7xr"
+      "api_key": "<api-key>",
+      "secret": "<secret>"
     }
   }
 }
