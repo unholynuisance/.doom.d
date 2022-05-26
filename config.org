@@ -719,7 +719,6 @@ mu4e isync msmtp
 :app
 calendar
 ;;emms
-<<app-everywhere()>>    ; *leave* Emacs!? You must be joking
 ;;irc                   ; how neckbeards socialize
 ;;(rss                  ; emacs as an RSS reader
 ;; +org)
@@ -727,9 +726,9 @@ calendar
 #+end_src
 
 **** Emacs everywhere
-#+name: app-everywhere
-#+begin_src emacs-lisp :tangle no
-(if (satan/current-system-p "Linux") "everywhere" ";;everywhere")
+#+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
+(:if (satan/current-system-p "Linux")
+ everywhere)          ; *leave* Emacs!? You must be joking
 #+end_src
 
 ***** Pacman packages
