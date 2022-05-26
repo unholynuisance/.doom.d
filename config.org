@@ -710,23 +710,29 @@ mu4e isync msmtp
 #+end_src
 
 *** App
-#+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
+#+begin_src emacs-lisp :tangle no :noweb yes :noweb-ref doom-packages
 :app
 calendar
 ;;emms
-everywhere        ; *leave* Emacs!? You must be joking
-;;irc               ; how neckbeards socialize
-;;(rss              ; emacs as an RSS reader
+<<app-everywhere()>>    ; *leave* Emacs!? You must be joking
+;;irc                   ; how neckbeards socialize
+;;(rss                  ; emacs as an RSS reader
 ;; +org)
-;;twitter           ; twitter client https://twitter.com/vnought
+;;twitter               ; twitter client https://twitter.com/vnought
 #+end_src
 
-**** Pacman packages
+**** Emacs everywhere
+#+name: app-everywhere
+#+begin_src emacs-lisp :tangle no
+(if (satan/current-system-p "Linux") "everywhere" ";;everywhere")
+#+end_src
+
+***** Pacman packages
 #+begin_src fundamental :noweb-ref pacman-packages
 xorg-xwininfo xorg-xprop xdotool xclip
 #+end_src
 
-**** Aptitude packages
+***** Aptitude packages
 #+begin_src fundamental :noweb-ref apt-packages
 x11-utils xdotool xclip
 #+end_src
