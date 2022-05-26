@@ -362,9 +362,10 @@ Just in case.
 (prefer-coding-system 'utf-8)
 #+end_src
 
-*** Systemd daemon
+*** Daemon mode
+**** Systemd service
 Default Systemd service that comes with Emacs from version =2.6= has ~Restart~ set to ~on-failure~, and i would like it to be ~always~.
-#+begin_src conf :tangle ~/.config/systemd/user/emacs.service :cache yes
+#+begin_src conf :tangle (if (executable-find "systemctl") "~/.config/systemd/user/emacs.service" "no")
 [Unit]
 Description=Emacs text editor
 Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
@@ -379,8 +380,9 @@ Restart=always
 WantedBy=default.target
 #+end_src
 
-Now, we need =.desktop= file for =emacsclient=.
-#+begin_src conf :tangle ~/.local/share/applications/emacs.desktop
+**** .desktop
+We may need a =.desktop= file for =emacsclient=.
+#+begin_src conf :tangle (if (satan/current-system-p "Linux") "~/.local/share/applications/emacs.desktop" "no")
 [Desktop Entry]
 Name=Emacs
 GenericName=Text Editor
@@ -405,6 +407,7 @@ Name=No Daemon
 Exec=emacs %F
 #+end_src
 
+**** Other
 For some reason when I open new emacsclient frame it comes up garbled in some way. We can fix it by reloading theme after making new frame.
 #+begin_src emacs-lisp
 (when (daemonp)
