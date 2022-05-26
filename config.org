@@ -29,24 +29,30 @@ Let's define a straightforward way to check for system we are on (subject to cha
   (with-temp-buffer
     (insert-file-contents filename)
     (buffer-string)))
-        
+
+(defun satan/current-system-type ()
+  (cond (IS-LINUX   "Linux")
+        (IS-WINDOWS "Windows")
+        (IS-MAC     "Mac")
+        (IS-BSD     "BSD")
+        (t          "Unknown")))
+
 (defun satan/current-system ()
   "Return string containing current system capitalized name, or `\"Unknown\"'"
   (capitalize
-   (downcase 
-    (or (pcase system-type
-          ('gnu/linux
+   (downcase
+    (pcase (satan/current-system-type)
+          ("Linux"
            (save-match-data
              (let ((contents (satan/file-contents "/etc/os-release")))
                (string-match "^ID=\\(\\\w*\\)" contents)
                (match-string 1 contents))))
-          ('windows-nt "Windows"))
-        "Unknown"))))
-
+          (type type)))))
 
 (defun satan/current-system-p (&rest args)
   "Return non-nil if `satan/current-system' is in ARGS"
-  (member (satan/current-system) args))
+  (or (member (satan/current-system) args)
+      (member (satan/current-system-type) args)))
 #+end_src
 
 As [[current-system]] is not evaluated during tangle, we need to somehow enforce evaluation.
