@@ -159,7 +159,7 @@ CHOCOLATEY_PACKAGES=(
 #+end_src
 
 #+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Windows") "bin/install.sh" "no")
-choco install -y "${CHOCOLATEY_PACKAGES}"
+choco install -y "${CHOCOLATEY_PACKAGES[@]}"
 #+end_src
 
 ** Init script
