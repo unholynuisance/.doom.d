@@ -1,7 +1,7 @@
 #+title: Doom Emacs configuration
 #+author: son-of-satan
 
-This is my take at configuring Doom Emacs, heavily inspired by [[https://tecosaur.github.io/emacs-config/][this]] masterpiece by [[https://github.com/tecosaur][tecosaur]].
+This is my take at configuring [[https://github.com/doomemacs/doomemacs][Doom Emacs]], heavily inspired by [[https://tecosaur.github.io/emacs-config/][this]] masterpiece by [[https://github.com/tecosaur][tecosaur]].
 
 It's a literate configuration, meaning it has one [[file:config.org][config.org]] file which is then tangled into whatever pieces of config I need ([[file:init.el][init.el]], [[file:packages.el][packages.el]], [[file:config.el][config.el]], install scripts, etc.).
 
@@ -18,7 +18,7 @@ makepkg -si
 popd
 
 git clone git@github.com:son-of-satan/.doom.d.git ~/.config/doom
-~/.config/doom/init.sh
+~/.config/doom/bin/init.sh
 #+end_src
 
 ** For Ubuntu
@@ -26,7 +26,19 @@ git clone git@github.com:son-of-satan/.doom.d.git ~/.config/doom
 sudo apt update
 sudo apt install git emacs
 git clone git@github.com:son-of-satan/.doom.d.git ~/.config/doom
-~/.config/doom/ini.sh
+~/.config/doom/bin/init.sh
 #+end_src
 
 ** TODO For Windows
+First, we need to set ~HOME~ environmental variable, install =chocolatey=, as =winget= is piece of =@#$%=, git and Emacs. This needs to be ran from =powershell= under administrator.
+#+begin_src ps
+[Environment]::SetEnvironmentVariable("HOME", "C:\Users\${env:username}", "User")
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+choco install -y git emacs
+#+end_src
+
+After that, run this in git bash under administrator. *Note*: you need to have ssh key generated.
+#+begin_src sh
+git clone git@github.com:son-of-satan/.doom.d.git ~/.config/doom
+~/.config/doom/init.sh
+#+end_src
