@@ -1,10 +1,7 @@
-# ignore eveything
-/*
-
-# except
-!/bin/init.sh
-!/pictures/
-!/config.org
-!/custom.el
-!/README.org
-!/.gitignore
+/pkg/
+/bin/install.sh
+/bin/setup.sh
+/config.el
+/init.el
+/packages.el
+/custom.el
