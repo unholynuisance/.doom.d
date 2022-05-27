@@ -1294,6 +1294,23 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
   (after-init . org-alert-enable))
 #+end_src
 
+*** Visuals
+**** Org Modern
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-modern)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! org-modern
+  :hook (org-mode . org-modern-mode)
+  :config
+  (setq! org-modern-table-vertical 1
+         org-modern-table-horizontal 0.2
+         org-modern-block nil
+         org-modern-progress nil
+         org-modern-keyword nil))
+#+end_src
+
 *** Exporting
 Make org recognize first /five/ levels of headings as headings when exporting
 #+begin_src emacs-lisp
