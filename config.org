@@ -1294,6 +1294,15 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
   (after-init . org-alert-enable))
 #+end_src
 
+**** Graphviz
+#+begin_src emacs-lisp :tangle packages.el
+(package! graphviz-dot-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! graphviz-dot-mode)
+#+end_src
+
 *** Visuals
 **** Org Modern
 #+begin_src emacs-lisp :tangle packages.el
