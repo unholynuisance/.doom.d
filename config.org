@@ -902,6 +902,17 @@ We also need a =.floorc.json= with credentials in our home dir.
 (setq! ispell-personal-dictionary (expand-file-name "dictionary" "~/.local/share/ispell/"))
 #+end_src
 
+*** Screenshot
+This makes it a breeze to take lovely screenshots.
+#+begin_src emacs-lisp :tangle packages.el
+(package! screenshot :recipe (:host github :repo "tecosaur/screenshot" :build (:not compile)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! screenshot
+  :defer t)
+#+end_src
+
 ** Visuals
 *** Good scroll
 #+begin_src emacs-lisp
