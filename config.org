@@ -675,7 +675,7 @@ markdown          ; writing docs for people to ignore
 ;;nix               ; I hereby declare "nix geht mehr!"
 ;;ocaml             ; an objective camel
 (org +roam2
-     +pretty
+     ;; +pretty
      +pandoc
      +present
      +dragndrop)  ; organize your plain life in plain text
@@ -1324,11 +1324,11 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
   :config
-  (setq! org-modern-table-vertical 1
-         org-modern-table-horizontal 0.2
-         org-modern-block nil
-         org-modern-progress nil
-         org-modern-keyword nil))
+  (setq! org-modern-star ["◉" "○" "◈" "◇"]
+         org-modern-hide-stars nil
+         org-modern-list '((?* . "•") (?+ . "➤") (?- . "–"))
+         org-modern-table-vertical 1
+         org-modern-table-horizontal 0.2))
 #+end_src
 
 *** Exporting
