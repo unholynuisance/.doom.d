@@ -1322,12 +1322,25 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 #+end_src
 
 **** Graphviz
+Org supports drawing graphs with [[https://graphviz.org/][graphviz]], though there is no built-in major mode for DOT. Fortunately, [[https://github.com/ppareit/graphviz-dot-mode][this]] package provides what we need.
 #+begin_src emacs-lisp :tangle packages.el
 (package! graphviz-dot-mode)
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package! graphviz-dot-mode)
+#+end_src
+
+**** PlantUML
+Graphviz is nice, but drawing UML diagrams with it is painful.
+#+begin_src emacs-lisp
+(after! ob-plantuml
+  (setq! org-plantuml-exec-mode 'plantuml))
+#+end_src
+
+***** Pacman packages
+#+begin_src fundamental :noweb-ref pacman-packages
+plantuml
 #+end_src
 
 *** Visuals
