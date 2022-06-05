@@ -947,6 +947,22 @@ I use Emacs btw (only if discord is installed).
   (setq! elcord-use-major-mode-as-main-icon t))
 #+end_src
 
+*** Selectric
+So everyone (including myself) knows I'm typing.
+#+begin_src emacs-lisp :tangle packages.el
+(package! selectric-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! selectic-mode
+  :commands selectic-mode)
+#+end_src
+
+**** Pacman packages
+#+begin_src fundamental :noweb-ref pacman-packages
+alsa-utils
+#+end_src
+
 * Applications
 ** Emacs application framework
 #+begin_src emacs-lisp :tangle no
