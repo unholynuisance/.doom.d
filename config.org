@@ -1381,74 +1381,673 @@ texlive-pictures
 texlive-full
 #+end_src
 
-**** Export settings
-#+begin_src conf :tangle (if (executable-find "systemctl") "~/.config/environment.d/texmf.conf" "no")
-TEXMFHOME=${HOME}/.local/share/texmf
+**** Compiling
+Org uses =latexmk= with =pdflatex= as compiler by default, and =pdflatex= doesn't support =utf-8=. So let's use =xelatex= instead.
+#+begin_src emacs-lisp
+(after! org
+  (setq! org-latex-compiler '"xelatex"))
 #+end_src
 
+**** Class templates
 #+begin_src emacs-lisp
 (after! org
   (setq! org-latex-classes
-         '(("beamer" "\\documentclass[presentation]{beamer}"
-            ("\\section{%s}" . "\\section*{%s}")
-            ("\\subsection{%s}" . "\\subsection*{%s}")
-            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-           ("article" "\\documentclass[11pt]{article}"
+         '(("article" "\\documentclass{scrartcl}"
             ("\\section{%s}" . "\\section*{%s}")
             ("\\subsection{%s}" . "\\subsection*{%s}")
             ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
             ("\\paragraph{%s}" . "\\paragraph*{%s}")
             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-           ("report" "\\documentclass[11pt]{report}"
+
+           ("report" "\\documentclass{scrreprt}"
             ("\\part{%s}" . "\\part*{%s}")
             ("\\chapter{%s}" . "\\chapter*{%s}")
             ("\\section{%s}" . "\\section*{%s}")
             ("\\subsection{%s}" . "\\subsection*{%s}")
             ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-           ("book" "\\documentclass[11pt]{book}"
+
+           ("book" "\\documentclass{scrbook}"
             ("\\part{%s}" . "\\part*{%s}")
             ("\\chapter{%s}" . "\\chapter*{%s}")
             ("\\section{%s}" . "\\section*{%s}")
             ("\\subsection{%s}" . "\\subsection*{%s}")
-            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-           ("dstu-report" "\\documentclass{satan/dstu-report}"
-            ("\\section{%s}" . "\\section*{%s}")
-            ("\\subsection{%s}" . "\\subsection*{%s}")
-            ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-            ("\\paragraph{%s}" . "\\paragraph*{%s}")
-            ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 #+end_src
 
-**** TODO Default style
+**** Modular preamble generation
+Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-preamble][this]].
 
-**** TODO DSTU 3008-2015 Style
-#+begin_src latex :tangle (or "no" "~/.local/share/texmf/tex/xelatex/satan/dstu-report.cls")
-\NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{satan/dstu-article}
+***** Keywords/Options
+#+begin_src emacs-lisp
+(defun org-latex-mp--register-option (name keyword option default behavior)
+  (after! ox
+    (add-to-list 'org-export-options-alist
+                 (list name keyword option default behavior))))
 
-\LoadClass[14pt,a4paper]{article}
+(defun org-latex-mp--register-options (&rest args)
+  (dolist (option args)
+    (apply #'org-latex-mp--register-option option)))
+#+end_src
 
-% indentfirst paragraph (it needs to be loaded before polyglossia)
-\RequirePackage{indentfirst}
+***** Requires
+#+begin_src emacs-lisp
+(require 'map)
+#+end_src
 
-% polyglossia setup
-\RequirePackage{fontspec}
-\RequirePackage{polyglossia}
-\setdefaultlanguage{ukrainian}
-\setotherlanguage{english}
+***** Order
+#+begin_src emacs-lisp
+(defvar org-latex-mp--orders-alist
+  '((typography . 0)
+    (typography-fonts . 0)
+    (typography-microtype . 0.1)
+    (typography-math . 0.2)
+    (typography-math-fonts . 0.3)
+    (typography-acr . 0.4)
+    (typography-misc . 0.5)
+    (default . 1)
+    (content . 2)
+    (misc . 3)))
 
-% fontspec setup
-\setmainfont{Times New Roman}
-\setsansfont{Noto Sans}
-\setmonofont{Noto Sans Mono}
+(defvar org-latex-mp--default-order 'default)
 
-% page layout
-\RequirePackage[paper=a4paper,top=2cm,bottom=2cm,left=2.5cm,right=1cm]{geometry}
+(defun org-latex-mp--get-order (name)
+  (map-elt org-latex-mp--orders-alist name 1))
+#+end_src
 
-% paragraphs and linespread
-\setlength{\parindent}{5ex}
-\setlength{\parskip}{0pt}
-\linespread{1.3}
+***** Triggers
+#+begin_src emacs-lisp
+(defvar org-latex-mp--feature-triggers-alist nil)
+
+(defun org-latex-mp--register-trigger (trigger &rest rest)
+  (map-put org-latex-mp--feature-triggers-alist
+           trigger (delete-dups
+                    (append rest (map-elt org-latex-mp--feature-triggers-alist trigger)))))
+#+end_src
+
+***** Styles
+#+begin_src emacs-lisp
+(defvar org-latex-mp--styles-alist nil)
+
+(defvar org-latex-mp--default-style 'default)
+
+(defun org-latex-mp--get-style (style)
+  (map-elt org-latex-mp--styles-alist style))
+#+end_src
+
+***** Features
+#+begin_src emacs-lisp
+(defun org-latex-mp--get-feature (name &rest rest)
+  (let ((style (or (plist-get rest :style) org-latex-mp--default-style)))
+    (or (map-elt (org-latex-mp--get-style style)
+                 name)
+        (map-elt (org-latex-mp--get-style org-latex-mp--default-style)
+                 name))))
+
+(defun org-latex-mp--register-feature (name &rest rest)
+  (let ((style    (or (plist-get rest :style)    org-latex-mp--default-style))
+        (snippet  (or (plist-get rest :snippet)  nil))
+        (order    (or (plist-get rest :order)    org-latex-mp--default-order))
+        (requires (or (plist-get rest :requires) nil))
+        (eager    (or (plist-get rest :eager)    nil)))
+    (let ((features (map-elt org-latex-mp--styles-alist style)))
+      (map-put features
+               name `(:snippet ,snippet :order ,order :requires ,requires :eager ,eager))
+      (map-put org-latex-mp--styles-alist
+               style features))))
+
+(defun org-latex-mp--register-features (&rest args)
+  (dolist (module args)
+    (apply #'org-latex-mp--register-feature module)))
+#+end_src
+
+***** Feature detection
+#+begin_src emacs-lisp
+(org-latex-mp--register-option
+ :latex-features "LATEX_FEATURES" nil nil 'split)
+
+(defun org-latex-mp--feature-detected-p (trigger)
+  (save-excursion
+    (goto-char (point-min))
+    (re-search-forward trigger nil t)))
+
+(defun org-latex-mp--detect-features (&optional buffer)
+  "List features from `org-latex-mp--triggers-alist' detected in BUFFER."
+  (let ((case-fold-search nil))
+    (with-current-buffer (or buffer (current-buffer))
+      (delete-dups
+       (mapcan
+        (lambda (pair)
+          (let ((trigger (car pair))
+                (feature (cdr pair)))
+            (when (org-latex-mp--feature-detected-p trigger)
+              (-list feature))))
+        org-latex-mp--feature-triggers-alist)))))
+#+end_src
+
+***** Style detection
+#+begin_src emacs-lisp
+(org-latex-mp--register-option
+ :style nil "style" 'org-latex-mp--default-style nil)
+#+end_src
+
+***** Feature processing
+#+begin_src emacs-lisp
+(defun org-latex-mp--collect-requires (names style)
+  (let ((result nil))
+    (while names
+      (setq result (append names
+                           (cl-set-difference
+                            (-list (plist-get (org-latex-mp--get-feature (car names) :style style) :requires))
+                            result)))
+      (push (pop names) result))))
+
+(defun org-latex-mp--collect-eager-features (names style)
+  (reverse
+   (delete-dups
+    (mapcan
+     (lambda (pair)
+       (let ((name    (car pair))
+             (feature (cdr pair)))
+         (let ((eager (plist-get feature :eager)))
+           (if (pcase eager
+                 ((pred booleanp) eager))
+               (list name)))))
+     (append (org-latex-mp--get-style 'default)
+             (org-latex-mp--get-style style))))))
+
+(defun org-latex-mp--sort-features (names style)
+  (sort names
+        (lambda (left right)
+          (< (org-latex-mp--get-order
+              (plist-get (org-latex-mp--get-feature left :style style) :order))
+             (org-latex-mp--get-order
+              (plist-get (org-latex-mp--get-feature right :style style) :order))))))
+
+(defun org-latex-mp--expand-features (feature-names style)
+  (setq feature-names
+        (append feature-names
+                (org-latex-mp--collect-requires feature-names style)))
+  (setq feature-names
+        (append feature-names
+                (org-latex-mp--collect-eager-features feature-names style)))
+  (setq feature-names
+        (append feature-names
+                (org-latex-mp--collect-requires feature-names style)))
+  (org-latex-mp--sort-features (delete-dups feature-names) style))
+#+end_src
+
+***** Preamble generation
+#+begin_src emacs-lisp
+(defun org-latex-mp--expand-snippet (info snippet)
+  (pcase snippet
+    ((pred functionp) (funcall snippet info))
+    ((pred stringp) snippet)))
+
+(defun org-latex-mp--generate-preamble (info)
+  (let* ((style (plist-get info :style))
+         (feature-names (org-latex-mp--expand-features
+                         (append (org-latex-mp--detect-features)
+                                 (-map (lambda (str) (intern str))
+                                       (plist-get info :latex-features)))
+                         style)))
+    (concat
+     (format "\n%% style: %s\n%% features: %s\n" style feature-names)
+     (mapconcat (lambda (feature-name)
+                  (when-let ((feature (org-latex-mp--get-feature feature-name :style style)))
+                    (when-let ((snippet (plist-get feature :snippet)))
+                      (org-latex-mp--expand-snippet info snippet))))
+                feature-names "\n")
+     "\n% end features\n")))
+#+end_src
+
+***** Advicing
+#+begin_src emacs-lisp
+(defvar org-latex-mp--tmp-info nil)
+
+(defadvice! org-latex-mp--make-preamble-advice (info &optional template snippet?)
+  :before #'org-latex-make-preamble
+  (setq org-latex-mp--tmp-info info))
+
+(defadvice! org-latex-mp--splice-latex-header-advice (orig-fn tpl def-pkg pkg snippets-p &optional extra)
+  "Dynamically insert preamble content based on `org-latex-conditional-preambles'."
+  :around #'org-splice-latex-header
+  (let ((header (funcall orig-fn tpl def-pkg pkg snippets-p extra)))
+    (if snippets-p
+        header
+      (concat
+       header
+       (org-latex-mp--generate-preamble org-latex-mp--tmp-info)
+       "\n"))))
+#+end_src
+
+**** Default latex packages
+#+begin_src emacs-lisp
+(after! ox-latex
+  (setq! org-latex-default-packages-alist
+         '(("AUTO"     "inputenc"    t ("pdflatex"))
+           ("T1"       "fontenc"     t ("pdflatex"))
+           ("AUTO"     "babel"       t ("pdflatex" "xelatex"))
+           (""         "fontspec"    t ("xelatex"))
+           ;; ("AUTO"     "polyglossia" t ("xelatex"))
+           ;; (" "        "biblatex"    nil)
+           (""         "graphicx"    t)
+           (""         "longtable"   nil)
+           (""         "wrapfig"     nil)
+           (""         "rotating"    nil)
+           ("normalem" "ulem"        t)
+           (""         "amsmath"     t)
+           (""         "amssymb"     t)
+           (""         "capt-of"     nil)
+           (""         "hyperref"    nil))))
+#+end_src
+
+**** Default style
+***** Fonts
+#+begin_src emacs-lisp
+(org-latex-mp--register-features
+ '(font-main
+   :snippet "\\setmainfont{Noto Serif}"
+   :order typography-fonts
+   :eager t )
+ '(font-sans
+   :snippet "\\setsansfont{Noto Sans}"
+   :order typography-fonts
+   :eager t)
+ '(font-mono
+   :snippet "\\setmonofont[Scale=MatchLowercase]{Noto Sans Mono}"
+   :order typography-fonts
+   :eager t))
+#+end_src
+
+***** Listings
+#+begin_src emacs-lisp
+(after! ox-latex
+  (setq! org-latex-listings t))
+
+(org-latex-mp--register-features
+ '(listings
+   :style default
+   :snippet "
+\\usepackage{color}
+\\usepackage{listings}
+
+\\lstset{
+  language=[LaTeX]TeX,
+  breaklines=true,
+  basicstyle=\\ttfamily\\normalsize,
+  keywordstyle=\\color{blue},
+  frame = single
+}
+"
+   :order default
+   :eager t))
+#+end_src
+
+**** DSTU style
+***** Fonts
+#+begin_src emacs-lisp
+(org-latex-mp--register-features
+ '(font-main
+   :style dstu
+   :snippet "\\setmainfont{Times New Roman}"
+   :order typography-fonts
+   :eager t)
+ '(font-sans
+   :style dstu
+   :snippet "\\setsansfont{Times New Roman}"
+   :order typography-fonts
+   :eager t))
+ #+end_src
+
+***** Font size
+#+begin_src emacs-lisp
+(org-latex-mp--register-features
+ '(font-size
+   :style dstu
+   :snippet "\\KOMAoptions{fontsize=14pt}"
+   :order typography-fonts
+   :eager t))
+#+end_src
+
+***** Spacing
+#+begin_src emacs-lisp
+(org-latex-mp--register-features
+ '(parindent
+   :style dstu
+   :snippet "\\setlength{\\parindent}{5ex}"
+   :order typography-misc
+   :eager t)
+ '(parskip
+   :style dstu
+   :snippet "\\setlength{\\parskip}{0pt}"
+   :order typography-misc
+   :eager t)
+ '(lisespread
+   :style dstu
+   :snippet "\\usepackage{setspace}\n\\onehalfspacing"
+   :order typography-misc
+   :eager t))
+#+end_src
+
+***** Margins
+#+begin_src emacs-lisp
+(org-latex-mp--register-features
+ '(geometry
+   :style dstu
+   :snippet "\\usepackage[top=20mm,bottom=20mm,left=25mm,right=10mm]{geometry}"
+   :order typography
+   :eager t))
+#+end_src
+
+***** Sections
+#+name: chapter-style
+#+begin_src latex
+\\KOMAoptions{chapterprefix=true,appendixprefix=true,numbers=endperiod}
+
+\\RedeclareSectionCommand[
+beforeskip=1em,
+afterskip=1em,
+afterindent=true,
+]{chapter}
+
+\\addtokomafont{chapterprefix}{\\normalfont\\normalsize\\bfseries\\MakeUppercase}
+\\addtokomafont{chapter}{\\normalfont\\normalsize\\bfseries\\MakeUppercase}
+\\renewcommand*{\\chapterheadmidvskip}{~}
+\\renewcommand*{\\raggedchapter}{\\centering}
+#+end_src
+
+#+name: section-style
+#+begin_src latex
+\\RedeclareSectionCommand[
+indent=5ex,
+beforeskip=1em,
+afterskip=1sp,
+afterindent=true,
+]{section}
+
+\\addtokomafont{section}{\\normalfont\\normalsize\\bfseries}
+\\addtokomafont{subsection}{\\normalfont\\normalsize\\bfseries}
+\\renewcommand*{\\sectionformat}{\\thesection\\enskip}
+\\renewcommand*{\\subsectionformat}{\\thesubsection\\enskip}
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(org-latex-mp--register-features
+ '(chapter-style
+   :style dstu
+   :snippet "
+<<chapter-style>>
+"
+   :order default
+   :eager t)
+ '(section-style
+   :style dstu
+   :snippet "
+<<section-style>>
+"
+   :order default
+   :eager t))
+#+end_src
+
+***** Captions
+#+name: caption-style
+#+begin_src latex
+\\usepackage{float, scrhack}
+\\floatstyle{komaabove}
+\\restylefloat{table}
+
+\\renewcommand*{\\captionformat}{~--~}
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(org-latex-mp--register-features
+ '(caption-style
+   :style dstu
+   :snippet "
+<<caption-style>>
+"
+   :order default
+   :eager t))
+#+end_src
+
+***** Page numbers
+#+name: page-number-style
+#+begin_src latex
+\\usepackage{scrlayer-scrpage}
+\\cfoot[]{}
+\\ohead[\\pagemark]{\\pagemark}
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(org-latex-mp--register-features
+ '(page-number-style
+   :style dstu
+   :snippet "
+<<page-number-style>>
+"
+   :order default
+   :eager t))
+#+end_src
+
+***** TOC
+#+name: toc-style
+#+begin_src latex
+\\KOMAoptions{chapterentrydots=true}
+% \\KOMAoptions{sectionentrydots=true}
+
+\\DeclareTOCStyleEntry[
+beforeskip=0em,
+]{section}{chapter}
+
+\\DeclareTOCStyleEntry[
+beforeskip=0em,
+]{section}{section}
+
+\\addtokomafont{chapterentry}{\\normalsize\\mdseries}
+\\addtokomafont{chapterentrydots}{\\normalsize}
+\\addtokomafont{chapterentrypagenumber}{\\normalsize}
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(org-latex-mp--register-features
+ '(toc-style
+   :style dstu
+   :snippet "
+<<toc-style>>
+"
+   :order default
+   :eager t))
+#+end_src
+
+**** Title pages
+***** Additional title fields
+#+begin_src emacs-lisp
+(after! ox-latex
+  (setq! org-latex-subtitle-separate t)
+  (setq! org-latex-subtitle-format "\\subtitle{%s}"))
+
+(org-latex-mp--register-options
+ '(:subject            "SUBJECT"            nil "" nil)
+ '(:author-position    "AUTHOR_POSITION"    nil "" nil)
+ '(:author-record      "AUTHOR_RECORD"      nil "" nil)
+ '(:principal          "PRINCIPAL"          nil "" nil)
+ '(:principal-position "PRINCIPAL_POSITION" nil "" nil)
+ '(:committee-member-1 "COMMITTEE_MEMBER_1" nil "" nil)
+ '(:committee-member-2 "COMMITTEE_MEMBER_2" nil "" nil))
+#+end_src
+
+***** KPI-related documents
+****** Laboratory reports
+#+name: kpi-lab-report-title-page
+#+begin_src latex
+\\usepackage{multicol}
+\\usepackage{titling}
+
+\\makeatletter
+\\renewcommand{\\maketitle}{%%
+  \\begin{titlepage}
+    \\centering
+      \\uppercase{Національний технічний університет України} \\\\
+      «Київський політехнічний інститут імені Ігоря Сікорського» \\\\
+      Факультет інформатики та обчислювальної техніки \\\\
+      Кафедра інформатики та програмної інженерії \\\\
+    \\par
+
+    \\vspace{5cm}
+
+    \\centering
+    \\@title \\\\
+    \\@subtitle \\\\
+    З дисципліни «%s» \\\\ %% subject
+    \\par
+
+    \\vspace{5cm}
+
+    \\begin{multicols}{2}
+      \\raggedright
+      \\textbf{Прийняв:} \\\\
+      %s \\\\ %% principal-position
+      %s \\\\ %% principal
+      \\newcolumn
+      \\textbf{Виконав:} \\\\
+      %s \\\\ %% author-position
+      \\@author \\\\
+      \\par
+    \\end{multicols}
+
+    \\vfill
+    \\centering
+      Київ -- 2020
+    \\par
+  \\end{titlepage}
+}
+\\makeatother
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(org-latex-mp--register-features
+ '(kpi-lab-report-title-page
+   :snippet (lambda (info)
+              (format "
+<<kpi-lab-report-title-page>>
+"
+                      (plist-get info :subject)
+                      (plist-get info :principal-position)
+                      (plist-get info :principal)
+                      (plist-get info :author-position)))))
+#+end_src
+
+****** Term papers
+#+name: kpi-term-paper-title-page
+#+begin_src latex
+\\usepackage{multicol}
+\\usepackage{titling}
+
+\\makeatletter
+\\renewcommand{\\maketitle}{%%
+  \\begin{titlepage}
+    \\centering
+      \\uppercase{Міністерство освіти і науки України} \\\\
+      \\uppercase{Національний технічний університет України} \\\\
+      «Київський політехнічний інститут імені Ігоря Сікорського» \\\\
+      \\uppercase{Факультет інформатики та обчислювальної техніки} \\\\
+      \\uppercase{Кафедра інформатики та програмної інженерії} \\\\
+    \\par
+
+    \\vspace{6em}
+
+    \\centering
+    \\@title \\\\
+    З дисципліни «%s» \\\\ %% subject
+    Тема: \\@subtitle \\\\
+    \\par
+
+    \\vspace{6em}
+
+    \\setlength{\\columnsep}{1cm}
+    \\begin{multicols}{2}
+      \\raggedright
+      \\textbf{Керівник:} \\\\
+      %s \\\\ %% principal-position
+      %s \\\\ %% principal
+      «Допущено до захисту» \\\\
+      \\underline{\\hspace{10em}} \\\\
+      %% \\underline{\\hspace{1.5em}} \\hspace{0.5em} \\underline{\\hspace{4em}} \\hspace{0.5em} 2022 р. \\\\
+      «\\underline{\\hspace{1.25em}}» \\underline{\\hspace{4em}} 2022 р. \\\\
+      Захищено з оцінкою \\\\
+      \\underline{\\hspace{10em}} \\\\
+      Члени комісії: \\\\
+      \\underline{\\hspace{10em}} \\\\
+      \\underline{\\hspace{10em}} \\\\
+      \\newcolumn
+      \\textbf{Виконавець:} \\\\
+      %s \\\\ %% author-position
+      \\@author \\\\
+      Залікова книжка №%s \\\\ %% author-record
+      \\underline{\\hspace{10em}} \\\\
+      \\@date \\\\
+      \\vfill
+      %s \\\\ %% committee-member-1
+      %s \\\\ %% committee-member-2
+      \\par
+    \\end{multicols}
+
+    \\vfill
+    \\centering
+      \\textbf{Київ -- 2020}
+    \\par
+  \\end{titlepage}
+}
+\\makeatother
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(org-latex-mp--register-features
+ '(kpi-term-paper-title-page
+   :snippet (lambda (info)
+              (format "
+<<kpi-term-paper-title-page>>
+"
+                      (plist-get info :subject)
+                      (plist-get info :principal-position)
+                      (plist-get info :principal)
+                      (plist-get info :author-position)
+                      (plist-get info :author-record)
+                      (plist-get info :committee-member-1)
+                      (plist-get info :committee-member-2)))))
+#+end_src
+
+**** Hyperref setup
+#+name: hyperref
+#+begin_src latex
+\\usepackage[usenames]{xcolor}
+
+\\providecolor{url}{HTML}{0077bb}
+\\providecolor{link}{HTML}{882255}
+\\providecolor{cite}{HTML}{999933}
+\\hypersetup{
+  pdfauthor={%a},
+  pdftitle={%t},
+  pdfkeywords={%k},
+  pdfsubject={%d},
+  pdfcreator={%c},
+  pdflang={%L},
+  breaklinks=true,
+  colorlinks=true,
+  linkcolor=link,
+  urlcolor=url,
+  citecolor=cite\n}
+\\urlstyle{same}
+%% hide links styles in toc
+\\NewCommandCopy{\\oldtoc}{\\tableofcontents}
+\\renewcommand{\\tableofcontents}{\\begingroup\\hypersetup{hidelinks}\\oldtoc\\endgroup}
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(after! ox-latex
+  (setq! org-latex-hyperref-template "
+<<hyperref>>
+"))
 #+end_src
 
 *** HTML export
