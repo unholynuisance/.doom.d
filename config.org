@@ -1475,6 +1475,15 @@ TEXMFHOME=${HOME}/.local/share/texmf
          org-re-reveal-height (display-pixel-height)))
 #+end_src
 
+*** Confluence
+#+begin_src emacs-lisp :tangle packages.el
+(package! ox-confluence :recipe (:host github :repo "nan0scho1ar/ox-confluence-modern" :files ("*.el")))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! ox-confluence)
+#+end_src
+
 ** NASM
 #+begin_src emacs-lisp :tangle packages.el
 (package! nasm-mode)
