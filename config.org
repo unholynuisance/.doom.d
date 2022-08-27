@@ -559,7 +559,6 @@ syntax                 ; tasing you for every semicolon you forget
 ;; grammar             ; tasing every grammar mistake you make
 #+end_src
 
-
 **** Spelling
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 (:if (executable-find "aspell")
