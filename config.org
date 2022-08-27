@@ -202,7 +202,7 @@ git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.config/emacs
 *** Transparency
 I prefer my Emacs windows to be slightly transparent. So let's set a default alpha for new frames.
 #+begin_src emacs-lisp
-(defvar satan/default-transparency '(98 . 90))
+(defvar satan/default-transparency '(98 . 98))
 (add-to-list 'default-frame-alist
              `(alpha . ,satan/default-transparency))
 #+end_src
@@ -217,7 +217,7 @@ While we are at it, let's add some convenience functions to set current frame tr
 
 We can go further and define the following minor mode.
 #+begin_src emacs-lisp
-(defvar satan/transparent-mode-transparency '(60 . 40))
+(defvar satan/transparent-mode-transparency '(60 . 60))
 
 (define-minor-mode satan/transparent-mode
   nil
