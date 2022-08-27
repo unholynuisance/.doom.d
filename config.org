@@ -809,7 +809,7 @@ literate
 ** Tools
 *** Projectile
 Keybindings.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (map! :leader
       (:prefix-map ("p" . "project")
        :desc "Browse project"               "." #'+default/browse-project
