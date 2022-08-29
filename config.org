@@ -807,6 +807,12 @@ literate
 #+end_src
 
 ** Tools
+*** Vterm
+#+begin_src emacs-lisp
+(after! vterm
+  (setq! vterm-timer-delay 0.01))
+#+end_src
+
 *** Projectile
 Keybindings.
 #+begin_src emacs-lisp
