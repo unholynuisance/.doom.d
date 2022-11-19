@@ -922,6 +922,16 @@ This makes it a breeze to take lovely screenshots.
   :defer t)
 #+end_src
 
+*** Webpaste
+#+begin_src emacs-lisp :tangle packages.el
+(package! webpaste)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! webpaste
+  :defer t)
+#+end_src
+
 ** Visuals
 *** Good scroll
 #+begin_src emacs-lisp
