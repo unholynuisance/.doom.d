@@ -637,7 +637,9 @@ tty               ; improve the terminal Emacs experience
 ;;common-lisp       ; if you've seen one lisp, you've seen them all
 ;;coq               ; proofs-as-programs
 ;;crystal           ; ruby at the speed of c
-;;csharp            ; unity, .NET, and mono shenanigans
+(csharp           ; unity, .NET, and mono shenanigans
+ +lsp
+ +unity)
 data              ; config/data formats
 ;;(dart             ; paint ui and not much else
 ;; +flutter)
@@ -2121,4 +2123,10 @@ For editing systemd unit files
 #+begin_src emacs-lisp
 (use-package! systemd
   :defer t)
+#+end_src
+
+** Csharp
+#+begin_src emacs-lisp
+(after! csharp
+  (setq! lsp-csharp-server-path "/usr/bin/omnisharp"))
 #+end_src
