@@ -403,7 +403,7 @@ Name=Emacs
 GenericName=Text Editor
 Comment=Edit text
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
-Exec=emacsclient -create-frame %F
+Exec=emacsclient --create-frame %F
 Icon=emacs
 Type=Application
 Terminal=false
@@ -411,7 +411,7 @@ Categories=Development;TextEditor;Utility;
 StartupNotify=true
 StartupWMClass=Emacs
 Keywords=Text;Editor;
-Actions=new-window;no-daemon;
+Actions=new-window;no-daemon;restart-daemon;
 
 [Desktop Action new-window]
 Name=New Window
@@ -420,6 +420,10 @@ Exec=emacsclient --create-frame %F
 [Desktop Action no-daemon]
 Name=No Daemon
 Exec=emacs %F
+
+[Desktop Action restart-daemon]
+Name=Restart Daemon
+Exec=systemctl --user restart emacs
 #+end_src
 
 **** Other
