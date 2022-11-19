@@ -1310,9 +1310,11 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 (after! org
   (setq! org-directory "~/Org/agenda")
   (setq! org-roam-directory "~/Org/roam")
-  (setq! org-agenda-files '("~/Org/agenda"))
+  (setq! org-agenda-files '("~/Org/roam"))
   (setq! org-cite-global-bibliography '("~/Org/bibliography.bib"))
   (setq! org-latex-compiler '"xelatex")
+  (setq! org-agenda-weekend-days '(0))
+  (setq! calendar-week-start-day 1)
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
 (use-package! org-tempo
