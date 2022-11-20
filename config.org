@@ -430,14 +430,9 @@ Exec=systemctl --user restart emacs
 For some reason when I open new emacsclient frame it comes up garbled in some way. We can fix it by reloading theme after making new frame.
 #+begin_src emacs-lisp
 (when (daemonp)
-  (add-hook! 'server-after-make-frame-hook
-             #'doom/reload-theme))
-#+end_src
-
-Also, I prefer =main= workspace when opening a new frame.
-#+begin_src emacs-lisp
-(after! persp-mode
-  (setq persp-emacsclient-init-frame-behaviour-override "main"))
+  (add-hook! server-after-make-frame
+             (lambda (frame)
+               (doom/reload-theme))))
 #+end_src
 
 *** TODO Alerts
