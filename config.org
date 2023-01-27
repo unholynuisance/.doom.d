@@ -25,6 +25,64 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 (use-package f)
 #+end_src
 
+** Profiles
+#+begin_src emacs-lisp
+(defvar
+  satan/profiles-profile-dir
+  (file-name-concat doom-private-dir "profiles"))
+
+(defvar
+  satan/profiles-default-profile
+  "default.el")
+
+(defvar
+  satan/profiles-active-profile
+  "active.el")
+
+(defvar
+  satan/profiles-keyboard-layout
+  "default")
+
+(defun satan/profiles-load-profile (file)
+  (let ((profile (read (f-read-text file))))
+    (setq satan/profiles-keyboard-layout
+          (or (plist-get profile :keyboard-layout)
+              satan/profiles-keyboard-layout))))
+
+(defun satan/profiles-load-active-profile ()
+  (let ((active-profile-file (file-name-concat satan/profiles-profile-dir satan/profiles-active-profile))
+        (default-profile-file (file-name-concat satan/profiles-profile-dir satan/profiles-default-profile)))
+    (if (file-exists-p active-profile-file)
+        (satan/profiles-load-profile active-profile-file)
+      (satan/profiles-load-profile default-profile-file))))
+
+(defun satan/profiles-set-active-profile ()
+  (interactive)
+  (let* ((profile (completing-read
+                   "Select profile: "
+                   (directory-files satan/profiles-profile-dir ())
+                   (lambda (value) (not (member value `("." ".." ,satan/profiles-active-profile))))
+                   t))
+         (active-profile-file (file-name-concat satan/profiles-profile-dir satan/profiles-active-profile))
+         (profile-file (file-name-concat satan/profiles-profile-dir profile)))
+    (make-symbolic-link profile-file active-profile-file t)
+    (satan/profiles-load-active-profile)))
+
+(satan/profiles-load-active-profile)
+#+end_src
+
+Default profile:
+#+begin_src emacs-lisp :tangle profiles/default.el
+(:keyboard-layout "default" ;; possible layouts: ("default" "moonlander")
+)
+#+end_src
+
+Desktop profile:
+#+begin_src emacs-lisp :tangle profiles/desktop.el
+(:keyboard-layout "moonlander" ;; possible layouts: ("default" "moonlander")
+)
+#+end_src
+
 ** Current system
 Let's define a straightforward way to check for system we are on (subject to change).
 #+name: current-system
