@@ -1472,6 +1472,15 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
   (setq! calendar-week-start-day 1)
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
+(after! ox
+  (add-to-list 'org-export-smart-quotes-alist
+               '("uk"
+                 (primary-opening :utf-8 "«" :html "&laquo;" :latex "{}<<" :texinfo "@guillemetleft{}")
+                 (primary-closing :utf-8 "»" :html "&raquo;" :latex ">>{}" :texinfo "@guillemetright{}")
+                 (secondary-opening :utf-8 "„" :html "&bdquo;" :latex "\\glqq{}" :texinfo "@quotedblbase{}")
+                 (secondary-closing :utf-8 "“" :html "&ldquo;" :latex "\\grqq{}" :texinfo "@quotedblleft{}")
+                 (apostrophe :utf-8 "’" :html: "&#39;"))))
+
 (use-package! org-tempo
   :after org)
 #+end_src
@@ -1579,6 +1588,12 @@ Org uses =latexmk= with =pdflatex= as compiler by default, and =pdflatex= doesn'
             ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
 
            ("report" "\\documentclass{scrreprt}"
+            ("\\chapter{%s}" . "\\chapter*{%s}")
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+
+           ("split-report" "\\documentclass{scrreprt}"
             ("\\part{%s}" . "\\part*{%s}")
             ("\\chapter{%s}" . "\\chapter*{%s}")
             ("\\section{%s}" . "\\section*{%s}")
@@ -1803,21 +1818,21 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 #+begin_src emacs-lisp
 (after! ox-latex
   (setq! org-latex-default-packages-alist
-         '(("AUTO"     "inputenc"    t ("pdflatex"))
-           ("T1"       "fontenc"     t ("pdflatex"))
-           ("AUTO"     "babel"       t ("pdflatex" "xelatex"))
-           (""         "fontspec"    t ("xelatex"))
-           ;; ("AUTO"     "polyglossia" t ("xelatex"))
-           ;; (" "        "biblatex"    nil)
-           (""         "graphicx"    t)
-           (""         "longtable"   nil)
-           (""         "wrapfig"     nil)
-           (""         "rotating"    nil)
-           ("normalem" "ulem"        t)
-           (""         "amsmath"     t)
-           (""         "amssymb"     t)
-           (""         "capt-of"     nil)
-           (""         "hyperref"    nil))))
+         '(("AUTO"     "inputenc"     t ("pdflatex"))
+           ("T1"       "fontenc"      t ("pdflatex"))
+           (""         "fontspec"     t ("xelatex"))
+           ("AUTO"     "babel"        t ("pdflatex" "xelatex"))
+           (""         "biblatex"     nil)
+           (""         "graphicx"     t)
+           (""         "longtable"    nil)
+           (""         "wrapfig"      nil)
+           (""         "rotating"     nil)
+           ("normalem" "ulem"         t)
+           (""         "amsmath"      t)
+           (""         "amssymb"      t)
+           (""         "unicode-math" t ("xelatex"))
+           (""         "capt-of"      nil)
+           (""         "hyperref"     nil))))
 #+end_src
 
 **** Default style
@@ -1875,6 +1890,11 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
    :style dstu
    :snippet "\\setsansfont{Times New Roman}"
    :order typography-fonts
+   :eager t)
+ '(font-math
+   :style dstu
+   :snippet "\\setmathfont{XITS Math}"
+   :order typography-fonts
    :eager t))
  #+end_src
 
@@ -1901,7 +1921,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
    :snippet "\\setlength{\\parskip}{0pt}"
    :order typography-misc
    :eager t)
- '(lisespread
+ '(linespread
    :style dstu
    :snippet "\\usepackage{setspace}\n\\onehalfspacing"
    :order typography-misc
@@ -2096,7 +2116,7 @@ beforeskip=0em,
 
     \\vfill
     \\centering
-      Київ -- 2020
+    \\textbf{Київ -- \\the\\year}
     \\par
   \\end{titlepage}
 }
@@ -2151,8 +2171,7 @@ beforeskip=0em,
       %s \\\\ %% principal
       «Допущено до захисту» \\\\
       \\underline{\\hspace{10em}} \\\\
-      %% \\underline{\\hspace{1.5em}} \\hspace{0.5em} \\underline{\\hspace{4em}} \\hspace{0.5em} 2022 р. \\\\
-      «\\underline{\\hspace{1.25em}}» \\underline{\\hspace{4em}} 2022 р. \\\\
+      «\\underline{\\hspace{1.25em}}» \\underline{\\hspace{4em}} \\the\\year р. \\\\
       Захищено з оцінкою \\\\
       \\underline{\\hspace{10em}} \\\\
       Члени комісії: \\\\
@@ -2173,7 +2192,7 @@ beforeskip=0em,
 
     \\vfill
     \\centering
-      \\textbf{Київ -- 2020}
+      \\textbf{Київ -- \\the\\year}
     \\par
   \\end{titlepage}
 }
