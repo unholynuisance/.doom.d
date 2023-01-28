@@ -960,7 +960,9 @@ literate
   :hook
   (after-init . reverse-im-mode)
   :custom
-  (reverse-im-input-methods '("russian-computer" "ukrainian-computer")))
+  (reverse-im-input-methods (pcase satan/profiles-keyboard-layout
+                              ("default"    '("ukrainian-computer"))
+                              ("moonlander" '("ukrainian-qwertivka")))))
 #+end_src
 
 #+begin_src emacs-lisp :tangle packages.el
