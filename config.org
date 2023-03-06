@@ -1566,6 +1566,18 @@ Make org recognize first /five/ levels of headings as headings when exporting
 (setq! org-export-headline-levels 5)
 #+end_src
 
+*** Engraving faces
+#+begin_src emacs-lisp :tangle packages.el
+(package! engrave-faces)
+#+end_src
+
+#+begin_src emacs-lisp
+(after! ox-latex
+  (use-package! engrave-faces)
+  (setq! org-latex-src-block-backend 'engraved)
+  (setq! org-latex-engraved-theme 'default))
+#+end_src
+
 *** Latex export
 **** System dependencies
 ***** Pacman packages
@@ -1863,30 +1875,6 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
  '(font-mono
    :snippet "\\setmonofont[Scale=MatchLowercase]{Noto Sans Mono}"
    :order typography-fonts
-   :eager t))
-#+end_src
-
-***** Listings
-#+begin_src emacs-lisp
-(after! ox-latex
-  (setq! org-latex-listings t))
-
-(org-latex-mp--register-features
- '(listings
-   :style default
-   :snippet "
-\\usepackage{color}
-\\usepackage{listings}
-
-\\lstset{
-  language=[LaTeX]TeX,
-  breaklines=true,
-  basicstyle=\\ttfamily\\normalsize,
-  keywordstyle=\\color{blue},
-  frame = single
-}
-"
-   :order default
    :eager t))
 #+end_src
 
