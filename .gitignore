@@ -1,6 +1,7 @@
-/pkg/
 /bin/install.sh
 /bin/setup.sh
+/pkg/
+/profiles/
 /config.el
 /init.el
 /packages.el
