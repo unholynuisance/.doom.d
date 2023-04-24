@@ -1848,6 +1848,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
            (""         "fontspec"     t ("xelatex"))
            ("AUTO"     "babel"        t ("pdflatex" "xelatex"))
            (""         "biblatex"     nil)
+           (""         "tikz"         t)
            (""         "graphicx"     t)
            (""         "longtable"    nil)
            (""         "wrapfig"      nil)
@@ -2219,8 +2220,6 @@ beforeskip=0em,
 **** Hyperref setup
 #+name: hyperref
 #+begin_src latex
-\\usepackage[usenames]{xcolor}
-
 \\providecolor{url}{HTML}{0077bb}
 \\providecolor{link}{HTML}{882255}
 \\providecolor{cite}{HTML}{999933}
