@@ -1476,10 +1476,10 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 ** Org
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-directory "~/Org/agenda")
+  (setq! org-directory "~/Org/")
   (setq! org-roam-directory "~/Org/roam")
-  (setq! org-agenda-files '("~/Org/roam"))
-  (setq! org-cite-global-bibliography '("~/Org/bibliography.bib"))
+  (setq! org-agenda-files "~/Org/.agenda-files")
+  (setq! org-cite-global-bibliography '("~/Org/.bib"))
   (setq! org-latex-compiler '"xelatex")
   (setq! org-agenda-weekend-days '(0))
   (setq! calendar-week-start-day 1)
@@ -1499,6 +1499,79 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 #+end_src
 
 *** Behaviour
+**** Key org roam nodes
+#+begin_src emacs-lisp
+(defun satan/org-roam-location (id)
+  `(lambda () (car (org-roam-id-find ',id))))
+
+(defvar
+  satan/org-roam-tasks-node-id
+  'ee595c48-5a64-44ef-bcb4-dbf2a01ab2e4)
+
+(defvar
+  satan/org-roam-archive-node-id
+  '659a9caa-5498-48ac-95b0-02dce766d48f)
+
+(defvar
+  satan/org-roam-leisure-node-id
+  'eff2874c-b6cb-4805-ac4c-4af835775458)
+
+(defvar
+  satan/org-roam-library-node-id
+  '68ec962b-3173-41bb-bcb1-35abc7f58ef5)
+#+end_src
+
+**** Capture templates
+#+begin_src emacs-lisp
+(after! org
+  (setq! org-capture-templates
+         `(("t" "Task" entry
+            (file ,(satan/org-roam-location satan/org-roam-tasks-node-id))
+            "* TODO %? \n %i\n"
+            :empty-lines 1)
+           ("l" "Library")
+           ("lb" "book" entry
+            (file+olp ,(satan/org-roam-location satan/org-roam-library-node-id) "Inbox")
+             "* UNREAD %? :book:\n %i\n"
+             :empty-lines 1)
+           ("L" "Leisure")
+           ("Ln" "novel" entry
+            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            "* UNREAD %? :novel:\n %i\n"
+            :empty-lines 1)
+           ("Lf" "film" entry
+            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            "* UNWATCHED %? :film:\n %i\n"
+            :empty-lines 1)
+           ("Ls" "series" entry
+            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            "* UNWATCHED %? :series:\n %i\n"
+            :empty-lines 1)
+           ("Lg" "game" entry
+            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            "* UNPLAYED %? :game:\n %i\n"
+            :empty-lines 1)
+           ("Lm" "manga" entry
+            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            "* UNREAD %? :manga:\n %i\n"
+            :empty-lines 1)
+           ("La" "anime" entry
+            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            "* UNWATCHED %? :anime:\n %i\n"
+            :empty-lines 1))))
+
+(after! org-roam
+  (setq! org-roam-capture-templates
+         `(("d" "Default" plain "%?"
+            :target
+            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+            :unnarrowed t)
+           ("g" "Game" plain "%?"
+            :target
+            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: :games:${title}:")
+            :unnarrowed t))))
+#+end_src
+
 **** Auto tangle mode
 #+begin_src emacs-lisp
 (use-package! org-auto-tangle
