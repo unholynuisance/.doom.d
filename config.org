@@ -834,8 +834,8 @@ mu4e isync msmtp
 calendar
 ;;emms
 ;;irc                   ; how neckbeards socialize
-;;(rss                  ; emacs as an RSS reader
-;; +org)
+(rss                  ; emacs as an RSS reader
+ +org)
 ;;twitter               ; twitter client https://twitter.com/vnought
 #+end_src
 
