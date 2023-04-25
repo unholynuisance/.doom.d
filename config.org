@@ -1501,11 +1501,14 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 *** Behaviour
 **** Key org roam nodes
 #+begin_src emacs-lisp
-(defun satan/org-roam-location (id)
-  `(lambda () (car (org-roam-id-find ',id))))
+(defun satan/get-org-roam-file-by-title (title)
+  "Get the ID of an Org Roam node with the given TITLE."
+  (cl-loop for node in (org-roam-node-list)
+           when (string= title (org-roam-node-title node))
+           return (org-roam-node-file node)))
 
 (defvar
-  satan/org-roam-tasks-node-id
+  satan/org-roam-inbox-node-id
   'ee595c48-5a64-44ef-bcb4-dbf2a01ab2e4)
 
 (defvar
@@ -1526,37 +1529,37 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 (after! org
   (setq! org-capture-templates
          `(("t" "Task" entry
-            (file ,(satan/org-roam-location satan/org-roam-tasks-node-id))
+            (file ,(satan/get-org-roam-file-by-title "Inbox")
             "* TODO %? \n %i\n"
             :empty-lines 1)
            ("l" "Library")
            ("lb" "book" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-library-node-id) "Inbox")
+            (file+olp ,(satan/get-org-roam-file-by-title "Library") "Inbox")
              "* UNREAD %? :book:\n %i\n"
              :empty-lines 1)
            ("L" "Leisure")
            ("Ln" "novel" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(satan/get-org-roam-file-by-title "Leisure") "Inbox")
             "* UNREAD %? :novel:\n %i\n"
             :empty-lines 1)
            ("Lf" "film" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(satan/get-org-roam-file-by-title "Leisure") "Inbox")
             "* UNWATCHED %? :film:\n %i\n"
             :empty-lines 1)
            ("Ls" "series" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(satan/get-org-roam-file-by-title "Leisure") "Inbox")
             "* UNWATCHED %? :series:\n %i\n"
             :empty-lines 1)
            ("Lg" "game" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(satan/get-org-roam-file-by-title "Leisure") "Inbox")
             "* UNPLAYED %? :game:\n %i\n"
             :empty-lines 1)
            ("Lm" "manga" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(satan/get-org-roam-file-by-title "Leisure") "Inbox")
             "* UNREAD %? :manga:\n %i\n"
             :empty-lines 1)
            ("La" "anime" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(satan/get-org-roam-file-by-title "Leisure") "Inbox")
             "* UNWATCHED %? :anime:\n %i\n"
             :empty-lines 1))))
 
@@ -1566,10 +1569,19 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
             :target
             (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
             :unnarrowed t)
+           ;; ("p" "project")
+           ;; ("t" "task")
            ("g" "Game" plain "%?"
             :target
             (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: :games:${title}:")
-            :unnarrowed t))))
+            :unnarrowed t)
+           ;; ("n" "novel")
+           ;; ("f" "film")
+           ;; ("s" "series")
+           ;; ("g" "game")
+           ;; ("m" "manga")
+           ;; ("a" "anime")
+           )))
 #+end_src
 
 **** Auto tangle mode
