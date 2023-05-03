@@ -342,6 +342,13 @@ It's convenient when you can see distance between current line and the line you 
 #+end_src
 
 *** Dashboard
+Change dashboard buffer name to =*dashboard*=:
+#+begin_src emacs-lisp
+(after! doom-dashboard
+  (setq +doom-dashboard-name "*dashboard*")
+  (setq doom-fallback-buffer-name "*dashboard*"))
+#+end_src
+
 Menu sections:
 #+begin_src emacs-lisp
 (setq +doom-dashboard-menu-sections
