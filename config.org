@@ -391,6 +391,12 @@ I often run Emacs in fullscreen, and thus I can't see my system clock. We can fi
 (add-hook! doom-init-ui #'display-time-mode)
 #+end_src
 
+*** Modeline
+#+begin_src emacs-lisp
+(after! doom-modeline
+  (setq doom-modeline-persp-name t))
+#+end_src
+
 ** Other
 *** New frames
 I have (or had) two problems with new frames:
