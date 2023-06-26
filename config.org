@@ -1630,6 +1630,12 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
 plantuml
 #+end_src
 
+****  Attachments
+#+begin_src emacs-lisp
+(after! org-attach
+  (setq! org-attach-id-dir "~/Org/.attach/"))
+#+end_src
+
 *** Visuals
 **** Org Modern
 #+begin_src emacs-lisp :tangle packages.el
