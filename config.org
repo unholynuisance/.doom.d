@@ -413,7 +413,7 @@ I have (or had) two problems with new frames:
 
 Fortunately, we can fix the first problem by modifying ~default-frame-alist~.
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist '(width . 80))
+(add-to-list 'default-frame-alist '(width . 100))
 (add-to-list 'default-frame-alist '(height . 43))
 #+end_src
 
