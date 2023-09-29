@@ -337,7 +337,8 @@ It's convenient when you can see distance between current line and the line you 
 
 *** Theme
 #+begin_src emacs-lisp
-(setq! doom-theme 'doom-vibrant)
+(setq! doom-theme 'doom-dracula)
+(setq! doom-themes-enable-italic t)
 #+end_src
 
 *** Dashboard
