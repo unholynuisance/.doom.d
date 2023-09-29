@@ -200,7 +200,6 @@ And the other half of a script.
 sudo apt update
 sudo apt install "${APT_PACKAGES[@]}"
 
-# HACK fd is fdfind on Ubuntu to avoid confusion with fdclone (really?)
 [[ -f /usr/bin/fd ]] || sudo ln -s /usr/bin/fdfind /usr/bin/fd
 #+end_src
 
