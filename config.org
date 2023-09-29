@@ -1939,7 +1939,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
    :eager t)
  '(linespread
    :style dstu
-   :snippet "\\usepackage{setspace}\n\\onehalfspacing"
+   :snippet "\\usepackage[onehalfspacing]{setspace}"
    :order typography-misc
    :eager t))
 #+end_src
