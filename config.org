@@ -401,8 +401,11 @@ I often run Emacs in fullscreen, and thus I can't see my system clock. We can fi
 *** Modeline
 #+begin_src emacs-lisp
 (after! doom-modeline
-  (setq doom-modeline-persp-name t)
-  (setq doom-modeline-display-default-persp-name t))
+  (setq doom-modeline-height 40
+        doom-modeline-persp-name t
+        doom-modeline-display-default-persp-name t
+        doom-modeline-major-mode-icon t
+        doom-modeline-enable-word-count t))
 #+end_src
 
 ** Other
