@@ -1903,6 +1903,15 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
    :eager t))
 #+end_src
 
+***** Spacing
+#+begin_src emacs-lisp
+(org-latex-mp--register-features
+ '(parsizes
+   :snippet "\\setparsizes{0pt}{0.5\\baselineskip}{0pt plus 1fil}"
+   :order typography-misc
+   :eager t))
+#+end_src
+
 **** DSTU style
 ***** Fonts
 #+begin_src emacs-lisp
