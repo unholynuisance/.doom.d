@@ -1890,15 +1890,19 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 #+begin_src emacs-lisp
 (org-latex-mp--register-features
  '(font-main
-   :snippet "\\setmainfont{Noto Serif}"
+   :snippet "\\setmainfont{IBM Plex Serif}"
    :order typography-fonts
-   :eager t )
+   :eager t)
  '(font-sans
-   :snippet "\\setsansfont{Noto Sans}"
+   :snippet "\\setsansfont{IBM Plex Sans}"
    :order typography-fonts
    :eager t)
  '(font-mono
-   :snippet "\\setmonofont[Scale=MatchLowercase]{Noto Sans Mono}"
+   :snippet "\\setmonofont{IBM Plex Mono}"
+   :order typography-fonts
+   :eager t)
+ '(font-math
+   :snippet "\\setmathfont{XITS Math}"
    :order typography-fonts
    :eager t))
 #+end_src
