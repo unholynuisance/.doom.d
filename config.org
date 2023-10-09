@@ -561,7 +561,7 @@ hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
 ;;hydra
 ;;indent-guides     ; highlighted indent columns
 ;;(:if (>= (string-to-number emacs-version) 28)
-;; ligatures
+;;ligatures
 ;; +extra)          ; ligatures and symbols to make your code pretty again
 ;;minimap           ; show a map of the code on the side
 modeline          ; snazzy, Atom-inspired modeline, plus API
@@ -660,7 +660,7 @@ aspell-en aspell-uk
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :tools
 ;;ansible
-biblio            ; Writes a PhD for you (citation needed)
+;;biblio            ; Writes a PhD for you (citation needed)
 debugger          ; FIXME stepping through code, to help you add bugs
 direnv
 docker
@@ -760,21 +760,26 @@ emacs-lisp        ; drown in parentheses
 (markdown         ; writing docs for people to ignore
  +grip)
 ;;nim               ; python + lisp at the speed of c
-;;nix               ; I hereby declare "nix geht mehr!"
+nix               ; I hereby declare "nix geht mehr!"
 ;;ocaml             ; an objective camel
-(org +roam2       ; organize your plain life in plain text
-     ;; +pretty
+(org +contacts    ; organize your plain life in plain text
+     +dragndrop
+     +gnuplqot
+     +jupyter
+     +noter
      +pandoc
      +present
-     +dragndrop
-     +gnuplot)
+     ;; +pretty
+     +roam2)
 ;;php               ; perl's insecure younger brother
 ;;plantuml          ; diagrams for confusing people more
 ;;purescript        ; javascript, but functional
 (python           ; beautiful is better than ugly
  +lsp
  +tree-sitter
- +pyenv)
+ +pyright
+ ;; +pyenv
+ )
 ;;qt                ; the 'cutest' gui framework ever
 ;;racket            ; a DSL for DSLs
 ;;raku              ; the artist formerly known as perl6
