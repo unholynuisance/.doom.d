@@ -1065,7 +1065,11 @@ This makes it a breeze to take lovely screenshots.
 
 *** Mixed pitch
 #+begin_src emacs-lisp
-(add-hook! (org-mode LaTeX-mode markdown-mode gfm-mode Info-mode) #'mixed-pitch-mode)
+(use-package! mixed-pitch
+  :hook
+  (org-mode . mixed-pitch-mode)
+  :config
+  (setq! mixed-pitch-face 'variable-pitch))
 #+end_src
 
 ** Questionable stuff
