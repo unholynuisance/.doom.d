@@ -931,6 +931,47 @@ literate
 #+end_src
 
 ** Tools
+*** OpenAI
+#+begin_src emacs-lisp :tangle packages.el
+(package! openai :recipe (:host github :repo "emacs-openai/openai"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! openai
+  :config
+  (setq! openai-key "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"))
+#+end_src
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix-map ("A" . "AI")
+       :desc "Start ChatGPT instance" "s" #'chatgpt
+       :desc "CodeGPT" "c" #'codegpt))
+#+end_src
+
+**** ChatGPT
+#+begin_src emacs-lisp :tangle packages.el
+(package! chatgpt :recipe (:host github :repo "emacs-openai/chatgpt"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! chatgpt
+  :custom
+  (chatgpt-model "gpt-3.5-turbo"))
+#+end_src
+
+**** CodeGPT
+#+begin_src emacs-lisp :tangle packages.el
+(package! codegpt :recipe (:host github :repo "emacs-openai/codegpt"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! codegpt
+  :custom
+  (codegpt-model "gpt-3.5-turbo")
+  (codegpt-tunnel 'chat))
+#+end_src
+
 *** Vterm
 #+begin_src emacs-lisp
 (after! vterm
