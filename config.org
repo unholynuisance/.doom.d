@@ -1436,6 +1436,8 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
   (setq! org-latex-compiler '"xelatex")
   (setq! org-agenda-weekend-days '(0))
   (setq! calendar-week-start-day 1)
+  (setq! org-element-cache-persistent nil)
+  (setq! org-element-use-cache nil)
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
 (after! ox
