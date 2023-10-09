@@ -537,7 +537,9 @@ There are some packages in this config using [[https://github.com/jwiegley/alert
 *** Completion
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :completion
-company           ; the ultimate code completion backend
+;;company           ; the ultimate code completion backend
+(corfu            ; complete with cap(f), cape and a flying feather
+ +icons)
 ;;helm              ; the *other* search engine for love and life
 ;;ido               ; the other *other* search engine...
 ;;(ivy            ; a search engine for love and life
