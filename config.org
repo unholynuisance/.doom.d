@@ -423,8 +423,13 @@ I have (or had) two problems with new frames:
 
 Fortunately, we can fix the first problem by modifying ~default-frame-alist~.
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist '(width . 100))
-(add-to-list 'default-frame-alist '(height . 43))
+(modify-all-frames-parameters
+ '((width . 90)
+   (height . 43)))
+
+(defun satan/resize-frame (&optional frame)
+  (interactive)
+  (modify-frame-parameters frame '((width . 90) (height . 43))))
 #+end_src
 
 To fix the second problem, we can use the following function (taken from [[https://christiantietze.de/posts/2022/04/emacs-center-window-current-monitor-simplified/][here]]) that centers the frame.
