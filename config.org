@@ -1443,6 +1443,49 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
   :after org)
 #+end_src
 
+*** Org protocol
+#+begin_src conf :tangle (if (satan/current-system-p "Linux") "~/.local/share/applications/org-protocol.desktop" "no")
+[Desktop Entry]
+Name=Org Protocol
+Comment=Intercept calls from emacsclient to trigger custom actions
+Categories=Other;
+Keywords=org-protocol;
+Icon=emacs
+Type=Application
+Exec=emacsclient %u
+Terminal=false
+StartupWMClass=Emacs
+MimeType=x-scheme-handler/org-protocol;
+NoDisplay=true
+#+end_src
+
+Store Link:
+#+begin_src js
+javascript:location.href = 'org-protocol://store-link?' +
+    new URLSearchParams({
+        url:location.href,
+        title:document.title,
+        body:window.getSelection()
+    })
+#+end_src
+
+Capture:
+#+begin_src js
+javascript:location.href = 'org-protocol://capture://' + new URLSearchParams({
+        url: location.href,
+        title: document.title,
+        body: window.getSelection()
+    })
+#+end_src
+
+Open Source:
+#+begin_src js
+javascript:location.href = 'org-protocol://open-source?' +
+    new URLSearchParams({
+        url:location.href
+    })
+#+end_src
+
 *** Behaviour
 **** Key org roam nodes
 #+begin_src emacs-lisp
