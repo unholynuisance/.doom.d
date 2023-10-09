@@ -513,15 +513,6 @@ Name=Restart Daemon
 Exec=systemctl --user restart emacs
 #+end_src
 
-**** Other
-For some reason when I open new emacsclient frame it comes up garbled in some way. We can fix it by reloading theme after making new frame.
-#+begin_src emacs-lisp
-(when (daemonp)
-  (add-hook! server-after-make-frame
-             (lambda (frame)
-               (doom/reload-theme))))
-#+end_src
-
 *** TODO Alerts
 There are some packages in this config using [[https://github.com/jwiegley/alert][alert.el]], so it would be nice to set it up depending on platform we are on.
 #+begin_src emacs-lisp
