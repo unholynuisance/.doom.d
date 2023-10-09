@@ -2241,6 +2241,67 @@ beforeskip=0em,
                       (plist-get info :committee-member-2)))))
 #+end_src
 
+***** LPNU-related documents
+****** Laboratory reports
+#+name: lpnu-lab-report-title-page
+#+begin_src latex
+\\usepackage{multicol}
+\\usepackage{titling}
+
+\\makeatletter
+\\renewcommand{\\maketitle}{%%
+  \\begin{titlepage}
+    \\centering
+      \\uppercase{Міністерство освіти і науки України} \\\\
+      \\uppercase{Національний університет «Львівська Політехніка»} \\\\
+      \\uppercase{Інститут комп'ютерних наук та інформаційних технологій} \\\\
+      Кафедра систем штучного інтелекту \\\\
+    \\par
+
+    \\vspace{5cm}
+
+    \\centering
+    \\@title \\\\
+    \\@subtitle \\\\
+    З курсу «%s» \\\\ %% subject
+    \\par
+
+    \\vspace{5cm}
+
+    \\begin{multicols}{2}
+      \\raggedright
+      \\textbf{Прийняв:} \\\\
+      %s \\\\ %% principal-position
+      %s \\\\ %% principal
+      \\newcolumn
+      \\textbf{Виконав:} \\\\
+      %s \\\\ %% author-position
+      \\@author \\\\
+      \\par
+    \\end{multicols}
+
+    \\vfill
+    \\centering
+    \\textbf{Київ -- \\the\\year}
+    \\par
+  \\end{titlepage}
+}
+\\makeatother
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(org-latex-mp--register-features
+ '(lpnu-lab-report-title-page
+   :snippet (lambda (info)
+              (format "
+<<lpnu-lab-report-title-page>>
+"
+                      (plist-get info :subject)
+                      (plist-get info :principal-position)
+                      (plist-get info :principal)
+                      (plist-get info :author-position)))))
+#+end_src
+
 **** Hyperref setup
 #+name: hyperref
 #+begin_src latex
