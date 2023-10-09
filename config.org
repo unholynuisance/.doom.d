@@ -1048,15 +1048,14 @@ This makes it a breeze to take lovely screenshots.
 #+end_src
 
 ** Visuals
-*** Good scroll
+*** Scrolling
 #+begin_src emacs-lisp
-(use-package! good-scroll
-  :hook
-  (after-init . good-scroll-mode))
-#+end_src
+(add-hook 'doom-first-buffer-hook #'pixel-scroll-precision-mode)
 
-#+begin_src emacs-lisp :tangle packages.el
-(package! good-scroll)
+(setq! pixel-scroll-precision-use-momentum t
+       pixel-scroll-precision-interpolate-mice t
+       pixel-scroll-precision-interpolate-page t
+       pixel-scroll-precision-large-scroll-height 1)
 #+end_src
 
 *** Mixed pitch
