@@ -1578,10 +1578,9 @@ plantuml
   :hook (org-mode . org-modern-mode)
   :config
   (setq! org-modern-star ["◉" "○" "◈" "◇"]
-         org-modern-hide-stars nil
          org-modern-list '((?* . "•") (?+ . "➤") (?- . "–"))
-         org-modern-table-vertical 1
-         org-modern-table-horizontal 0.2))
+         org-modern-hide-stars nil
+         org-modern-table nil))
 #+end_src
 
 *** Exporting
