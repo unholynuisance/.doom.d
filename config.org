@@ -441,11 +441,16 @@ If FRAME is omitted or nil, use currently selected frame."
 
 And add it to one of ~doom-init-ui~ or ~server-after-make-frame~ hooks.
 #+begin_src emacs-lisp
+(defun satan/fix-frame (&optional frame)
+  (satan/resize-frame frame)
+  (satan/center-frame frame)
+  (doom/reload-theme))
+
 (if (daemonp)
   (add-hook! server-after-make-frame
-             #'satan/center-frame)
+             #'satan/fix-frame)
   (add-hook! doom-init-ui
-             #'satan/center-frame))
+             #'satan/fix-frame))
 #+end_src
 
 *** Preferred encoding
