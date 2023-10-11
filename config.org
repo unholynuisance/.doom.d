@@ -238,18 +238,6 @@ git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.config/emacs
 #+end_src
 
 * General configuration
-** Keybindings
-*** Doom leader keys:
-#+begin_src emacs-lisp
-(setq doom-leader-alt-key "C-SPC")
-(setq doom-localleader-alt-key "C-SPC l")
-#+end_src
-
-*** Rebind set-mark-command
-#+begin_src emacs-lisp
-(map! :leader :desc "Mark" "C-SPC"#'set-mark-command)
-#+end_src
-
 ** UI
 *** Transparency
 I prefer my Emacs windows to be slightly transparent. So let's set a default ~alpha~ and ~alpha-background~ for new frames.
