@@ -385,7 +385,7 @@ Menu sections:
 
 Banner:
 #+begin_src emacs-lisp
-(setq fancy-splash-image (concat (file-name-as-directory doom-private-dir) "resources/splash-images/kurisu.png"))
+(setq fancy-splash-image (concat (file-name-as-directory doom-private-dir) "share/images/kurisu.png"))
 #+end_src
 
 *** Doom quit
