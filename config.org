@@ -1484,7 +1484,8 @@ javascript:location.href = 'org-protocol://store-link?' +
 
 Capture:
 #+begin_src js
-javascript:location.href = 'org-protocol://capture://' + new URLSearchParams({
+javascript:location.href = 'org-protocol://capture://' +
+    new URLSearchParams({
         url: location.href,
         title: document.title,
         body: window.getSelection()
