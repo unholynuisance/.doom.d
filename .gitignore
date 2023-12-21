@@ -1,5 +1,8 @@
 /bin/install.sh
 /bin/setup.sh
+/share/emacs.desktop
+/share/org-protocol.desktop
+/config/emacs.service
 /pkg/
 /profiles/
 /config.el

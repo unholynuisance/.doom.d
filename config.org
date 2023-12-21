@@ -464,7 +464,7 @@ Just in case.
 *** Daemon mode
 **** Systemd service
 Default Systemd service that comes with Emacs from version =2.6= has ~Restart~ set to ~on-failure~, and i would like it to be ~always~.
-#+begin_src conf :tangle (if (executable-find "systemctl") "~/.config/systemd/user/emacs.service" "no")
+#+begin_src conf :tangle config/emacs.service
 [Unit]
 Description=Emacs text editor
 Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
@@ -481,7 +481,7 @@ WantedBy=default.target
 
 **** .desktop
 We may need a =.desktop= file for =emacsclient=.
-#+begin_src conf :tangle (if (satan/current-system-p "Linux") "~/.local/share/applications/emacs.desktop" "no")
+#+begin_src conf :tangle share/emacs.desktop
 [Desktop Entry]
 Name=Emacs
 GenericName=Text Editor
@@ -1457,7 +1457,7 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
 #+end_src
 
 *** Org protocol
-#+begin_src conf :tangle (if (satan/current-system-p "Linux") "~/.local/share/applications/org-protocol.desktop" "no")
+#+begin_src conf :tangle share/org-protocol.desktop
 [Desktop Entry]
 Name=Org Protocol
 Comment=Intercept calls from emacsclient to trigger custom actions
