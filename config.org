@@ -262,7 +262,6 @@ While we are at it, let's add some convenience functions to set current frame tr
   (set-frame-parameter (selected-frame) 'alpha-background alpha))
 #+end_src
 
-
 We can go further and define the following minor mode.
 #+begin_src emacs-lisp
 (defvar satan/transparent-mode-alpha-background 50)
@@ -302,7 +301,9 @@ Also, let's set a sensible keybind for this mode.
           doom-variable-pitch-font
           (font-spec :family "IBM Plex Serif")
           doom-serif-font
-          (font-spec :family "IBM Plex Mono")))
+          (font-spec :family "IBM Plex Mono")
+          doom-unicode-font
+          (font-spec :family "Noto Sans")))
   ("Ubuntu"
    (setq! doom-font
           (font-spec :family "Fira Code" :size 16)
