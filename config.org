@@ -1635,7 +1635,7 @@ plantuml
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
   :config
-  (setq! org-modern-star ["◉" "○" "◈" "◇"]
+  (setq! org-modern-star '("◉" "○" "◈" "◇")
          org-modern-list '((?* . "•") (?+ . "➤") (?- . "–"))
          org-modern-hide-stars nil
          org-modern-table nil))
