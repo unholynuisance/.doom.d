@@ -1827,7 +1827,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 ***** Style detection
 #+begin_src emacs-lisp
 (org-latex-mp--register-option
- :style nil "style" 'org-latex-mp--default-style nil)
+ :style nil "STYLE" 'org-latex-mp--default-style nil)
 #+end_src
 
 ***** Feature processing
