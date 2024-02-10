@@ -2333,7 +2333,7 @@ beforeskip=0em,
     \\centering
     \\@title \\\\
     \\@subtitle \\\\
-    З курсу «%s» \\\\ %% subject
+    З дисципліни «%s» \\\\ %% subject
     \\par
 
     \\vspace{5cm}
@@ -2352,7 +2352,7 @@ beforeskip=0em,
 
     \\vfill
     \\centering
-    \\textbf{Київ -- \\the\\year}
+    \\textbf{Львів -- \\the\\year}
     \\par
   \\end{titlepage}
 }
