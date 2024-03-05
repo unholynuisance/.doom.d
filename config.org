@@ -1430,6 +1430,22 @@ user mykola.tataryn@apriorit.com
 passwordeval "secret-tool lookup application email account mykola.tataryn@apriorit.com"
 #+end_src
 
+** File manager
+#+begin_src emacs-lisp :tangle packages.el
+(package! dired-hide-dotfiles)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! dired-hide-dotfiles
+  :after dired
+  :hook (dired-mode . dired-hide-dotfiles-mode)
+  :config
+  (map! :map dired-mode-map
+        :after dired-hide-dotfiles
+        :localleader
+        :ne "." #'dired-hide-dotfiles-mode))
+#+end_src
+
 * Language configuration
 ** Org
 #+begin_src emacs-lisp
