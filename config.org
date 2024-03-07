@@ -538,7 +538,10 @@ There are some packages in this config using [[https://github.com/jwiegley/alert
 :completion
 ;;company           ; the ultimate code completion backend
 (corfu            ; complete with cap(f), cape and a flying feather
- +icons)
+ +icons
+ +orderless
+ +dabbrev
+ +on-ret-pt)
 ;;helm              ; the *other* search engine for love and life
 ;;ido               ; the other *other* search engine...
 ;;(ivy            ; a search engine for love and life
