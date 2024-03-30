@@ -758,7 +758,8 @@ emacs-lisp        ; drown in parentheses
 ;;lean              ; for folks with too much to prove
 ;;ledger            ; be audit you can be
 (lua              ; one-based indices? one-based indices
- +lsp)
+ +lsp
+ +tree-sitter)
 (markdown         ; writing docs for people to ignore
  +grip)
 ;;nim               ; python + lisp at the speed of c
