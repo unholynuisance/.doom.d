@@ -983,6 +983,17 @@ literate
   (setq! vterm-timer-delay 0.01))
 #+end_src
 
+*** TRAMP
+#+begin_src emacs-lisp
+(after! tramp
+  (setq! tramp-histfile-override t))
+
+(after! (:and tramp vterm)
+  (setq! vterm-tramp-shells
+         '(("ssh" "zsh")
+           ("docker" "ssh"))))
+#+end_src
+
 *** Projectile
 Configuration.
 #+begin_src emacs-lisp
