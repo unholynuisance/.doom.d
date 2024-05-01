@@ -149,76 +149,6 @@ Same as with [[current-system]], [[current-display-server]] has to be evaluated.
 #+end_src
 
 * Installation
-** Packaging
-*** Pacman
-#+begin_src conf :tangle pkg/pacman/PKGBUILD :noweb yes
-# Maintainer: son-of-satan <mtataryn555@gmail.com>
-pkgname=satanic-emacs-packages
-pkgver=1
-pkgrel=1
-pkgdesc="Packages needed by my emacs setup"
-arch=('any')
-license=('WTFPL')
-depends=(
-    <<pacman-packages>>
-)
-#+end_src
-
-** Doom dependencies
-**** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-emacs ripgrep fd python cmake
-#+end_src
-
-**** Aptitude packages
-#+begin_src fundamental :noweb-ref apt-packages
-emacs ripgrep fd-find python3 cmake
-#+end_src
-
-**** Chocolatey packages
-#+begin_src fundamental :noweb-ref chocolatey-packages
-emacs ripgrep fd python3 cmake
-#+end_src
-
-** Install script
-*** Arch
-#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Arch") "bin/install.sh" "no")
-cd ~/.config/doom/pkg/pacman
-paru -Ui
-#+end_src
-
-*** Ubuntu
-Because we are using noweb here, the syntax highlighting will break in this code block. So we need to split the script.
-#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Ubuntu") "bin/install.sh" "no") :noweb yes
-APT_PACKAGES=(
-    <<apt-packages>>
-)
-#+end_src
-
-And the other half of a script.
-#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Ubuntu") "bin/install.sh" "no")
-sudo apt update
-sudo apt install "${APT_PACKAGES[@]}"
-
-[[ -f /usr/bin/fd ]] || sudo ln -s /usr/bin/fdfind /usr/bin/fd
-#+end_src
-
-*** Windows
-I'm making two assumptions here:
-+ Git bash is installed (as you would need git to clone the repository).
-+ =Chocolatey= has been installed (otherwise it would be a nightmare to install dependencies).
-
-Similar to [[Ubuntu]] section, we need to split the script to get proper syntax highlighting.
-#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Windows") "bin/install.sh" "no") :noweb yes
-CHOCOLATEY_PACKAGES=(
-    <<chocolatey-packages>>
-)
-#+end_src
-
-#+begin_src sh :shebang #!/bin/bash :tangle (if (satan/current-system-p "Windows") "bin/install.sh" "no")
-choco install -y "${CHOCOLATEY_PACKAGES[@]}"
-#+end_src
-
 ** Init script
 This script tangles this file, clones [[https://github.com/doomemacs/doomemacs][Doom Emacs]] and then runs setup scripts.
 #+begin_src sh :shebang #!/bin/bash :tangle bin/init.sh :noweb yes
@@ -229,12 +159,9 @@ emacs --batch --eval "
   (org-babel-tangle-file \"~/.config/doom/config.org\"))
 "
 
-# ~/.config/doom/bin/install.sh
-
 git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.config/emacs
 
 ~/.config/emacs/bin/doom -y install || ~/.config/emacs/bin/doom build
-~/.config/doom/bin/setup.sh
 #+end_src
 
 * General configuration
@@ -318,21 +245,6 @@ Also, let's set a sensible keybind for this mode.
           (font-spec :family "Julia Mono")
           doom-unicode-font
           (font-spec :family "Julia Mono"))))
-#+end_src
-
-**** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-ttf-fira-code ttf-juliamono
-#+end_src
-
-**** Aptitude packages
-#+begin_src funtamental :noweb-ref apt-packages
-fonts-firacode fonts-noto
-#+end_src
-
-**** Chocolatey packages
-#+begin_src funtamental :noweb-ref chocolatey-packages
-firacode noto
 #+end_src
 
 *** Line numbers
@@ -621,16 +533,6 @@ vc                ; version-control and Emacs, sitting in a tree
 vterm             ; the best terminal emulation in Emacs
 #+end_src
 
-**** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-libtool
-#+end_src
-
-**** Aptitude packages
-#+begin_src fundamental :noweb-ref apt-packages
-libtool-bin
-#+end_src
-
 *** Checkers
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :checkers
@@ -645,16 +547,6 @@ syntax                 ; tasing you for every semicolon you forget
  +flyspell
  +aspell
  +everywhere))
-#+end_src
-
-**** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-aspell-en aspell-uk
-#+end_src
-
-**** Aptitude packages
-#+begin_src fundamental :noweb-ref apt-packages
-aspell-en aspell-uk
 #+end_src
 
 *** Tools
@@ -684,16 +576,6 @@ taskrunner        ; taskrunner for all your projects
 ;;tmux              ; an API for interacting with tmux
 ;;upload            ; map local to remote projects via ssh/ftp
 tree-sitter       ;
-#+end_src
-
-**** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-editorconfig-core-c
-#+end_src
-
-**** Aptitude packages
-#+begin_src fundamental :noweb-ref apt-packages
-editorconfig
 #+end_src
 
 *** OS
@@ -812,37 +694,6 @@ yaml              ; JSON, but readable
 ;;zig               ; C, but simpler
 #+end_src
 
-**** Pacman packages
-#+begin_src fundamental :noweb yes :noweb-ref pacman-packages
-clang glslang
-jdk-openjdk
-pandoc
-gnome-screenshot graphviz
-<<pacman-packages-wl-clipboard()>>
-python-black python-pyflakes python-isort python-pipenv python-nose python-pytest pyenv
-shellcheck
-#+end_src
-
-#+name: pacman-packages-wl-clipboard
-#+begin_src emacs-lisp :tangle no
-(if (satan/current-display-server-p "Wayland") "wl-clipboard" "")
-#+end_src
-
-**** Aptitude packages
-#+begin_src fundamental :noweb yes :noweb-ref apt-packages
-clang-format glslang-tools
-default-jdk
-pandoc
-gnome-screenshot graphviz
-<<apt-packages-wl-clipboard()>>
-shellcheck
-#+end_src
-
-#+name: apt-packages-wl-clipboard
-#+begin_src emacs-lisp :tangle no
-(if (satan/current-display-server-p "Wayland") "wl-clipboard" "")
-#+end_src
-
 *** Email
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :email
@@ -853,16 +704,6 @@ shellcheck
 ;;notmuch
 ;;(wanderlust
 ;; +gmail)
-#+end_src
-
-**** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-mu isync msmtp
-#+end_src
-
-**** Aptitude packages
-#+begin_src fundamental :noweb-ref apt-packages
-mu4e isync msmtp
 #+end_src
 
 *** App
@@ -880,16 +721,6 @@ calendar
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 (:if (satan/current-system-p "Linux")
  everywhere)          ; *leave* Emacs!? You must be joking
-#+end_src
-
-***** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-xorg-xwininfo xorg-xprop xdotool xclip
-#+end_src
-
-***** Aptitude packages
-#+begin_src fundamental :noweb-ref apt-packages
-x11-utils xdotool xclip
 #+end_src
 
 *** Config
@@ -1120,11 +951,6 @@ So everyone (including myself) knows I'm typing.
 #+begin_src emacs-lisp
 (use-package! selectic-mode
   :commands selectic-mode)
-#+end_src
-
-**** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-alsa-utils
 #+end_src
 
 * Applications
@@ -1648,11 +1474,6 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
   (setq! org-plantuml-exec-mode 'plantuml))
 #+end_src
 
-***** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-plantuml
-#+end_src
-
 ****  Attachments
 #+begin_src emacs-lisp
 (after! org-attach
@@ -1694,21 +1515,6 @@ Make org recognize first /five/ levels of headings as headings when exporting
 #+end_src
 
 *** Latex export
-**** System dependencies
-***** Pacman packages
-#+begin_src fundamental :noweb-ref pacman-packages
-texlive-core
-texlive-latexextra
-texlive-fontsextra
-texlive-langcyrillic
-texlive-pictures
-#+end_src
-
-***** Aptitude packages
-#+begin_src fundamental :noweb-ref apt-packages
-texlive-full
-#+end_src
-
 **** Compiling
 Org uses =latexmk= with =pdflatex= as compiler by default, and =pdflatex= doesn't support =utf-8=. So let's use =xelatex= instead.
 #+begin_src emacs-lisp
