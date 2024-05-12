@@ -1294,6 +1294,16 @@ passwordeval "secret-tool lookup application email account mykola.tataryn@aprior
         :ne "." #'dired-hide-dotfiles-mode))
 #+end_src
 
+** E-reader
+#+begin_src emacs-lisp :tangle packages.el
+(package! nov)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! nov
+  :mode ("\\.epub\\'" . nov-mode))
+#+end_src
+
 * Language configuration
 ** Org
 #+begin_src emacs-lisp
