@@ -15,6 +15,11 @@ We want lexical binding, right?
 ;;; config.el -*- lexical-binding: t; -*-
 #+end_src
 
+** Garbage collection
+#+begin_src emacs-lisp :tangle init.el
+(setq! gcmh-high-cons-threshold (* 128 1024 1024))
+#+end_src
+
 ** File manipulation
 I'd like to have a some file manipulation utilities from [[https://github.com/rejeep/f.el][f.el]].
 #+begin_src emacs-lisp :tangle packages.el
