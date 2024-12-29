@@ -1496,6 +1496,11 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
 #+end_src
 
 *** Visuals
+**** Pretty mode
+#+begin_src emacs-lisp
+(add-hook! org-mode #'+org-pretty-mode)
+#+end_src
+
 **** Org Modern
 #+begin_src emacs-lisp :tangle packages.el
 (package! org-modern)
