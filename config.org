@@ -1407,11 +1407,23 @@ javascript:location.href = 'org-protocol://open-source?' +
             (file ,(satan/org-roam-location satan/org-roam-tasks-node-id))
             "* TODO %? \n %i\n"
             :empty-lines 1)
+
+           ("p" "Templates for projects")
+           ("pt" "Project-local todo" entry  ; {project-root}/todo.org
+            (file+headline +org-capture-project-todo-file "Inbox")
+            "* TODO %?\n%i\n%a" :prepend t)
+           ("pn" "Project-local notes" entry  ; {project-root}/notes.org
+            (file+headline +org-capture-project-notes-file "Inbox")
+            "* %U %?\n%i\n%a" :prepend t)
+           ("pc" "Project-local changelog" entry  ; {project-root}/changelog.org
+            (file+headline +org-capture-project-changelog-file "Unreleased")
+            "* %U %?\n%i\n%a" :prepend t)
+
            ("l" "Library")
            ("lb" "book" entry
             (file+olp ,(satan/org-roam-location satan/org-roam-library-node-id) "Inbox")
-             "* UNREAD %? :book:\n %i\n"
-             :empty-lines 1)
+            "* UNREAD %? :book:\n %i\n"
+            :empty-lines 1)
            ("L" "Leisure")
            ("Ln" "novel" entry
             (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
