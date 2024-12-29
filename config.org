@@ -1511,6 +1511,26 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
          org-modern-table nil))
 #+end_src
 
+**** Org appear
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-appear :recipe (:host github :repo "awth13/org-appear"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! org-appear
+  :hook
+  (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis t
+        org-appear-autosubmarkers t
+        org-appear-autoentities t
+        org-appear-autolinks t
+        org-appear-autokeywords t)
+  ;; for proper first-time setup, `org-appear--set-elements'
+  ;; needs to be run after other hooks have acted.
+  (run-at-time nil nil #'org-appear--set-elements))
+#+end_src
+
 *** Exporting
 Make org recognize first /five/ levels of headings as headings when exporting
 #+begin_src emacs-lisp
