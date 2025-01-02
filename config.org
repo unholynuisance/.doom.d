@@ -94,30 +94,6 @@ Let's define a straightforward way to check for system we are on (subject to cha
       (member (nuisance/current-system-type) args)))
 #+end_src
 
-** Current display server
-We may want to know which display server we are running, so it would be nice to have a utility similar to [[current-system]].
-#+name: current-display-server
-#+begin_src emacs-lisp :tangle init.el :eval :session
-(defun nuisance/current-display-server ()
-  "Return string containing current display server capitalized name, or `\"Unknown\"'"
-  (capitalize
-    (string-trim
-     (or
-      (shell-command-to-string
-       "loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}'")
-      (if (eq system-type 'windows-nt) "DWM")
-      "Unknown"))))
-
-(defun nuisance/current-display-server-p (&rest args)
-  "Return non-nil if `nuisance/current-display-server' is in ARGS"
-  (member (nuisance/current-display-server) args))
-#+end_src
-
-Same as with [[current-system]], [[current-display-server]] has to be evaluated.
-#+begin_src emacs-lisp :tangle (make-temp-file "") :noweb yes
-<<current-display-server()>>
-#+end_src
-
 * Installation
 ** Init script
 This script tangles this file, clones [[https://github.com/doomemacs/doomemacs][Doom Emacs]] and then runs setup scripts.
