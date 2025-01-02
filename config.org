@@ -31,16 +31,26 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 #+end_src
 
 ** Enviromental variables
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle init.el
 (defvar
   nuisance/keyboard-layout
   "default")
+
+(defvar
+  nuisance/system-type
+  "Linux")
+
+(defvar
+  nuisance/system
+  "Nixos")
 
 (defmacro nuisance/load-env-var (dst src)
   `(setq! ,dst (or (getenv ,src) ,dst)))
 
 (defun nuisance/load-env-vars ()
   (nuisance/load-env-var nuisance/keyboard-layout "NUISANCE_EMACS_KEYBOARD_LAYOUT")
+  (nuisance/load-env-var nuisance/system-type "NUISANCE_EMACS_SYSTEM_TYPE")
+  (nuisance/load-env-var nuisance/system "NUISANCE_EMACS_SYSTEM")
   )
 
 (nuisance/load-env-vars)
@@ -57,34 +67,31 @@ Let's define a straightforward way to check for system we are on (subject to cha
     (buffer-string)))
 
 (defun nuisance/current-system-type ()
-  (cond
-   ((eq system-type 'gnu/linux)                    "Linux")
-   ((memq system-type '(cygwin windows-nt ms-dos)) "Windows")
-   ((eq system-type 'darwin)                       "Mac")
-   ((or IS-MAC (eq system-type 'berkeley-unix))    "BSD")
-   (t                                              "Unknown")))
+  (or nuisance/system-type
+      (cond
+       ((eq system-type 'gnu/linux)                    "Linux")
+       ((memq system-type '(cygwin windows-nt ms-dos)) "Windows")
+       ((eq system-type 'darwin)                       "Mac")
+       ((or IS-MAC (eq system-type 'berkeley-unix))    "BSD")
+       (t                                              "Unknown"))))
 
 (defun nuisance/current-system ()
   "Return string containing current system capitalized name, or `\"Unknown\"'"
-  (capitalize
-   (downcase
-    (pcase (nuisance/current-system-type)
+  (or nuisance/system
+      (capitalize
+       (downcase
+        (pcase (nuisance/current-system-type)
           ("Linux"
            (save-match-data
              (let ((contents (nuisance/file-contents "/etc/os-release")))
                (string-match "^ID=\\(\\\w*\\)" contents)
                (match-string 1 contents))))
-          (type type)))))
+          (type type))))))
 
 (defun nuisance/current-system-p (&rest args)
   "Return non-nil if `nuisance/current-system' is in ARGS"
   (or (member (nuisance/current-system) args)
       (member (nuisance/current-system-type) args)))
-#+end_src
-
-As [[current-system]] is not evaluated during tangle, we need to somehow enforce evaluation.
-#+begin_src emacs-lisp :tangle (make-temp-file "") :noweb yes
-<<current-system()>>
 #+end_src
 
 ** Current display server
@@ -183,7 +190,7 @@ Also, let's set a sensible keybind for this mode.
           (font-spec :family "IBM Plex Serif")
           doom-serif-font
           (font-spec :family "IBM Plex Mono")))
-  ("Nixos"
+  ("NixOS"
    (setq! doom-font
           (font-spec :family "IBM Plex Mono" :size 16)
           doom-big-font
