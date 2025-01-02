@@ -46,60 +46,6 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 (nuisance/load-env-vars)
 #+end_src
 
-** Profiles
-#+begin_src emacs-lisp
-(defvar
-  nuisance/profiles-profile-dir
-  (file-name-concat doom-private-dir "profiles"))
-
-(defvar
-  nuisance/profiles-default-profile
-  "default.el")
-
-(defvar
-  nuisance/profiles-active-profile
-  "active.el")
-
-(defun nuisance/profiles-load-profile (file)
-  (let ((profile (read (f-read-text file))))
-    (setq nuisance/keyboard-layout
-          (or (plist-get profile :keyboard-layout)
-              nuisance/keyboard-layout))))
-
-(defun nuisance/profiles-load-active-profile ()
-  (let ((active-profile-file (file-name-concat nuisance/profiles-profile-dir nuisance/profiles-active-profile))
-        (default-profile-file (file-name-concat nuisance/profiles-profile-dir nuisance/profiles-default-profile)))
-    (if (file-exists-p active-profile-file)
-        (nuisance/profiles-load-profile active-profile-file)
-      (nuisance/profiles-load-profile default-profile-file))))
-
-(defun nuisance/profiles-set-active-profile ()
-  (interactive)
-  (let* ((profile (completing-read
-                   "Select profile: "
-                   (directory-files nuisance/profiles-profile-dir ())
-                   (lambda (value) (not (member value `("." ".." ,nuisance/profiles-active-profile))))
-                   t))
-         (active-profile-file (file-name-concat nuisance/profiles-profile-dir nuisance/profiles-active-profile))
-         (profile-file (file-name-concat nuisance/profiles-profile-dir profile)))
-    (make-symbolic-link profile-file active-profile-file t)
-    (nuisance/profiles-load-active-profile)))
-
-;; (nuisance/profiles-load-active-profile)
-#+end_src
-
-Default profile:
-#+begin_src emacs-lisp :tangle profiles/default.el
-(:keyboard-layout "default" ;; possible layouts: ("default" "moonlander")
-)
-#+end_src
-
-Desktop profile:
-#+begin_src emacs-lisp :tangle profiles/desktop.el
-(:keyboard-layout "moonlander" ;; possible layouts: ("default" "moonlander")
-)
-#+end_src
-
 ** Current system
 Let's define a straightforward way to check for system we are on (subject to change).
 #+name: current-system
