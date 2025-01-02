@@ -30,6 +30,22 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 (use-package f)
 #+end_src
 
+** Enviromental variables
+#+begin_src emacs-lisp
+(defvar
+  nuisance/keyboard-layout
+  "default")
+
+(defmacro nuisance/load-env-var (dst src)
+  `(setq! ,dst (or (getenv ,src) ,dst)))
+
+(defun nuisance/load-env-vars ()
+  (nuisance/load-env-var nuisance/keyboard-layout "NUISANCE_EMACS_KEYBOARD_LAYOUT")
+  )
+
+(nuisance/load-env-vars)
+#+end_src
+
 ** Profiles
 #+begin_src emacs-lisp
 (defvar
@@ -43,10 +59,6 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 (defvar
   nuisance/profiles-active-profile
   "active.el")
-
-(defvar
-  nuisance/keyboard-layout
-  "default")
 
 (defun nuisance/profiles-load-profile (file)
   (let ((profile (read (f-read-text file))))
@@ -73,7 +85,7 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
     (make-symbolic-link profile-file active-profile-file t)
     (nuisance/profiles-load-active-profile)))
 
-(nuisance/profiles-load-active-profile)
+;; (nuisance/profiles-load-active-profile)
 #+end_src
 
 Default profile:
