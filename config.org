@@ -45,14 +45,14 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
   "active.el")
 
 (defvar
-  nuisance/profiles-keyboard-layout
+  nuisance/keyboard-layout
   "default")
 
 (defun nuisance/profiles-load-profile (file)
   (let ((profile (read (f-read-text file))))
-    (setq nuisance/profiles-keyboard-layout
+    (setq nuisance/keyboard-layout
           (or (plist-get profile :keyboard-layout)
-              nuisance/profiles-keyboard-layout))))
+              nuisance/keyboard-layout))))
 
 (defun nuisance/profiles-load-active-profile ()
   (let ((active-profile-file (file-name-concat nuisance/profiles-profile-dir nuisance/profiles-active-profile))
@@ -762,7 +762,7 @@ literate
   :hook
   (after-init . reverse-im-mode)
   :custom
-  (reverse-im-input-methods (pcase nuisance/profiles-keyboard-layout
+  (reverse-im-input-methods (pcase nuisance/keyboard-layout
                               ("default"    '("ukrainian-computer"))
                               ("moonlander" '("ukrainian-qwertivka")))))
 #+end_src
