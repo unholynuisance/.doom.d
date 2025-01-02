@@ -33,47 +33,47 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 ** Profiles
 #+begin_src emacs-lisp
 (defvar
-  satan/profiles-profile-dir
+  nuisance/profiles-profile-dir
   (file-name-concat doom-private-dir "profiles"))
 
 (defvar
-  satan/profiles-default-profile
+  nuisance/profiles-default-profile
   "default.el")
 
 (defvar
-  satan/profiles-active-profile
+  nuisance/profiles-active-profile
   "active.el")
 
 (defvar
-  satan/profiles-keyboard-layout
+  nuisance/profiles-keyboard-layout
   "default")
 
-(defun satan/profiles-load-profile (file)
+(defun nuisance/profiles-load-profile (file)
   (let ((profile (read (f-read-text file))))
-    (setq satan/profiles-keyboard-layout
+    (setq nuisance/profiles-keyboard-layout
           (or (plist-get profile :keyboard-layout)
-              satan/profiles-keyboard-layout))))
+              nuisance/profiles-keyboard-layout))))
 
-(defun satan/profiles-load-active-profile ()
-  (let ((active-profile-file (file-name-concat satan/profiles-profile-dir satan/profiles-active-profile))
-        (default-profile-file (file-name-concat satan/profiles-profile-dir satan/profiles-default-profile)))
+(defun nuisance/profiles-load-active-profile ()
+  (let ((active-profile-file (file-name-concat nuisance/profiles-profile-dir nuisance/profiles-active-profile))
+        (default-profile-file (file-name-concat nuisance/profiles-profile-dir nuisance/profiles-default-profile)))
     (if (file-exists-p active-profile-file)
-        (satan/profiles-load-profile active-profile-file)
-      (satan/profiles-load-profile default-profile-file))))
+        (nuisance/profiles-load-profile active-profile-file)
+      (nuisance/profiles-load-profile default-profile-file))))
 
-(defun satan/profiles-set-active-profile ()
+(defun nuisance/profiles-set-active-profile ()
   (interactive)
   (let* ((profile (completing-read
                    "Select profile: "
-                   (directory-files satan/profiles-profile-dir ())
-                   (lambda (value) (not (member value `("." ".." ,satan/profiles-active-profile))))
+                   (directory-files nuisance/profiles-profile-dir ())
+                   (lambda (value) (not (member value `("." ".." ,nuisance/profiles-active-profile))))
                    t))
-         (active-profile-file (file-name-concat satan/profiles-profile-dir satan/profiles-active-profile))
-         (profile-file (file-name-concat satan/profiles-profile-dir profile)))
+         (active-profile-file (file-name-concat nuisance/profiles-profile-dir nuisance/profiles-active-profile))
+         (profile-file (file-name-concat nuisance/profiles-profile-dir profile)))
     (make-symbolic-link profile-file active-profile-file t)
-    (satan/profiles-load-active-profile)))
+    (nuisance/profiles-load-active-profile)))
 
-(satan/profiles-load-active-profile)
+(nuisance/profiles-load-active-profile)
 #+end_src
 
 Default profile:
@@ -92,13 +92,13 @@ Desktop profile:
 Let's define a straightforward way to check for system we are on (subject to change).
 #+name: current-system
 #+begin_src emacs-lisp :tangle init.el :eval :session
-(defun satan/file-contents (filename)
+(defun nuisance/file-contents (filename)
   "Return the contents of FILENAME."
   (with-temp-buffer
     (insert-file-contents filename)
     (buffer-string)))
 
-(defun satan/current-system-type ()
+(defun nuisance/current-system-type ()
   (cond
    ((eq system-type 'gnu/linux)                    "Linux")
    ((memq system-type '(cygwin windows-nt ms-dos)) "Windows")
@@ -106,22 +106,22 @@ Let's define a straightforward way to check for system we are on (subject to cha
    ((or IS-MAC (eq system-type 'berkeley-unix))    "BSD")
    (t                                              "Unknown")))
 
-(defun satan/current-system ()
+(defun nuisance/current-system ()
   "Return string containing current system capitalized name, or `\"Unknown\"'"
   (capitalize
    (downcase
-    (pcase (satan/current-system-type)
+    (pcase (nuisance/current-system-type)
           ("Linux"
            (save-match-data
-             (let ((contents (satan/file-contents "/etc/os-release")))
+             (let ((contents (nuisance/file-contents "/etc/os-release")))
                (string-match "^ID=\\(\\\w*\\)" contents)
                (match-string 1 contents))))
           (type type)))))
 
-(defun satan/current-system-p (&rest args)
-  "Return non-nil if `satan/current-system' is in ARGS"
-  (or (member (satan/current-system) args)
-      (member (satan/current-system-type) args)))
+(defun nuisance/current-system-p (&rest args)
+  "Return non-nil if `nuisance/current-system' is in ARGS"
+  (or (member (nuisance/current-system) args)
+      (member (nuisance/current-system-type) args)))
 #+end_src
 
 As [[current-system]] is not evaluated during tangle, we need to somehow enforce evaluation.
@@ -133,7 +133,7 @@ As [[current-system]] is not evaluated during tangle, we need to somehow enforce
 We may want to know which display server we are running, so it would be nice to have a utility similar to [[current-system]].
 #+name: current-display-server
 #+begin_src emacs-lisp :tangle init.el :eval :session
-(defun satan/current-display-server ()
+(defun nuisance/current-display-server ()
   "Return string containing current display server capitalized name, or `\"Unknown\"'"
   (capitalize
     (string-trim
@@ -143,9 +143,9 @@ We may want to know which display server we are running, so it would be nice to 
       (if (eq system-type 'windows-nt) "DWM")
       "Unknown"))))
 
-(defun satan/current-display-server-p (&rest args)
-  "Return non-nil if `satan/current-display-server' is in ARGS"
-  (member (satan/current-display-server) args))
+(defun nuisance/current-display-server-p (&rest args)
+  "Return non-nil if `nuisance/current-display-server' is in ARGS"
+  (member (nuisance/current-display-server) args))
 #+end_src
 
 Same as with [[current-system]], [[current-display-server]] has to be evaluated.
@@ -174,48 +174,48 @@ git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.config/emacs
 *** Transparency
 I prefer my Emacs windows to be slightly transparent. So let's set a default ~alpha~ and ~alpha-background~ for new frames.
 #+begin_src emacs-lisp
-(defvar satan/default-alpha '(100 . 100))
-(defvar satan/default-alpha-background 95)
+(defvar nuisance/default-alpha '(100 . 100))
+(defvar nuisance/default-alpha-background 95)
 
 (modify-all-frames-parameters
- `((alpha . ,satan/default-alpha)
-   (alpha-background . ,satan/default-alpha-background)))
+ `((alpha . ,nuisance/default-alpha)
+   (alpha-background . ,nuisance/default-alpha-background)))
 #+end_src
 
 While we are at it, let's add some convenience functions to set current frame transparency.
 #+begin_src emacs-lisp
-(defun satan/set-alpha (active &optional inactive)
+(defun nuisance/set-alpha (active &optional inactive)
   (interactive "p")
   (set-frame-parameter (selected-frame) 'alpha
                        (cons active (or inactive (cdr (frame-parameter (selected-frame) 'alpha))))))
 
-(defun satan/set-alpha-background (alpha)
+(defun nuisance/set-alpha-background (alpha)
   (interactive "p")
   (set-frame-parameter (selected-frame) 'alpha-background alpha))
 #+end_src
 
 We can go further and define the following minor mode.
 #+begin_src emacs-lisp
-(defvar satan/transparent-mode-alpha-background 50)
+(defvar nuisance/transparent-mode-alpha-background 50)
 
-(define-minor-mode satan/transparent-mode
+(define-minor-mode nuisance/transparent-mode
   nil
   :global t
-  (if satan/transparent-mode
-      (satan/set-alpha-background satan/transparent-mode-alpha-background)
-    (satan/set-alpha-background satan/default-alpha-background)))
+  (if nuisance/transparent-mode
+      (nuisance/set-alpha-background nuisance/transparent-mode-alpha-background)
+    (nuisance/set-alpha-background nuisance/default-alpha-background)))
 #+end_src
 
 Also, let's set a sensible keybind for this mode.
 #+begin_src emacs-lisp
 (map! :leader
       (:prefix "t"
-       :desc "Transparent mode" "t" #'satan/transparent-mode))
+       :desc "Transparent mode" "t" #'nuisance/transparent-mode))
 #+end_src
 
 *** Fonts
 #+begin_src emacs-lisp
-(pcase (satan/current-system)
+(pcase (nuisance/current-system)
   ("Arch"
    (setq! doom-font
           (font-spec :family "IBM Plex Mono" :size 16)
@@ -342,14 +342,14 @@ Fortunately, we can fix the first problem by modifying ~default-frame-alist~.
  '((width . 90)
    (height . 43)))
 
-(defun satan/resize-frame (&optional frame)
+(defun nuisance/resize-frame (&optional frame)
   (interactive)
   (modify-frame-parameters frame '((width . 90) (height . 43))))
 #+end_src
 
 To fix the second problem, we can use the following function (taken from [[https://christiantietze.de/posts/2022/04/emacs-center-window-current-monitor-simplified/][here]]) that centers the frame.
 #+begin_src emacs-lisp
-(defun satan/center-frame (&optional frame)
+(defun nuisance/center-frame (&optional frame)
   "Center FRAME on the screen.
 FRAME can be a frame name, a terminal name, or a frame.
 If FRAME is omitted or nil, use currently selected frame."
@@ -361,16 +361,16 @@ If FRAME is omitted or nil, use currently selected frame."
 
 And add it to one of ~doom-init-ui~ or ~server-after-make-frame~ hooks.
 #+begin_src emacs-lisp
-(defun satan/fix-frame (&optional frame)
-  (satan/resize-frame frame)
-  (satan/center-frame frame)
+(defun nuisance/fix-frame (&optional frame)
+  (nuisance/resize-frame frame)
+  (nuisance/center-frame frame)
   (doom/reload-theme))
 
 (if (daemonp)
   (add-hook! server-after-make-frame
-             #'satan/fix-frame)
+             #'nuisance/fix-frame)
   (add-hook! doom-init-ui
-             #'satan/fix-frame))
+             #'nuisance/fix-frame))
 #+end_src
 
 *** Preferred encoding
@@ -724,7 +724,7 @@ calendar
 
 **** Emacs everywhere
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
-(:if (satan/current-system-p "Linux")
+(:if (nuisance/current-system-p "Linux")
  everywhere)          ; *leave* Emacs!? You must be joking
 #+end_src
 
@@ -762,7 +762,7 @@ literate
   :hook
   (after-init . reverse-im-mode)
   :custom
-  (reverse-im-input-methods (pcase satan/profiles-keyboard-layout
+  (reverse-im-input-methods (pcase nuisance/profiles-keyboard-layout
                               ("default"    '("ukrainian-computer"))
                               ("moonlander" '("ukrainian-qwertivka")))))
 #+end_src
@@ -874,7 +874,7 @@ We also need a =.floorc.json= with credentials in our home dir.
 {
   "auth": {
     "floobits.com": {
-      "username": "son-of-satan",
+      "username": "son-of-nuisance",
       "api_key": "<api-key>",
       "secret": "<secret>"
     }
@@ -1379,23 +1379,23 @@ javascript:location.href = 'org-protocol://open-source?' +
 *** Behaviour
 **** Key org roam nodes
 #+begin_src emacs-lisp
-(defun satan/org-roam-location (id)
+(defun nuisance/org-roam-location (id)
   `(lambda () (car (org-roam-id-find ',id))))
 
 (defvar
-  satan/org-roam-tasks-node-id
+  nuisance/org-roam-tasks-node-id
   'ee595c48-5a64-44ef-bcb4-dbf2a01ab2e4)
 
 (defvar
-  satan/org-roam-archive-node-id
+  nuisance/org-roam-archive-node-id
   '659a9caa-5498-48ac-95b0-02dce766d48f)
 
 (defvar
-  satan/org-roam-leisure-node-id
+  nuisance/org-roam-leisure-node-id
   'eff2874c-b6cb-4805-ac4c-4af835775458)
 
 (defvar
-  satan/org-roam-library-node-id
+  nuisance/org-roam-library-node-id
   '68ec962b-3173-41bb-bcb1-35abc7f58ef5)
 #+end_src
 
@@ -1404,7 +1404,7 @@ javascript:location.href = 'org-protocol://open-source?' +
 (after! org
   (setq! org-capture-templates
          `(("t" "Task" entry
-            (file ,(satan/org-roam-location satan/org-roam-tasks-node-id))
+            (file ,(nuisance/org-roam-location nuisance/org-roam-tasks-node-id))
             "* TODO %? \n %i\n"
             :empty-lines 1)
 
@@ -1421,32 +1421,32 @@ javascript:location.href = 'org-protocol://open-source?' +
 
            ("l" "Library")
            ("lb" "book" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-library-node-id) "Inbox")
+            (file+olp ,(nuisance/org-roam-location nuisance/org-roam-library-node-id) "Inbox")
             "* UNREAD %? :book:\n %i\n"
             :empty-lines 1)
            ("L" "Leisure")
            ("Ln" "novel" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(nuisance/org-roam-location nuisance/org-roam-leisure-node-id) "Inbox")
             "* UNREAD %? :novel:\n %i\n"
             :empty-lines 1)
            ("Lf" "film" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(nuisance/org-roam-location nuisance/org-roam-leisure-node-id) "Inbox")
             "* UNWATCHED %? :film:\n %i\n"
             :empty-lines 1)
            ("Ls" "series" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(nuisance/org-roam-location nuisance/org-roam-leisure-node-id) "Inbox")
             "* UNWATCHED %? :series:\n %i\n"
             :empty-lines 1)
            ("Lg" "game" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(nuisance/org-roam-location nuisance/org-roam-leisure-node-id) "Inbox")
             "* UNPLAYED %? :game:\n %i\n"
             :empty-lines 1)
            ("Lm" "manga" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(nuisance/org-roam-location nuisance/org-roam-leisure-node-id) "Inbox")
             "* UNREAD %? :manga:\n %i\n"
             :empty-lines 1)
            ("La" "anime" entry
-            (file+olp ,(satan/org-roam-location satan/org-roam-leisure-node-id) "Inbox")
+            (file+olp ,(nuisance/org-roam-location nuisance/org-roam-leisure-node-id) "Inbox")
             "* UNWATCHED %? :anime:\n %i\n"
             :empty-lines 1))))
 
