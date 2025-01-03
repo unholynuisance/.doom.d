@@ -718,7 +718,7 @@ literate
 ** Tools
 *** OpenAI
 #+begin_src emacs-lisp :tangle packages.el
-(package! openai :recipe (:host github :repo "emacs-openai/openai"))
+(package! openai :recipe (:host github :repo "emacs-openai/openai") :pin "b4c5e5e925ec6155f89e008698e512a0e8899348")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -736,7 +736,7 @@ literate
 
 **** ChatGPT
 #+begin_src emacs-lisp :tangle packages.el
-(package! chatgpt :recipe (:host github :repo "emacs-openai/chatgpt"))
+(package! chatgpt :recipe (:host github :repo "emacs-openai/chatgpt") :pin "e6ffd2a9d63fa8437301411d81d2488b278911e6")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -747,7 +747,7 @@ literate
 
 **** CodeGPT
 #+begin_src emacs-lisp :tangle packages.el
-(package! codegpt :recipe (:host github :repo "emacs-openai/codegpt"))
+(package! codegpt :recipe (:host github :repo "emacs-openai/codegpt") :pin "12b79c3a7f8d84709f065aa286ca2559573a9206")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -792,7 +792,7 @@ Configuration.
 *** Screenshot
 This makes it a breeze to take lovely screenshots.
 #+begin_src emacs-lisp :tangle packages.el
-(package! screenshot :recipe (:host github :repo "tecosaur/screenshot" :build (:not compile)))
+(package! screenshot :recipe (:host github :repo "tecosaur/screenshot") :pin "2770c0cfefe1cc09d55585f4f2f336a1b26e610e")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1431,7 +1431,7 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
 
 **** Org appear
 #+begin_src emacs-lisp :tangle packages.el
-(package! org-appear :recipe (:host github :repo "awth13/org-appear"))
+(package! org-appear :recipe (:host github :repo "awth13/org-appear") :pin "32ee50f8fdfa449bbc235617549c1bccb503cb09")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2221,7 +2221,7 @@ beforeskip=0em,
 
 *** Confluence
 #+begin_src emacs-lisp :tangle packages.el
-(package! ox-confluence :recipe (:host github :repo "nan0scho1ar/ox-confluence-modern" :files ("*.el")))
+(package! ox-confluence :recipe (:host github :repo "nan0scho1ar/ox-confluence-modern" :files ("*.el")) :pin "1a855f95a3243c3fffc2f50fd07c50634c9daee6")
 #+end_src
 
 #+begin_src emacs-lisp
