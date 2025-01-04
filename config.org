@@ -2221,11 +2221,11 @@ beforeskip=0em,
 
 *** Confluence
 #+begin_src emacs-lisp :tangle packages.el
-(package! ox-confluence :recipe (:host github :repo "nan0scho1ar/ox-confluence-modern" :files ("*.el")) :pin "1a855f95a3243c3fffc2f50fd07c50634c9daee6")
+(package! ox-confluence-modern :recipe (:host github :repo "nan0scho1ar/ox-confluence-modern") :pin "1a855f95a3243c3fffc2f50fd07c50634c9daee6")
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package! ox-confluence)
+(use-package! ox-confluence-modern)
 #+end_src
 
 ** NASM
