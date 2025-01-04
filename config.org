@@ -601,7 +601,6 @@ emacs-lisp        ; drown in parentheses
 (org +contacts    ; organize your plain life in plain text
      +dragndrop
      +gnuplqot
-     +jupyter
      +noter
      +pandoc
      +present
