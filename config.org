@@ -32,15 +32,13 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 
 ** Enviromental variables
 #+begin_src emacs-lisp :tangle init.el
-(defvar
-  nuisance/keyboard-layout
-  "default")
+(defvar nuisance/ua-keyboard-layout "ukrainian-qwertivka")
 
 (defmacro nuisance/load-env-var (dst src)
   `(setq! ,dst (or (getenv ,src) ,dst)))
 
 (defun nuisance/load-env-vars ()
-  (nuisance/load-env-var nuisance/keyboard-layout "NUISANCE_EMACS_UA_KEYBOARD_LAYOUT"))
+  (nuisance/load-env-var nuisance/ua-keyboard-layout "NUISANCE_EMACS_UA_KEYBOARD_LAYOUT"))
 
 (nuisance/load-env-vars)
 #+end_src
@@ -665,9 +663,7 @@ literate
   :hook
   (after-init . reverse-im-mode)
   :custom
-  (reverse-im-input-methods (pcase nuisance/keyboard-layout
-                              ("default"    '("ukrainian-computer"))
-                              ("moonlander" '("ukrainian-qwertivka")))))
+  (reverse-im-input-methods  `(,nuisance/ua-keyboard-layout)))
 #+end_src
 
 #+begin_src emacs-lisp :tangle packages.el
