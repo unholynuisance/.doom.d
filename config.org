@@ -876,6 +876,11 @@ So everyone (including myself) knows I'm typing.
          mu4e-compose-context-policy 'always-ask))
 #+end_src
 
+*** mu4e-views
+#+begin_src emacs-lisp :tangle packages.el
+(package! mu4e-views)
+#+end_src
+
 ** File manager
 #+begin_src emacs-lisp :tangle packages.el
 (package! dired-hide-dotfiles)
