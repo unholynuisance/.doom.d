@@ -605,10 +605,10 @@ yaml              ; JSON, but readable
 *** Email
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :email
-(:if (executable-find "mu")
- (mu4e
+(mu4e
+  +mbsync
   +org
-  +gmail))
+  +gmail)
 ;;notmuch
 ;;(wanderlust
 ;; +gmail)
