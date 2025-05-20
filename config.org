@@ -536,7 +536,9 @@ emacs-lisp        ; drown in parentheses
 (java             ; the poster child for carpal tunnel syndrome
  +lsp
  +tree-sitter)
-;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
+(javascript       ; all(hope(abandon(ye(who(enter(here))))))
+ +lsp
+ +tree-sitter)
 ;;julia             ; a better, faster MATLAB
 ;;kotlin            ; a better, slicker Java(Script)
 (latex            ; writing papers in Emacs has never been so fun
