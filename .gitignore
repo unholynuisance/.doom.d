@@ -1,3 +1,5 @@
+/.devenv/
+/.direnv/
 /bin/install.sh
 /bin/setup.sh
 /share/emacs.desktop
