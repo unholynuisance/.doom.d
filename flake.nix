@@ -24,11 +24,6 @@
       url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # doom-emacs-config = {
-    #   url = "github:unholynuisance/.doom.d";
-    #   flake = false;
-    # };
   };
 
   outputs =
@@ -36,7 +31,6 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./nix/modules/flake/shells.nix
-        ./nix/modules/flake/pkgs.nix
       ];
 
       config = {
@@ -44,21 +38,16 @@
           "x86_64-linux"
         ];
 
-        flake.overlays = {
-          nix-doom-emacs-unstraightened = inputs.nix-doom-emacs-unstraightened.overlays.default;
-        };
-
         perSystem =
           {
-            pkgs,
+            inputs',
             ...
           }:
           {
-            packages = rec {
-              default = doom-emacs;
-              doom-emacs = pkgs.emacsWithDoom {
+            packages = with inputs'.nix-doom-emacs-unstraightened.packages; {
+              emacs-with-doom = emacs-with-doom.override {
                 doomDir = ./.;
-                doomLocalDir = "~/.local/share/nix-doom";
+                doomLocalDir = "~/.local/share/doom/.local";
                 tangleArgs = ".";
                 extraPackages = epkgs: [ epkgs.treesit-grammars.with-all-grammars ];
               };
