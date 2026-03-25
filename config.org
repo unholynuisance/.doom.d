@@ -20,6 +20,12 @@ We want lexical binding, right?
 (setq! gcmh-high-cons-threshold (* 128 1024 1024))
 #+end_src
 
+** Custom file
+#+begin_src emacs-lisp
+(setq! custom-file (file-name-concat doom-profile-cache-dir "custom.el"))
+(load custom-file)
+#+end_src
+
 ** File manipulation
 I'd like to have a some file manipulation utilities from [[https://github.com/rejeep/f.el][f.el]].
 #+begin_src emacs-lisp :tangle packages.el
