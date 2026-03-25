@@ -285,57 +285,6 @@ Just in case.
 (prefer-coding-system 'utf-8)
 #+end_src
 
-*** Daemon mode
-**** Systemd service
-Default Systemd service that comes with Emacs from version =2.6= has ~Restart~ set to ~on-failure~, and i would like it to be ~always~.
-# #+begin_src conf :tangle config/emacs.service
-#+begin_src conf :tangle no
-[Unit]
-Description=Emacs text editor
-Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
-
-[Service]
-Type=notify
-ExecStart=/usr/bin/emacs --fg-daemon
-SuccessExitStatus=15
-Restart=always
-
-[Install]
-WantedBy=default.target
-#+end_src
-
-**** .desktop
-We may need a =.desktop= file for =emacsclient=.
-# #+begin_src conf :tangle share/emacs.desktop
-#+begin_src conf :tangle no
-[Desktop Entry]
-Name=Emacs
-GenericName=Text Editor
-Comment=Edit text
-MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
-Exec=emacsclient --create-frame %F
-Icon=emacs
-Type=Application
-Terminal=false
-Categories=Development;TextEditor;Utility;
-StartupNotify=true
-StartupWMClass=Emacs
-Keywords=Text;Editor;
-Actions=new-window;no-daemon;restart-daemon;
-
-[Desktop Action new-window]
-Name=New Window
-Exec=emacsclient --create-frame %F
-
-[Desktop Action no-daemon]
-Name=No Daemon
-Exec=emacs %F
-
-[Desktop Action restart-daemon]
-Name=Restart Daemon
-Exec=systemctl --user restart emacs
-#+end_src
-
 *** TODO Alerts
 There are some packages in this config using [[https://github.com/jwiegley/alert][alert.el]], so it would be nice to set it up depending on platform we are on.
 #+begin_src emacs-lisp
