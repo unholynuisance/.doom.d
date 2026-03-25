@@ -23,7 +23,7 @@ We want lexical binding, right?
 ** Custom file
 #+begin_src emacs-lisp
 (setq! custom-file (file-name-concat doom-profile-cache-dir "custom.el"))
-(load custom-file)
+(load custom-file t)
 #+end_src
 
 ** File manipulation
