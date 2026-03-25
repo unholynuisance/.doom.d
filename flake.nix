@@ -49,6 +49,7 @@
                 doomDir = ./.;
                 doomLocalDir = "~/.local/share/doom/.local";
                 tangleArgs = ".";
+                profileName = "test";
                 extraPackages = epkgs: [ epkgs.treesit-grammars.with-all-grammars ];
               };
             };
