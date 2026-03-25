@@ -333,7 +333,8 @@ Exec=systemctl --user restart emacs
 *** TODO Alerts
 There are some packages in this config using [[https://github.com/jwiegley/alert][alert.el]], so it would be nice to set it up depending on platform we are on.
 #+begin_src emacs-lisp
-(setq! alert-default-style 'notifications)
+;; TODO: use setopt 
+(setq alert-default-style 'notifications)
 #+end_src
 
 * Packages
@@ -726,11 +727,6 @@ literate
 #+begin_src emacs-lisp
 (after! tramp
   (setq! tramp-histfile-override t))
-
-(after! (:and tramp vterm)
-  (setq! vterm-tramp-shells
-         '(("ssh" "zsh")
-           ("docker" "ssh"))))
 #+end_src
 
 *** Projectile
@@ -1128,7 +1124,8 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
   :config
-  (setq! org-modern-star '("◉" "○" "◈" "◇")
+  (setq! org-modern-star 'replace
+         org-modern-replace-stars "◉○◈◇"
          org-modern-list '((?* . "•") (?+ . "➤") (?- . "–"))
          org-modern-hide-stars nil
          org-modern-table nil))
@@ -1503,10 +1500,11 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 #+end_src
 
 *** HTML export
-**** Mathjax
+**** TODO Mathjax
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-html-mathjax-options
+  ;; TODO: use setopt 
+  (setq org-html-mathjax-options
          '((path "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" )
            (scale "1")
            (autonumber "ams")
