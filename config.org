@@ -423,6 +423,7 @@ taskrunner        ; taskrunner for all your projects
 ;;tmux              ; an API for interacting with tmux
 ;;upload            ; map local to remote projects via ssh/ftp
 tree-sitter       ;
+llm
 #+end_src
 
 *** OS
@@ -615,45 +616,15 @@ literate
 #+end_src
 
 ** Tools
-*** OpenAI
-#+begin_src emacs-lisp :tangle packages.el
-(package! openai :recipe (:host github :repo "emacs-openai/openai") :pin "b4c5e5e925ec6155f89e008698e512a0e8899348")
-#+end_src
-
+*** LLM
 #+begin_src emacs-lisp
-(use-package! openai
-  :config
-  (setq! openai-key "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"))
-#+end_src
-
-#+begin_src emacs-lisp
-(map! :leader
-      (:prefix-map ("A" . "AI")
-       :desc "Start ChatGPT instance" "s" #'chatgpt
-       :desc "CodeGPT" "c" #'codegpt))
-#+end_src
-
-**** ChatGPT
-#+begin_src emacs-lisp :tangle packages.el
-(package! chatgpt :recipe (:host github :repo "emacs-openai/chatgpt") :pin "e6ffd2a9d63fa8437301411d81d2488b278911e6")
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! chatgpt
-  :custom
-  (chatgpt-model "gpt-3.5-turbo"))
-#+end_src
-
-**** CodeGPT
-#+begin_src emacs-lisp :tangle packages.el
-(package! codegpt :recipe (:host github :repo "emacs-openai/codegpt") :pin "12b79c3a7f8d84709f065aa286ca2559573a9206")
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! codegpt
-  :custom
-  (codegpt-model "gpt-3.5-turbo")
-  (codegpt-tunnel 'chat))
+(after! gptel
+  (let ((copilot (gptel-make-gh-copilot "Copilot" :stream t)))
+    (setq! gptel-prompt-prefix-alist
+           '((markdown-mode . "# ")
+             (org-mode . "* ")
+             (text-mode . "# "))
+           gptel-backend copilot)))
 #+end_src
 
 *** Vterm
