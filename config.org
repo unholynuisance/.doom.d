@@ -72,7 +72,6 @@ Let's define a straightforward way to check for system we are on (subject to cha
   (member (nuisance/current-system) args))
 #+end_src
 
-
 * General configuration
 ** UI
 *** Transparency
