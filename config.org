@@ -618,14 +618,38 @@ literate
 
 ** Tools
 *** LLM
+**** Client configuration
 #+begin_src emacs-lisp
 (after! gptel
   (let ((copilot (gptel-make-gh-copilot "Copilot" :stream t)))
+    (require 'gptel-integrations)
     (setq! gptel-prompt-prefix-alist
            '((markdown-mode . "# ")
              (org-mode . "* ")
              (text-mode . "# "))
            gptel-backend copilot)))
+#+end_src
+
+**** Model Context Protocol
+#+begin_src emacs-lisp :tangle packages.el
+(package! mcp
+  :recipe
+  (:host github
+   :repo "lizqwerscott/mcp.el")
+  :pin "5c105a8db470eb9777fdbd26251548dec42c03f0")
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! mcp
+  :after gptel
+  :config
+  (setq! mcp-hub-servers
+         '(("filesystem" .
+            (:command "podman"
+             :args ("run" "-i" "--rm"
+                    "--mount" "type=bind,src=/home/unholynuisance/Projects/,dst=/projects,ro"
+                    "mcp/filesystem"
+                    "/projects"))))))
 #+end_src
 
 *** Vterm
