@@ -40,19 +40,31 @@
 
         perSystem =
           {
+            pkgs,
             inputs',
             ...
           }:
           {
-            packages = with inputs'.nix-doom-emacs-unstraightened.packages; {
-              emacs-with-doom = emacs-with-doom.override {
-                doomDir = ./.;
-                doomLocalDir = "~/.local/share/doom/.local";
-                tangleArgs = ".";
-                profileName = "test";
-                extraPackages = epkgs: [ epkgs.treesit-grammars.with-all-grammars ];
+            packages =
+              let
+                pkg = inputs'.nix-doom-emacs-unstraightened.packages.emacs-with-doom;
+                pkg' = pkg.override {
+                  extraPackages = epkgs: [ epkgs.treesit-grammars.with-all-grammars ];
+                  doomDir = ./.;
+                  tangleArgs = ".";
+                  doomLocalDir = "~/.local/share/doom/.local";
+                  profileName = "test";
+                };
+              in
+              {
+                emacs-with-doom = pkg'.override {
+                  emacs = pkgs.emacs;
+                };
+
+                emacs-with-doom-pgtk = pkg'.override {
+                  emacs = pkgs.emacs-pgtk;
+                };
               };
-            };
           };
       };
     };
