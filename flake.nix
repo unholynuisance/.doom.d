@@ -48,13 +48,20 @@
             packages =
               let
                 pkg = inputs'.nix-doom-emacs-unstraightened.packages.emacs-with-doom;
-                pkg' = pkg.override {
-                  extraPackages = epkgs: [ epkgs.treesit-grammars.with-all-grammars ];
+                pkg' = pkg.override (prev: {
+                  extraBinPackages = [
+                    pkgs.nodejs_latest
+                    pkgs.tree
+                    pkgs.uv
+                  ];
+                  extraPackages = epkgs: [
+                    epkgs.treesit-grammars.with-all-grammars
+                  ];
                   doomDir = ./.;
                   tangleArgs = ".";
                   doomLocalDir = "~/.local/share/doom/.local";
                   profileName = "test";
-                };
+                });
               in
               {
                 emacs-with-doom = pkg'.override {
