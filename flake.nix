@@ -57,6 +57,18 @@
                   extraPackages = epkgs: [
                     epkgs.treesit-grammars.with-all-grammars
                   ];
+                  emacsPackageOverrides = final: prev: {
+                    gptel = prev.gptel.overrideAttrs (
+                      final: prev: {
+                        patches = [
+                          (pkgs.fetchpatch {
+                            url = "https://github.com/karthink/gptel/commit/8336ecac1af75a45980991a3d78fad28ba86eee2.diff";
+                            sha256 = "sha256-HzeZZuNmymrkqVl62DYsnFoQssGEWXpQLb6Cvr8S0vI=";
+                          })
+                        ];
+                      }
+                    );
+                  };
                   doomDir = ./.;
                   tangleArgs = ".";
                   doomLocalDir = "~/.local/share/doom/.local";
