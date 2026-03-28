@@ -618,16 +618,40 @@ literate
 
 ** Tools
 *** LLM
-**** Client configuration
+**** Gptel configuration
+#+begin_src emacs-lisp :tangle packages.el
+(package! gptel :pin "23a0ec9730e08b6dd03821016fe33979e96c059b")
+#+end_src
+
 #+begin_src emacs-lisp
 (after! gptel
-  (let ((copilot (gptel-make-gh-copilot "Copilot" :stream t)))
-    (require 'gptel-integrations)
-    (setq! gptel-prompt-prefix-alist
-           '((markdown-mode . "# ")
-             (org-mode . "* ")
-             (text-mode . "# "))
-           gptel-backend copilot)))
+  (require 'gptel-integrations)
+  
+  (setq! gptel-model 'gpt-4.1
+         gptel-prompt-prefix-alist
+         '((markdown-mode . "# ")
+           (org-mode . "* ")
+           (text-mode . "# "))
+         gptel-expert-commands t)
+  
+  (gptel-make-gh-copilot "Copilot" :stream t)
+  (setq! gptel-backend (gptel-get-backend "Copilot")))
+#+end_src
+
+**** Gptel agent
+#+begin_src emacs-lisp :tangle packages.el
+(package! gptel-agent
+  :recipe
+  (:host github
+   :repo "karthink/gptel-agent")
+  :pin "8447523f9ac681268c8e83a026b3cfe6e24f682b")
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! gptel-agent
+  :after gptel
+  :config
+  (gptel-agent-update))
 #+end_src
 
 **** Model Context Protocol
