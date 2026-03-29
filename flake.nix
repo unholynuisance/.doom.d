@@ -65,6 +65,10 @@
                             url = "https://github.com/karthink/gptel/commit/8336ecac1af75a45980991a3d78fad28ba86eee2.diff";
                             sha256 = "sha256-HzeZZuNmymrkqVl62DYsnFoQssGEWXpQLb6Cvr8S0vI=";
                           })
+                          (pkgs.fetchpatch {
+                            url = "https://github.com/karthink/gptel/pull/1284.diff";
+                            sha256 = "sha256-DNdEOCsyho/laZ9M4H2+wG3odS6WLACDFNXan08l0rM=";
+                          })
                         ];
                       }
                     );
