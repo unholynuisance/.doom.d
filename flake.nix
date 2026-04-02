@@ -21,7 +21,7 @@
     };
 
     nix-doom-emacs-unstraightened = {
-      url = "github:marienz/nix-doom-emacs-unstraightened";
+      url = "github:unholynuisance/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -50,6 +50,9 @@
                 pkg = inputs'.nix-doom-emacs-unstraightened.packages.emacs-with-doom;
                 pkg' = pkg.override (prev: {
                   extraBinPackages = [
+                    pkgs.git
+                    pkgs.fd
+                    pkgs.ripgrep
                     pkgs.nodejs_latest
                     pkgs.tree
                     pkgs.uv
