@@ -70,7 +70,7 @@
                           })
                           (pkgs.fetchpatch {
                             url = "https://github.com/karthink/gptel/pull/1284.diff";
-                            sha256 = "sha256-DNdEOCsyho/laZ9M4H2+wG3odS6WLACDFNXan08l0rM=";
+                            sha256 = "sha256-C7+cZxxHutBePmFjw9iydYwFKsMJxLpfr2RJzyJW/Ns=";
                           })
                         ];
                       }
