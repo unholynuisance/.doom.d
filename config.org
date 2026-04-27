@@ -344,7 +344,10 @@ zen               ; distraction-free coding or writing
 *** Editor
 #+begin_src emacs-lisp :tangle no :noweb-ref doom-packages
 :editor
-(evil          ; come to the dark side, we have cookies
+(whitespace       ; a butler for your whitespace
+ +guess
+ +trim)
+(evil             ; come to the dark side, we have cookies
  +everywhere)
 file-templates    ; auto-snippets for empty files
 fold              ; (nigh) universal code folding
