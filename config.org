@@ -469,8 +469,9 @@ emacs-lisp        ; drown in parentheses
 ;;fsharp            ; ML stands for Microsoft's Language
 ;;fstar             ; (dependent) types and (monadic) effects and Z3
 ;;gdscript          ; the language you waited for
-;;(go               ; the hipster dialect
-;; +lsp)
+(go               ; the hipster dialect
+ +tree-sitter
+ +lsp)
 ;;(haskell          ; a language that's lazier than I am
 ;; +lsp)
 ;;hy                ; readability of scheme w/ speed of python
