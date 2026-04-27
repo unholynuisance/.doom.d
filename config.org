@@ -587,6 +587,12 @@ literate
 #+end_src
 
 ** Convenience
+*** Whitespace configuration
+#+begin_src emacs-lisp
+(after! whitespace
+  (setq! +whitespace-guess-in-projects t))
+#+end_src
+
 *** Reverse-im
 #+begin_src emacs-lisp
 (quail-define-package
