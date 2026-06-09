@@ -65,12 +65,8 @@
                       final: prev: {
                         patches = [
                           (pkgs.fetchpatch {
-                            url = "https://github.com/karthink/gptel/commit/8336ecac1af75a45980991a3d78fad28ba86eee2.diff";
-                            sha256 = "sha256-HzeZZuNmymrkqVl62DYsnFoQssGEWXpQLb6Cvr8S0vI=";
-                          })
-                          (pkgs.fetchpatch {
-                            url = "https://github.com/karthink/gptel/pull/1284.diff";
-                            sha256 = "sha256-C7+cZxxHutBePmFjw9iydYwFKsMJxLpfr2RJzyJW/Ns=";
+                            url = "https://github.com/karthink/gptel/compare/38bc5293e3f051d09ddc09d11a895552925da09a..b740110fe74d0829ad27f6c2a5fd29bcbde12e0e.diff";
+                            sha256 = "sha256-2nTCkuMdUSK+/VhV9hBx3Dn+dokNvHg7Gp/ZjzGHN9g=";
                           })
                         ];
                       }
