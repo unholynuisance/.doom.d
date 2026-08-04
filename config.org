@@ -632,7 +632,11 @@ literate
 *** LLM
 **** Gptel configuration
 #+begin_src emacs-lisp :tangle packages.el
-(package! gptel :pin "23a0ec9730e08b6dd03821016fe33979e96c059b")
+(package! gptel
+  :recipe
+  (:host github
+   :repo "karthink/gptel")
+  :pin "3c93bccf9a117535f2573e5a9753d6324474689a")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -656,7 +660,7 @@ literate
   :recipe
   (:host github
    :repo "karthink/gptel-agent")
-  :pin "8447523f9ac681268c8e83a026b3cfe6e24f682b")
+  :pin "e833bcaf617baf8c8075eac098231c4457386814")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -672,7 +676,7 @@ literate
   :recipe
   (:host github
    :repo "lizqwerscott/mcp.el")
-  :pin "5c105a8db470eb9777fdbd26251548dec42c03f0")
+  :pin "2d172809cbdb2a40d86b28ad73bd65547cefe0e1")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -734,7 +738,11 @@ Configuration.
 *** Screenshot
 This makes it a breeze to take lovely screenshots.
 #+begin_src emacs-lisp :tangle packages.el
-(package! screenshot :recipe (:host github :repo "tecosaur/screenshot") :pin "2770c0cfefe1cc09d55585f4f2f336a1b26e610e")
+(package! screenshot
+  :recipe
+  (:host github
+   :repo "tecosaur/screenshot")
+  :pin "2770c0cfefe1cc09d55585f4f2f336a1b26e610e")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -776,7 +784,8 @@ This makes it a breeze to take lovely screenshots.
 *** Elcord
 I use Emacs btw (only if discord is installed).
 #+begin_src emacs-lisp :tangle packages.el
-(package! elcord :disable (not (executable-find "discord")))
+(package! elcord
+  :disable (not (executable-find "discord")))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -838,7 +847,10 @@ So everyone (including myself) knows I'm typing.
 
 #+begin_src emacs-lisp :tangle no
 (package! emacs-application-framework
-  :recipe (:host github :repo "manateelazycat/emacs-application-framework" :files ("*")))
+  :recipe
+  (:host github
+   :repo "manateelazycat/emacs-application-framework"
+   :files ("*")))
 #+end_src
 
 ** Email
@@ -1120,7 +1132,11 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
 
 **** Org appear
 #+begin_src emacs-lisp :tangle packages.el
-(package! org-appear :recipe (:host github :repo "awth13/org-appear") :pin "32ee50f8fdfa449bbc235617549c1bccb503cb09")
+(package! org-appear
+  :recipe
+  (:host github
+   :repo "awth13/org-appear")
+  :pin "77d23efec5f5c25fc0798364d2b51a3ce3d8d518")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1512,7 +1528,11 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 
 *** Confluence
 #+begin_src emacs-lisp :tangle packages.el
-(package! ox-confluence-modern :recipe (:host github :repo "nan0scho1ar/ox-confluence-modern") :pin "1a855f95a3243c3fffc2f50fd07c50634c9daee6")
+(package! ox-confluence-modern
+  :recipe
+  (:host github
+   :repo "nan0scho1ar/ox-confluence-modern")
+  :pin "1a855f95a3243c3fffc2f50fd07c50634c9daee6")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1532,7 +1552,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 ** Systemd
 For editing systemd unit files
 #+begin_src emacs-lisp :tangle packages.el
-(package! systemd :pin "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
+(package! systemd)
 #+end_src
 
 #+begin_src emacs-lisp
