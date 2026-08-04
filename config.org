@@ -17,12 +17,12 @@ We want lexical binding, right?
 
 ** Garbage collection
 #+begin_src emacs-lisp :tangle init.el
-(setq! gcmh-high-cons-threshold (* 128 1024 1024))
+(setopt gcmh-high-cons-threshold (* 128 1024 1024))
 #+end_src
 
 ** Custom file
 #+begin_src emacs-lisp
-(setq! custom-file (file-name-concat doom-profile-cache-dir "custom.el"))
+(setopt custom-file (file-name-concat doom-profile-cache-dir "custom.el"))
 (load custom-file t)
 #+end_src
 
@@ -41,7 +41,7 @@ I'd like to have a some file manipulation utilities from [[https://github.com/re
 (defvar nuisance/ua-keyboard-layout "ukrainian-qwertivka")
 
 (defmacro nuisance/load-env-var (dst src)
-  `(setq! ,dst (or (getenv ,src) ,dst)))
+  `(setopt ,dst (or (getenv ,src) ,dst)))
 
 (defun nuisance/load-env-vars ()
   (nuisance/load-env-var nuisance/ua-keyboard-layout "NUISANCE_EMACS_UA_KEYBOARD_LAYOUT"))
@@ -120,7 +120,7 @@ Also, let's set a sensible keybind for this mode.
 #+begin_src emacs-lisp
 (pcase (nuisance/current-system)
   ("Linux"
-   (setq! doom-font
+   (setopt doom-font
           (font-spec :family "IBM Plex Mono" :size 16)
           doom-big-font
           (font-spec :family "IBM Plex Mono" :size 24)
@@ -131,7 +131,7 @@ Also, let's set a sensible keybind for this mode.
           doom-unicode-font
           (font-spec :family "Noto Sans")))
   ("Windows"
-   (setq! doom-font
+   (setopt doom-font
           (font-spec :family "Fira Code" :size 16)
           doom-big-font
           (font-spec :family "Fira Code" :size 24)
@@ -144,13 +144,13 @@ Also, let's set a sensible keybind for this mode.
 *** Line numbers
 It's convenient when you can see distance between current line and the line you want to jump to, isn't it?
 #+begin_src emacs-lisp
-(setq! display-line-numbers-type 'visual)
+(setopt display-line-numbers-type 'visual)
 #+end_src
 
 *** Theme
 #+begin_src emacs-lisp
-(setq! doom-theme 'doom-dracula)
-(setq! doom-themes-enable-italic t)
+(setopt doom-theme 'doom-dracula)
+(setopt doom-themes-enable-italic t)
 #+end_src
 
 *** Dashboard
@@ -203,8 +203,8 @@ Banner:
 *** Time
 I often run Emacs in fullscreen, and thus I can't see my system clock. We can fix that by displaying time on the modeline.
 #+begin_src emacs-lisp
-(setq! display-time-format "%H:%M")
-(setq! display-time-default-load-average nil)
+(setopt display-time-format "%H:%M")
+(setopt display-time-default-load-average nil)
 
 (add-hook! doom-init-ui #'display-time-mode)
 #+end_src
@@ -592,7 +592,7 @@ literate
 *** Whitespace configuration
 #+begin_src emacs-lisp
 (after! whitespace
-  (setq! +whitespace-guess-in-projects t))
+  (setopt +whitespace-guess-in-projects t))
 #+end_src
 
 *** Reverse-im
@@ -643,7 +643,7 @@ literate
 (after! gptel
   (require 'gptel-integrations)
   
-  (setq! gptel-model 'gpt-4.1
+  (setopt gptel-model 'gpt-4.1
          gptel-prompt-prefix-alist
          '((markdown-mode . "# ")
            (org-mode . "* ")
@@ -651,7 +651,7 @@ literate
          gptel-expert-commands t)
   
   (gptel-make-gh-copilot "Copilot" :stream t)
-  (setq! gptel-backend (gptel-get-backend "Copilot")))
+  (setopt gptel-backend (gptel-get-backend "Copilot")))
 #+end_src
 
 **** Gptel agent
@@ -683,7 +683,7 @@ literate
 (use-package! mcp
   :after gptel
   :config
-  (setq! mcp-hub-servers
+  (setopt mcp-hub-servers
          '(("filesystem" .
             (:command "podman"
              :args ("run" "-i" "--rm"
@@ -711,28 +711,28 @@ literate
 *** Vterm
 #+begin_src emacs-lisp
 (after! vterm
-  (setq! vterm-timer-delay 0.01))
+  (setopt vterm-timer-delay 0.01))
 #+end_src
 
 *** TRAMP
 #+begin_src emacs-lisp
 (after! tramp
-  (setq! tramp-histfile-override t))
+  (setopt tramp-histfile-override t))
 #+end_src
 
 *** Projectile
 Configuration.
 #+begin_src emacs-lisp
 (after! projectile
-  (setq! projectile-find-dir-includes-top-level t)
-  (setq! projectile-project-search-path '("~/Projects")))
+  (setopt projectile-find-dir-includes-top-level t)
+  (setopt projectile-project-search-path '("~/Projects")))
 #+end_src
 
 *** Checkers
 **** Spelling
 #+begin_src emacs-lisp
-(setq! ispell-dictionary "english")
-(setq! ispell-personal-dictionary (expand-file-name "dictionary" "~/.local/share/ispell/"))
+(setopt ispell-dictionary "english")
+(setopt ispell-personal-dictionary (expand-file-name "dictionary" "~/.local/share/ispell/"))
 #+end_src
 
 *** Screenshot
@@ -765,7 +765,7 @@ This makes it a breeze to take lovely screenshots.
 #+begin_src emacs-lisp :tangle no
 (add-hook 'doom-first-buffer-hook #'pixel-scroll-precision-mode)
 
-(setq! pixel-scroll-precision-use-momentum t
+(setopt pixel-scroll-precision-use-momentum t
        pixel-scroll-precision-interpolate-mice t
        pixel-scroll-precision-interpolate-page t
        pixel-scroll-precision-large-scroll-height 1)
@@ -777,7 +777,7 @@ This makes it a breeze to take lovely screenshots.
   :hook
   (org-mode . mixed-pitch-mode)
   :config
-  (setq! mixed-pitch-face 'variable-pitch))
+  (setopt mixed-pitch-face 'variable-pitch))
 #+end_src
 
 ** Questionable stuff
@@ -794,8 +794,8 @@ I use Emacs btw (only if discord is installed).
   (after-init . elcord-mode)
   :commands elcord-mode
   :config
-  (setq! elcord-quiet t)
-  (setq! elcord-use-major-mode-as-main-icon t))
+  (setopt elcord-quiet t)
+  (setopt elcord-use-major-mode-as-main-icon t))
 #+end_src
 
 *** Selectric
@@ -857,7 +857,7 @@ So everyone (including myself) knows I'm typing.
 *** mu4e
 #+begin_src emacs-lisp
 (after! mu4e
-  (setq! ; sendmail setup
+  (setopt ; sendmail setup
          sendmail-program (executable-find "msmtp")
          send-mail-function #'smtpmail-send-it
          message-sendmail-f-is-evil t
@@ -908,15 +908,15 @@ So everyone (including myself) knows I'm typing.
 ** Org
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-directory "~/Org/")
-  (setq! org-roam-directory "~/Org/roam")
-  (setq! org-agenda-files "~/Org/.agenda-files")
-  (setq! org-cite-global-bibliography '())
-  (setq! org-latex-compiler '"xelatex")
-  (setq! org-agenda-weekend-days '(0))
-  (setq! calendar-week-start-day 1)
-  (setq! org-element-cache-persistent nil)
-  (setq! org-element-use-cache nil)
+  (setopt org-directory "~/Org/")
+  (setopt org-roam-directory "~/Org/roam")
+  (setopt org-agenda-files "~/Org/.agenda-files")
+  (setopt org-cite-global-bibliography '())
+  (setopt org-latex-compiler '"xelatex")
+  (setopt org-agenda-weekend-days '(0))
+  (setopt calendar-week-start-day 1)
+  (setopt org-element-cache-persistent nil)
+  (setopt org-element-use-cache nil)
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 
 (after! ox
@@ -1003,7 +1003,7 @@ javascript:location.href = 'org-protocol://open-source?' +
 **** Capture templates
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-capture-templates
+  (setopt org-capture-templates
          `(("t" "Task" entry
             (file ,(nuisance/org-roam-location nuisance/org-roam-tasks-node-id))
             "* TODO %? \n %i\n"
@@ -1052,7 +1052,7 @@ javascript:location.href = 'org-protocol://open-source?' +
             :empty-lines 1))))
 
 (after! org-roam
-  (setq! org-roam-capture-templates
+  (setopt org-roam-capture-templates
          `(("d" "Default" plain "%?"
             :target
             (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
@@ -1099,13 +1099,13 @@ Org supports drawing graphs with [[https://graphviz.org/][graphviz]], though the
 Graphviz is nice, but drawing UML diagrams with it is painful.
 #+begin_src emacs-lisp
 (after! ob-plantuml
-  (setq! org-plantuml-exec-mode 'plantuml))
+  (setopt org-plantuml-exec-mode 'plantuml))
 #+end_src
 
 ****  Attachments
 #+begin_src emacs-lisp
 (after! org-attach
-  (setq! org-attach-id-dir "~/Org/.attach/"))
+  (setopt org-attach-id-dir "~/Org/.attach/"))
 #+end_src
 
 *** Visuals
@@ -1123,7 +1123,7 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
   :config
-  (setq! org-modern-star 'replace
+  (setopt org-modern-star 'replace
          org-modern-replace-stars "◉○◈◇"
          org-modern-list '((?* . "•") (?+ . "➤") (?- . "–"))
          org-modern-hide-stars nil
@@ -1157,7 +1157,7 @@ Graphviz is nice, but drawing UML diagrams with it is painful.
 *** Exporting
 Make org recognize first /five/ levels of headings as headings when exporting
 #+begin_src emacs-lisp
-(setq! org-export-headline-levels 5)
+(setopt org-export-headline-levels 5)
 #+end_src
 
 *** Engraving faces
@@ -1168,8 +1168,8 @@ Make org recognize first /five/ levels of headings as headings when exporting
 #+begin_src emacs-lisp
 (after! ox-latex
   (use-package! engrave-faces)
-  (setq! org-latex-src-block-backend 'engraved)
-  (setq! org-latex-engraved-theme 'default))
+  (setopt org-latex-src-block-backend 'engraved)
+  (setopt org-latex-engraved-theme 'default))
 #+end_src
 
 *** Latex export
@@ -1177,13 +1177,13 @@ Make org recognize first /five/ levels of headings as headings when exporting
 Org uses =latexmk= with =pdflatex= as compiler by default, and =pdflatex= doesn't support =utf-8=. So let's use =xelatex= instead.
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-latex-compiler '"xelatex"))
+  (setopt org-latex-compiler '"xelatex"))
 #+end_src
 
 **** Class templates
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-latex-classes
+  (setopt org-latex-classes
          '(("article" "\\documentclass{scrartcl}"
             ("\\section{%s}" . "\\section*{%s}")
             ("\\subsection{%s}" . "\\subsection*{%s}")
@@ -1421,7 +1421,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 **** Default latex packages
 #+begin_src emacs-lisp
 (after! ox-latex
-  (setq! org-latex-default-packages-alist
+  (setopt org-latex-default-packages-alist
          '(("AUTO"     "inputenc"     t ("pdflatex"))
            ("T1"       "fontenc"      t ("pdflatex"))
            (""         "fontspec"     t ("xelatex"))
@@ -1497,7 +1497,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 
 #+begin_src emacs-lisp :noweb yes
 (after! ox-latex
-  (setq! org-latex-hyperref-template "
+  (setopt org-latex-hyperref-template "
 <<hyperref>>
 "))
 #+end_src
@@ -1519,7 +1519,7 @@ Inspired by [[https://tecosaur.github.io/emacs-config/config.html#cleverer-pream
 *** Reveal export
 #+begin_src emacs-lisp
 (after! org
-  (setq! org-re-reveal-theme "night"
+  (setopt org-re-reveal-theme "night"
          org-re-reveal-transition "slide"
          org-re-reveal-plugins '(markdown notes math search zoom)
          org-re-reveal-width (display-pixel-width)
@@ -1563,5 +1563,5 @@ For editing systemd unit files
 ** Csharp
 #+begin_src emacs-lisp
 (after! csharp
-  (setq! lsp-csharp-server-path "/usr/bin/omnisharp"))
+  (setopt lsp-csharp-server-path "/usr/bin/omnisharp"))
 #+end_src
